@@ -8,11 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <Compile Remove="WebAPI\**" />
+    <Content Remove="WebAPI\**" />
+    <EmbeddedResource Remove="WebAPI\**" />
+    <None Remove="WebAPI\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="WebAPI\" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
 </Project>

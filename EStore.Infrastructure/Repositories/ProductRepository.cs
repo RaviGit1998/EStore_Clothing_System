@@ -2,12 +2,6 @@
 using EStore.Domain.Entities;
 using EStore.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EStore.Infrastructure.Repositories
 {
@@ -24,9 +18,9 @@ namespace EStore.Infrastructure.Repositories
             return await _context.Products.ToListAsync();
         }
 
-        public async Task<Product> GetProductsByIdAsync(int id)
+        public async Task<Product> GetProductsByIdAsync(int productId)
         {
-            return await _context.Products.FirstOrDefaultAsync(x => x.ProductId ==id);
+            return await _context.Products.FirstOrDefaultAsync(x => x.ProductId == productId);
         }
 
        

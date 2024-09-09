@@ -20,7 +20,7 @@ namespace EStore.Domain.Entities
 
         // Navigation Properties
         public virtual User User { get; set; }
-        public virtual ICollection<OrderItem> OrderItems { get; set; }
+        public virtual ICollection<OrderItem> OrderItems { get; set; } = null;
         public virtual Coupon Coupon { get; set; }
         public virtual Payment Payment { get; set; }
         public virtual Shipping Shipping { get; set; }

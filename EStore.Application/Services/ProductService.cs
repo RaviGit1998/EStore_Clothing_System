@@ -24,19 +24,19 @@ namespace EStore.Application.Services
             return await _productRepository.GetAllProducts();
         }
 
-        public async Task<Product> GetProductByIdAsync(int id)
+        public async Task<Product> GetProductByIdAsync(int productId)
         {
            
-            if (id <= 0)
+            if (productId <= 0)
             {
-                throw new ArgumentException("Invalid product ID", nameof(id));
+                throw new ArgumentException("Invalid product ID", nameof(productId));
             }
 
-            var product = await _productRepository.GetProductsByIdAsync(id);
+            var product = await _productRepository.GetProductsByIdAsync(productId);
 
             if (product == null)
             {
-                throw new KeyNotFoundException($"Product with ID {id} not found.");
+                throw new KeyNotFoundException($"Product with ID {productId} not found.");
             }
 
             return product;

@@ -23,7 +23,7 @@ namespace EStore.Web.Controllers
             var products = await _productService.GetAllProductsAsync();
             return Ok(products);
         }
-
+        
         // GET: api/product/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProductById(int id)

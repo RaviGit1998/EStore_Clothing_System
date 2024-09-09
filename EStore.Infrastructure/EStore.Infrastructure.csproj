@@ -20,4 +20,9 @@
     <ProjectReference Include="..\EStore.Application\EStore.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\" />
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+
 </Project>

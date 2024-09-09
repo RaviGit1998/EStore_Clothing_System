@@ -4,6 +4,7 @@ using EStore.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EStore.Infrastructure.Migrations
 {
     [DbContext(typeof(EStoreContext))]
-    partial class EStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20240909125702_NavigationsPayment")]
+    partial class NavigationsPayment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -249,9 +252,6 @@ namespace EStore.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProductVariantId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
@@ -259,14 +259,7 @@ namespace EStore.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("ProductReviewId");
-
-                    b.HasIndex("ProductVariantId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("ProductReviews");
                 });
@@ -290,9 +283,6 @@ namespace EStore.Infrastructure.Migrations
                     b.Property<decimal>("PricePerUnit")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -301,8 +291,6 @@ namespace EStore.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProductVariantId");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("ProductVariants");
                 });
@@ -324,17 +312,11 @@ namespace EStore.Infrastructure.Migrations
                     b.Property<bool>("IsSuccess")
                         .HasColumnType("bit");
 
-                    b.Property<int>("OrderItemId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Reason")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RefundsId");
-
-                    b.HasIndex("OrderItemId")
-                        .IsUnique();
 
                     b.ToTable("Refunds");
                 });
@@ -350,9 +332,6 @@ namespace EStore.Infrastructure.Migrations
                     b.Property<DateTime>("EstimatedDeliveryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("ShippigDate")
                         .HasColumnType("datetime2");
 
@@ -361,9 +340,6 @@ namespace EStore.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ShippingId");
-
-                    b.HasIndex("OrderId")
-                        .IsUnique();
 
                     b.ToTable("Shippings");
                 });
@@ -396,12 +372,7 @@ namespace EStore.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("ShippingAddressId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("ShippingAddresses");
                 });
@@ -485,9 +456,6 @@ namespace EStore.Infrastructure.Migrations
 
                     b.HasKey("WishListId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
                     b.ToTable("WishList");
                 });
 
@@ -557,69 +525,6 @@ namespace EStore.Infrastructure.Migrations
                     b.Navigation("SubCategory");
                 });
 
-            modelBuilder.Entity("EStore.Domain.Entities.ProductReview", b =>
-                {
-                    b.HasOne("EStore.Domain.Entities.ProductVariant", "Productvariants")
-                        .WithMany("ProductReviews")
-                        .HasForeignKey("ProductVariantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EStore.Domain.Entities.User", "User")
-                        .WithMany("ProductReviews")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Productvariants");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("EStore.Domain.Entities.ProductVariant", b =>
-                {
-                    b.HasOne("EStore.Domain.Entities.Product", "Product")
-                        .WithMany("ProductVariants")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("EStore.Domain.Entities.Refunds", b =>
-                {
-                    b.HasOne("EStore.Domain.Entities.OrderItem", "OrderItem")
-                        .WithOne("Refunds")
-                        .HasForeignKey("EStore.Domain.Entities.Refunds", "OrderItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OrderItem");
-                });
-
-            modelBuilder.Entity("EStore.Domain.Entities.Shipping", b =>
-                {
-                    b.HasOne("EStore.Domain.Entities.Order", "Order")
-                        .WithOne("Shipping")
-                        .HasForeignKey("EStore.Domain.Entities.Shipping", "OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("EStore.Domain.Entities.ShippingAddress", b =>
-                {
-                    b.HasOne("EStore.Domain.Entities.User", "User")
-                        .WithMany("ShippingAddresses")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("EStore.Domain.Entities.SubCategory", b =>
                 {
                     b.HasOne("EStore.Domain.Entities.Category", "Category")
@@ -629,17 +534,6 @@ namespace EStore.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("EStore.Domain.Entities.WishList", b =>
-                {
-                    b.HasOne("EStore.Domain.Entities.User", "User")
-                        .WithOne("WishList")
-                        .HasForeignKey("EStore.Domain.Entities.WishList", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EStore.Domain.Entities.Category", b =>
@@ -661,28 +555,12 @@ namespace EStore.Infrastructure.Migrations
 
                     b.Navigation("Payment")
                         .IsRequired();
-
-                    b.Navigation("Shipping")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EStore.Domain.Entities.OrderItem", b =>
-                {
-                    b.Navigation("Refunds")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EStore.Domain.Entities.Product", b =>
-                {
-                    b.Navigation("ProductVariants");
                 });
 
             modelBuilder.Entity("EStore.Domain.Entities.ProductVariant", b =>
                 {
                     b.Navigation("OrderItems")
                         .IsRequired();
-
-                    b.Navigation("ProductReviews");
                 });
 
             modelBuilder.Entity("EStore.Domain.Entities.SubCategory", b =>
@@ -693,13 +571,6 @@ namespace EStore.Infrastructure.Migrations
             modelBuilder.Entity("EStore.Domain.Entities.User", b =>
                 {
                     b.Navigation("Orders");
-
-                    b.Navigation("ProductReviews");
-
-                    b.Navigation("ShippingAddresses");
-
-                    b.Navigation("WishList")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

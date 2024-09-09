@@ -1,4 +1,7 @@
+using EStore.Infrastructure.Data;
 using EStore.Web;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

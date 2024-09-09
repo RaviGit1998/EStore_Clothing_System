@@ -1,9 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using EStore.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace EStore.Infrastructure
 {
@@ -11,7 +14,11 @@ namespace EStore.Infrastructure
     {
         public static IServiceCollection AddInfrastructureDI(this IServiceCollection services)
         {
-            return services;
+            return services.AddDbContext<EStoreContext>(options =>
+            {
+                options.UseSqlServer("Server=10.90.1.27;Initial Catalog=EStoreClothing;User Id=pidc2225;Password=sql@shaik123;TrustServerCertificate=True;");
+            }); 
+            
         }
     }
 }

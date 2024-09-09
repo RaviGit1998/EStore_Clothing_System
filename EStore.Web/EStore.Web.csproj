@@ -8,7 +8,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="WebAPI\**" />
+    <Content Remove="WebAPI\**" />
+    <EmbeddedResource Remove="WebAPI\**" />
+    <None Remove="WebAPI\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EStore.Application\EStore.Application.csproj" />
+    <ProjectReference Include="..\EStore.Infrastructure\EStore.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

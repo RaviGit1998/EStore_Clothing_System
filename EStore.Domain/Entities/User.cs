@@ -24,12 +24,12 @@ namespace EStore.Domain.Entities
         public DateTime CreatedDate { get; set; }
 
         //navigation Properties 
-      //  public virtual ICollection<Order> Orders { get; set; }
-      //  public virtual WishList WishList { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
+        public virtual WishList WishList { get; set; }
 
-       // public virtual ICollection<ProductReview> ProductReviews { get; set; }
+       public virtual ICollection<ProductReview> ProductReviews { get; set; }
 
-     //   public virtual ICollection<ShippingAddress> ShippingAddresses { get; set; }
+        public virtual ICollection<ShippingAddress> ShippingAddresses { get; set; }
 
     }
 }

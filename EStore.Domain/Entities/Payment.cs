@@ -17,8 +17,8 @@ namespace EStore.Domain.Entities
 
         public string PaymentStatus { get; set; }
 
-      //  public int OrderId { get; set; }
+       public int OrderId { get; set; }
 
-      //  public virtual Order Order { get; set; }
+       public virtual Order Order { get; set; }
     }
 }

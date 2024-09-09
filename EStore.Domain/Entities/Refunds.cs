@@ -9,9 +9,9 @@ namespace EStore.Domain.Entities
     public class Refunds
     {
 
-        public int RefundId { get; set; }
+        public int RefundsId { get; set; }
 
-        //public int OrderItemId { get; set; }
+        public int OrderItemId { get; set; }
 
         public decimal AmountRefunded { get; set; }
 
@@ -20,6 +20,6 @@ namespace EStore.Domain.Entities
 
         public bool IsSuccess { get; set; }
 
-        //public virtual OrderItem OrderItem { get; set; }
+        public virtual OrderItem OrderItem { get; set; }
     }
 }

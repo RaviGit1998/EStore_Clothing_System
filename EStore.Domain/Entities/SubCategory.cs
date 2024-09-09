@@ -12,15 +12,15 @@ namespace EStore.Domain.Entities
 
         public string Name { get; set; }
 
-       // public int CategoryId { get; set; }
+        public int CategoryId { get; set; }
 
         public bool IsActive { get; set; }
 
         public DateTime CreatedDate { get; set; }
 
         //Navigation Properties
-       // public virtual Category Category { get; set; }
-        //public virtual ICollection<Product> Products { get; set; }
+       public virtual Category Category { get; set; }
+       public virtual ICollection<Product> Products { get; set; }
 
     }
 }

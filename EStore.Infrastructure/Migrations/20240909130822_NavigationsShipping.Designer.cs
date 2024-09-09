@@ -4,6 +4,7 @@ using EStore.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EStore.Infrastructure.Migrations
 {
     [DbContext(typeof(EStoreContext))]
-    partial class EStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20240909130822_NavigationsShipping")]
+    partial class NavigationsShipping
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -396,12 +399,7 @@ namespace EStore.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("ShippingAddressId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("ShippingAddresses");
                 });
@@ -484,9 +482,6 @@ namespace EStore.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("WishListId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("WishList");
                 });
@@ -609,17 +604,6 @@ namespace EStore.Infrastructure.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("EStore.Domain.Entities.ShippingAddress", b =>
-                {
-                    b.HasOne("EStore.Domain.Entities.User", "User")
-                        .WithMany("ShippingAddresses")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("EStore.Domain.Entities.SubCategory", b =>
                 {
                     b.HasOne("EStore.Domain.Entities.Category", "Category")
@@ -629,17 +613,6 @@ namespace EStore.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("EStore.Domain.Entities.WishList", b =>
-                {
-                    b.HasOne("EStore.Domain.Entities.User", "User")
-                        .WithOne("WishList")
-                        .HasForeignKey("EStore.Domain.Entities.WishList", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EStore.Domain.Entities.Category", b =>
@@ -695,11 +668,6 @@ namespace EStore.Infrastructure.Migrations
                     b.Navigation("Orders");
 
                     b.Navigation("ProductReviews");
-
-                    b.Navigation("ShippingAddresses");
-
-                    b.Navigation("WishList")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -10,13 +10,13 @@ namespace EStore.Domain.Entities
     {
         public int ShippingId { get; set; }
 
-        //public int OrderId { get; set; }
+        public int OrderId { get; set; }
 
         public string TrackingNumber { get; set; }
 
         public DateTime ShippigDate { get; set; }
         public DateTime EstimatedDeliveryDate { get; set; }
 
-       // public virtual Order Order { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

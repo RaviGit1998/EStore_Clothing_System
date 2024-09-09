@@ -17,7 +17,7 @@ namespace EStore.Domain.Entities
         public DateTime CreatedDate { get; set; }
 
         // Navigation Property
-       // public virtual ICollection<SubCategory> SubCategories { get; set; }
-       //  public virtual ICollection<Product> Products { get; set; }
+       public virtual ICollection<SubCategory> SubCategories { get; set; }
+         public virtual ICollection<Product> Products { get; set; }
     }
 }

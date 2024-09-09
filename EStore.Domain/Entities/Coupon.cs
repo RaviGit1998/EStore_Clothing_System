@@ -19,6 +19,6 @@ namespace EStore.Domain.Entities
 
         public DateTime ExpirationDate { get; set; }
 
-       // public virtual ICollection<Order> Orders { get; set; }
+        public virtual Order Orders { get; set; } 
     }
 }

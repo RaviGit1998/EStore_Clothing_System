@@ -9,6 +9,7 @@ namespace EStore.Web
         {
             services.AddApplicationDI()
                 .AddInfrastructureDI();
+
             return services;
         }
     }

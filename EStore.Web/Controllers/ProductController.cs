@@ -1,6 +1,5 @@
-﻿using EStore.Application.Service_Interfaces;
+﻿using EStore.Application.Interfaces;
 using EStore.Domain.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EStore.Web.Controllers

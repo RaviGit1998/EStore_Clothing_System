@@ -11,4 +11,12 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\ShivaKumarRagam\source\repos\EStore_Clothing_System\EStore.Domain\EntityDtos\NewFolder\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\ShivaKumarRagam\source\repos\EStore_Clothing_System\EStore.Domain\EntityDtos\NewFolder\.editorconfig" />
+  </ItemGroup>
+
 </Project>

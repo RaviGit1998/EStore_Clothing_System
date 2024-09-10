@@ -44,22 +44,17 @@ namespace EStore.Application.Services
             }
 
             return product;
-        }    
-
-        public async Task<IEnumerable<ProductDto>> SearchAsync(string keyword)
-        {
-            var products = await _productRepository.SearchAsync(keyword);
-            return _mapper.Map<IEnumerable<ProductDto>>(products);
         }
 
-        public async Task<int> AddAsync(CreateProductDto createProductDto)
+        /*public async Task<ProductDto> GetByIdAsync(int productId)
         {
-            var product = _mapper.Map<Product>(createProductDto);
-            product.CreatedDate = DateTime.UtcNow;
-            product.ModifiedDate = DateTime.UtcNow;
-            await _productRepository.AddAsync(product);
-            return product.ProductId; 
-        }
+            var product = await _productRepository.GetProductsByIdAsync(productId);
+            if (product == null)
+            {
+                throw new InvalidOperationException($"Product with ID {productId} not found.");
+            }
+            return _mapper.Map<ProductDto>(product);
+        }*/
 
         public async Task<IEnumerable<ProductDto>> SearchProductAsync(string keyword)
         {
@@ -83,8 +78,7 @@ namespace EStore.Application.Services
             {
                 throw new InvalidOperationException($"Product with ID {productId} not found.");
             }
-            await _productRepository.DeleteAsync(productId);
-
+            await _productRepository.DeleteProductAsync(productId);
         }
 
     }

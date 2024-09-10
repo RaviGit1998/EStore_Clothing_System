@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EStore.Domain.Entities;
 using EStore.Domain.EntityDtos;
+using EStore.Domain.EntityDtos.NewFolder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,15 +24,23 @@ namespace EStore.Domain.AutoMapper
                 .ForMember(dest => dest.CreatedDate, opt => opt.Ignore()) 
                 .ForMember(dest => dest.ModifiedDate, opt => opt.Ignore());
 
-            //Map from CategoryReq to Category
-            CreateMap<CategoryReq, Category>()
-           .ForMember(dest => dest.SubCategories, opt => opt.Ignore())
-           .ForMember(dest => dest.Products, opt => opt.Ignore());
+            //Map from OrderReq to Order
+            CreateMap<OrderReq, Order>()
+                .ForMember(dest => dest.Coupon, opt => opt.Ignore())
+                .ForMember(dest => dest.Payment, opt => opt.Ignore())
+                .ForMember(dest => dest.User, opt => opt.Ignore());
+                         
 
-             
+            CreateMap<OrderItemreq,OrderItem>();
 
+            //Map from order to orderres
+            CreateMap<Order, OrderRes>()
+              .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems));
+              
+              
+            CreateMap<OrderItem, OrderItemRes>();
+               
             
-
         }
     }
 }

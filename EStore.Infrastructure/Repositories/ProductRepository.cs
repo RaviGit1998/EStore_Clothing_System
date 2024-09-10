@@ -1,7 +1,7 @@
 ﻿
+using EStore.Application.IRepositories;
 using EStore.Domain.Entities;
 using EStore.Infrastructure.Data;
-using EStore.Infrastructure.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace EStore.Infrastructure.Repositories

@@ -42,7 +42,7 @@ namespace EStore.Web.Api.Controllers
             }
         }
         [HttpGet()]
-        [Route("{name}")]
+        [Route("categoryName/{name}")]
         public async Task<ActionResult<Category>> GetCategoryByName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))

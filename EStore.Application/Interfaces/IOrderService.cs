@@ -1,4 +1,5 @@
 ﻿using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos.NewFolder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +11,13 @@ namespace EStore.Application.Interfaces
     public interface IOrderService
     {
         //create an Order
-        Task<Order> CreateAnOrderAsync(Order order);
+        Task<OrderRes> CreateAnOrderAsync(OrderReq orderReq);
 
         //Getting and order by its Id
         Task<Order> GetOrderByIdAsync(int orderId);
 
         //Getting all Orders of a Specific User
-        Task<IEnumerable<Order>> GetOrdersByUserIdAsync(int userId);
+        Task<IEnumerable<OrderRes>> GetOrdersByUserIdAsync(int userId);
 
         //Cancelling and Order
         Task<Order> CancelOrderAsync(int orderId);

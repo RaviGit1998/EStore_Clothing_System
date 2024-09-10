@@ -1,6 +1,8 @@
-﻿using EStore.Application.Interfaces;
+﻿using AutoMapper;
+using EStore.Application.Interfaces;
 using EStore.Application.IRepositories;
 using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos.NewFolder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +14,12 @@ namespace EStore.Application.Services
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
-        public OrderService(IOrderRepository orderRepository)
+        private readonly IMapper _mapper;
+
+        public OrderService(IOrderRepository orderRepository,IMapper mapper)
         {
             _orderRepository = orderRepository;
+            _mapper = mapper;   
         }
 
         public async Task<bool> ApplyCouponAsync(int orderId, string couponCode)
@@ -50,13 +55,14 @@ namespace EStore.Application.Services
             return await _orderRepository.CancelOrderAsync(orderId);
         }
 
-        public async Task<Order> CreateAnOrderAsync(Order order)
+        public async Task<OrderRes> CreateAnOrderAsync(OrderReq orderReq)
         {
+            var order=_mapper.Map<Order>(orderReq);
             if (order.OrderItems == null || !order.OrderItems.Any())
                 throw new ArgumentException("Order must contain at least one order item.");
 
-            return await _orderRepository.CreateAnOrderAsync(order);
-
+            var createdOrder= await _orderRepository.CreateAnOrderAsync(order);
+            return _mapper.Map<OrderRes>(createdOrder);
         }
 
         public async Task<Order> GetOrderByIdAsync(int orderId)
@@ -71,10 +77,14 @@ namespace EStore.Application.Services
             return order;
         }
 
-        public async Task<IEnumerable<Order>> GetOrdersByUserIdAsync(int userId)
+        public async Task<IEnumerable<OrderRes>> GetOrdersByUserIdAsync(int userId)
         {
             if (userId <= 0) throw new ArgumentException("Invalid User Id");
-            return await _orderRepository.GetOrdersByUserIdAsync(userId);
+
+           var orders= await _orderRepository.GetOrdersByUserIdAsync(userId);
+            var orderResponses = _mapper.Map<IEnumerable<OrderRes>>(orders);
+           
+            return orderResponses.ToList();
         }
 
         public async Task<bool> ProcessPayment(int orderId)

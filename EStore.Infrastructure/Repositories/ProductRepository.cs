@@ -8,20 +8,20 @@ namespace EStore.Infrastructure.Repositories
 {
     public class ProductRepository : IProductRepository
     {
-        private EStoreDbContext _context;
-        public ProductRepository(EStoreDbContext context) 
+        private EStoreDbContext _dbContext;
+        public ProductRepository(EStoreDbContext dbContext) 
         {
-            _context = context;
+            _dbContext = dbContext;
         }
 
         public async Task<IEnumerable<Product>> GetAllProducts()
         {
-            return await _context.Products.ToListAsync();
+            return await _dbContext.Products.ToListAsync();
         }
 
         public async Task<Product> GetProductsByIdAsync(int productId)
         {
-            return await _context.Products.FirstOrDefaultAsync(x => x.ProductId == productId);
+            return await _dbContext.Products.FirstOrDefaultAsync(x => x.ProductId == productId);
         }
 
        

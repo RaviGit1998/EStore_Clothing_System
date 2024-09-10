@@ -17,7 +17,7 @@ namespace EStore.Web.Controllers
             _productService = productService;
         }
 
-        // GET: api/product
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {
@@ -25,13 +25,13 @@ namespace EStore.Web.Controllers
             return Ok(products);
         }
         
-        // GET: api/product/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProductById(int id)
+       
+        [HttpGet("{productId}")]
+        public async Task<ActionResult<Product>> GetProductById(int productId)
         {
             try
             {
-                var product = await _productService.GetProductByIdAsync(id);
+                var product = await _productService.GetProductByIdAsync(productId);
                 return Ok(product);
             }
             catch (KeyNotFoundException)

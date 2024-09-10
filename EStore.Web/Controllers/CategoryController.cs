@@ -100,7 +100,14 @@ namespace EStore.Web.Api.Controllers
                   //in the service it returns null if category is already exists
                     return Conflict("A category with this name already exists");
                 }
+                return Ok(result);
             }
+            catch
+            {
+                return BadRequest("Invalid Input");
+            }
+          
         }
+        [HttpPut]
     }
 }

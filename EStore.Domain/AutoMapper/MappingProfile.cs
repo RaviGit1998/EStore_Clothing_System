@@ -29,18 +29,15 @@ namespace EStore.Domain.AutoMapper
                 .ForMember(dest => dest.Coupon, opt => opt.Ignore())
                 .ForMember(dest => dest.Payment, opt => opt.Ignore())
                 .ForMember(dest => dest.User, opt => opt.Ignore());
-                         
-
             CreateMap<OrderItemreq,OrderItem>();
-
             //Map from order to orderres
             CreateMap<Order, OrderRes>()
-              .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems));
-              
-              
+              .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems));                         
             CreateMap<OrderItem, OrderItemRes>();
-               
-            
+            //
+            CreateMap<CategoryReq, Category>()
+             .ForMember(dest => dest.SubCategories, opt => opt.Ignore())
+             .ForMember(dest => dest.Products, opt => opt.Ignore());
         }
     }
 }

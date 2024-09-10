@@ -14,7 +14,7 @@ namespace EStore.Infrastructure
     {
         public static IServiceCollection AddInfrastructureDI(this IServiceCollection services)
         {
-            return services.AddDbContext<EStoreContext>(options =>
+            return services.AddDbContext<EStoreDbContext>(options =>
             {
                 options.UseSqlServer("Server=10.90.1.27;Initial Catalog=EStoreClothing;User Id=pidc2225;Password=sql@shaik123;TrustServerCertificate=True;");
             }); 

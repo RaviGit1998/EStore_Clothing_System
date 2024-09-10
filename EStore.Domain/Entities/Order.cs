@@ -14,13 +14,13 @@ namespace EStore.Domain.Entities
         public DateTime OrderDate { get; set; }
 
         public decimal TotalAmount { get; set; }
-      public int? CouponId { get; set; }
+        public int? CouponId { get; set; }
         public int OrderQuantity {  get; set; }
         public bool IsCancelled { get; set; }
 
         // Navigation Properties
         public virtual User User { get; set; }
-        public virtual ICollection<OrderItem> OrderItems { get; set; }
+        public virtual ICollection<OrderItem> OrderItems { get; set; } = null;
         public virtual Coupon Coupon { get; set; }
         public virtual Payment Payment { get; set; }
         public virtual Shipping Shipping { get; set; }

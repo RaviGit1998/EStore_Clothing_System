@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace EStore.Infrastructure.Data
 {
-    public class EStoreContext : DbContext
+    public class EStoreDbContext : DbContext
     {
-        public EStoreContext(DbContextOptions<EStoreContext> options) : base(options)
+        public EStoreDbContext(DbContextOptions<EStoreDbContext> options) : base(options)
         {
             
         }
@@ -114,7 +114,7 @@ namespace EStore.Infrastructure.Data
                 .HasMany(w => w.ProductVariants)
                 .WithOne(pv => pv.Wishlists)
                 .HasForeignKey(w => w.ProductId);
-         */
+*/
             //WishList and User 
             modelBuilder.Entity<WishList>()
                 .HasOne(w => w.User)

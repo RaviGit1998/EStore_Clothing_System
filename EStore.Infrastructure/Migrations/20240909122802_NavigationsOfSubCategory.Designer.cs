@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EStore.Infrastructure.Migrations
 {
-    [DbContext(typeof(EStoreContext))]
+    [DbContext(typeof(EStoreDbContext))]
     [Migration("20240909122802_NavigationsOfSubCategory")]
     partial class NavigationsOfSubCategory
     {

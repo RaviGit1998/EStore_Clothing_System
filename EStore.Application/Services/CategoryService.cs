@@ -46,21 +46,12 @@ namespace EStore.Application.Services
         }
 
         public async Task<Category> GetCategoryAsync(int id)
-        {
-            if (id < 0)
-            {
-                throw new ArgumentException("Invalid product ID", nameof(id));
-            }
+        {                    
             return await _categoryRepository.GetCategoryAsync(id);
         }
 
         public async Task<Category> GetCategoryAsync(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentException("Category name cannot be null or empty", nameof(name));
-            }
-
+        {        
             return await _categoryRepository.GetCategoryAsync(name);
         }
 

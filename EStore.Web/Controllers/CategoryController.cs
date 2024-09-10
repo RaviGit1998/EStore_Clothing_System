@@ -23,7 +23,8 @@ namespace EStore.Web.Api.Controllers
             var categories = await _categoryService.GetAllCategoriesAsync();
             return Ok(categories);
         }
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("{id}")]
         public async Task<ActionResult<Category>> GetCategoryById(int id)
         {
             if (id <= 0)
@@ -40,7 +41,8 @@ namespace EStore.Web.Api.Controllers
                 return NotFound();
             }
         }
-        [HttpGet("{name}")]
+        [HttpGet()]
+        [Route("{name}")]
         public async Task<ActionResult<Category>> GetCategoryByName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))

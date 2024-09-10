@@ -45,7 +45,7 @@ namespace EStore.Web.Api.Controllers
         }
 
         [HttpGet]
-        [Route("{userId}")]
+        [Route("user/{userId}")]
         public async Task<IActionResult> GetOrdersByUserId(int userId)
         {
             if (userId == null)
@@ -65,6 +65,21 @@ namespace EStore.Web.Api.Controllers
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPost]
+        [Route("cancel/{orderId}")]
+        public async Task<IActionResult> CancelOrder(int orderId)
+        {
+            try
+            {
+                var orderResponse = await _orderService.CancelOrderAsync(orderId);
+                return Ok(orderResponse);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,10 @@ namespace EStore.Application.Interfaces
     {
         Task<IEnumerable<Product>> GetAllProductsAsync();
         Task<Product> GetProductByIdAsync(int id);
+        Task<IEnumerable<ProductDto>> SearchAsync(string keyword);
+        //Task AddAsync(CreateProductDto createProductDto);
+        Task<int> AddAsync(CreateProductDto createProductDto);
+        Task DeleteAsync(int productId);
+        //Task<ProductDto> GetByIdAsync(int productId);
     }
 }

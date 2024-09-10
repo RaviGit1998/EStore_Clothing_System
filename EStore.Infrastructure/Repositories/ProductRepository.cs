@@ -24,6 +24,30 @@ namespace EStore.Infrastructure.Repositories
             return await _dbContext.Products.FirstOrDefaultAsync(x => x.ProductId == productId);
         }
 
-       
+        public async Task<IEnumerable<Product>> SearchAsync(string keyword)
+        {
+            return await _dbContext.Products
+                .Where(p => p.Name.Contains(keyword) || p.ShortDescription.Contains(keyword) || p.LongDesrciption.Contains(keyword))
+                .Include(p => p.Category)
+                .Include(p => p.SubCategory)
+                .Include(p => p.ProductVariants)
+                .ToListAsync();
+        }
+
+        public async Task AddAsync(Product product)
+        {
+            await _dbContext.Products.AddAsync(product);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int productId)
+        {
+            var product = await _dbContext.Products.FindAsync(productId);
+            if (product != null)
+            {
+                _dbContext.Products.Remove(product);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
     }
 }

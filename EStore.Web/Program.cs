@@ -1,6 +1,7 @@
 using EStore.Application.Interfaces;
 using EStore.Application.IRepositories;
 using EStore.Application.Services;
+using EStore.Domain.AutoMapper;
 using EStore.Infrastructure.Data;
 using EStore.Infrastructure.Repositories;
 using EStore.Web;
@@ -17,6 +18,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<EStoreDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 var app = builder.Build();

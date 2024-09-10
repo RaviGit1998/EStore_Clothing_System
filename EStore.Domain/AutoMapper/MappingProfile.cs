@@ -14,6 +14,10 @@ namespace EStore.Domain.AutoMapper
     {
         public MappingProfile()
         {
+            CreateMap<UpdateProductDto, Product>()
+            .ForMember(dest => dest.ModifiedDate, opt => opt.Ignore()) 
+            .ForMember(dest => dest.CreatedDate, opt => opt.Ignore()); 
+
             // Map from Product to ProductDto
             CreateMap<Product, ProductDto>()
                 .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId))

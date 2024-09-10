@@ -17,14 +17,14 @@ namespace EStore.Web.Controllers
             _productService = productService;
         }
 
-        [HttpGet]     
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {
             var products = await _productService.GetAllProductsAsync();
             return Ok(products);
         }
-        
-        [HttpGet("{productId}")]       
+
+        [HttpGet("{productId}")]
         public async Task<ActionResult<Product>> GetProductById(int productId)
         {
             try
@@ -52,9 +52,9 @@ namespace EStore.Web.Controllers
             {
                 return BadRequest(ModelState);
             }
-            
+
             var createdProductId = await _productService.AddProductAsync(createProductDto);
-           
+
             return CreatedAtAction(nameof(GetProductById), new { productId = createdProductId }, createProductDto);
         }
 
@@ -69,6 +69,29 @@ namespace EStore.Web.Controllers
             catch (InvalidOperationException ex)
             {
                 return NotFound(ex.Message);
+            }
+        }
+
+        [HttpPut("{productId}")]
+        public async Task<IActionResult> UpdateProduct(int productId, [FromBody] UpdateProductDto updateProductDto)
+        {
+            if (updateProductDto == null)
+            {
+                return BadRequest("Update data is required.");
+            }
+
+            try
+            {
+                await _productService.UpdateProductAsync(productId, updateProductDto);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
     }

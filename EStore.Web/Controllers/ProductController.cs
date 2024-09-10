@@ -1,5 +1,4 @@
-﻿
-using EStore.Application.Interfaces;
+﻿using EStore.Application.Interfaces;
 using EStore.Domain.Entities;
 using EStore.Domain.EntityDtos;
 using Microsoft.AspNetCore.Http;
@@ -18,16 +17,14 @@ namespace EStore.Web.Controllers
             _productService = productService;
         }
 
-        
-        [HttpGet]
+        [HttpGet]     
         public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {
             var products = await _productService.GetAllProductsAsync();
             return Ok(products);
         }
         
-       
-        [HttpGet("{productId}")]
+        [HttpGet("{productId}")]       
         public async Task<ActionResult<Product>> GetProductById(int productId)
         {
             try
@@ -42,30 +39,31 @@ namespace EStore.Web.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<IActionResult> Search([FromQuery] string keyword)
+        public async Task<IActionResult> SearchProduct([FromQuery] string keyword)
         {
-            var products = await _productService.SearchAsync(keyword);
+            var products = await _productService.SearchProductAsync(keyword);
             return Ok(products);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] CreateProductDto createProductDto)
+        public async Task<IActionResult> AddProduct([FromBody] CreateProductDto createProductDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            await _productService.AddAsync(createProductDto);
-            return CreatedAtAction(nameof(GetProductById), new { id = createProductDto.ProductId }, createProductDto);
+            
+            var createdProductId = await _productService.AddProductAsync(createProductDto);
+           
+            return CreatedAtAction(nameof(GetProductById), new { productId = createdProductId }, createProductDto);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("{productId}")]
+        public async Task<IActionResult> DeleteProduct(int productId)
         {
             try
             {
-                await _productService.DeleteAsync(id);
+                await _productService.DeleteProductAsync(productId);
                 return NoContent();
             }
             catch (InvalidOperationException ex)

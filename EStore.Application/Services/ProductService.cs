@@ -46,7 +46,7 @@ namespace EStore.Application.Services
             return product;
         }
 
-        public async Task<ProductDto> GetByIdAsync(int productId)
+        /*public async Task<ProductDto> GetByIdAsync(int productId)
         {
             var product = await _productRepository.GetProductsByIdAsync(productId);
             if (product == null)
@@ -54,31 +54,31 @@ namespace EStore.Application.Services
                 throw new InvalidOperationException($"Product with ID {productId} not found.");
             }
             return _mapper.Map<ProductDto>(product);
-        }
+        }*/
 
-        public async Task<IEnumerable<ProductDto>> SearchAsync(string keyword)
+        public async Task<IEnumerable<ProductDto>> SearchProductAsync(string keyword)
         {
-            var products = await _productRepository.SearchAsync(keyword);
+            var products = await _productRepository.SearchProductAsync(keyword);
             return _mapper.Map<IEnumerable<ProductDto>>(products);
         }
 
-        public async Task<int> AddAsync(CreateProductDto createProductDto)
+        public async Task<int> AddProductAsync(CreateProductDto createProductDto)
         {
             var product = _mapper.Map<Product>(createProductDto);
             product.CreatedDate = DateTime.UtcNow;
-            product.ModifiedDate = DateTime.UtcNow;
-            await _productRepository.AddAsync(product);
+            product.ModifiedDate = DateTime.UtcNow;        
+            await _productRepository.AddProductAsync(product);
             return product.ProductId; 
         }
 
-        public async Task DeleteAsync(int productId)
+        public async Task DeleteProductAsync(int productId)
         {
             var product = await _productRepository.GetProductsByIdAsync(productId);
             if (product == null)
             {
                 throw new InvalidOperationException($"Product with ID {productId} not found.");
             }
-            await _productRepository.DeleteAsync(productId);
+            await _productRepository.DeleteProductAsync(productId);
         }
 
     }

@@ -11,8 +11,8 @@ namespace EStore.Application.IRepositories
     {
         Task<IEnumerable<Product>> GetAllProducts();
         Task<Product> GetProductsByIdAsync(int id);
-        Task<IEnumerable<Product>> SearchAsync(string keyword);
-        Task AddAsync(Product product);
-        Task DeleteAsync(int productId);
+        Task<IEnumerable<Product>> SearchProductAsync(string keyword);
+        Task AddProductAsync(Product product);
+        Task DeleteProductAsync(int productId);
     }
 }

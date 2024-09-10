@@ -12,10 +12,9 @@ namespace EStore.Application.Interfaces
     {
         Task<IEnumerable<Product>> GetAllProductsAsync();
         Task<Product> GetProductByIdAsync(int id);
-        Task<IEnumerable<ProductDto>> SearchAsync(string keyword);
-        //Task AddAsync(CreateProductDto createProductDto);
-        Task<int> AddAsync(CreateProductDto createProductDto);
-        Task DeleteAsync(int productId);
+        Task<IEnumerable<ProductDto>> SearchProductAsync(string keyword);
+        Task<int> AddProductAsync(CreateProductDto createProductDto);
+        Task DeleteProductAsync(int productId);
         //Task<ProductDto> GetByIdAsync(int productId);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using EStore.Application.Interfaces;
 using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EStore.Web.Controllers
@@ -15,21 +17,19 @@ namespace EStore.Web.Controllers
             _productService = productService;
         }
 
-        // GET: api/product
-        [HttpGet]
+        [HttpGet]     
         public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {
             var products = await _productService.GetAllProductsAsync();
             return Ok(products);
         }
         
-        // GET: api/product/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProductById(int id)
+        [HttpGet("{productId}")]       
+        public async Task<ActionResult<Product>> GetProductById(int productId)
         {
             try
             {
-                var product = await _productService.GetProductByIdAsync(id);
+                var product = await _productService.GetProductByIdAsync(productId);
                 return Ok(product);
             }
             catch (KeyNotFoundException)
@@ -38,43 +38,38 @@ namespace EStore.Web.Controllers
             }
         }
 
-        /*// POST: api/product
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchProduct([FromQuery] string keyword)
+        {
+            var products = await _productService.SearchProductAsync(keyword);
+            return Ok(products);
+        }
+
         [HttpPost]
-        public async Task<ActionResult<Product>> CreateProduct([FromBody] Product product)
+        public async Task<IActionResult> AddProduct([FromBody] CreateProductDto createProductDto)
         {
-            // Add validation and logic to create a product here
-            // For demonstration, let's assume the product is created successfully
-            // In real-world applications, you would implement creation logic and return the created entity
-
-            return CreatedAtAction(nameof(GetProductById), new { id = product.ProductId }, product);
-        }
-
-        // PUT: api/product/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(int id, [FromBody] Product product)
-        {
-            // Add validation and logic to update a product here
-            // For demonstration, let's assume the update is successful
-            // In real-world applications, you would implement the update logic
-
-            if (id != product.ProductId)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
-
-            // Perform the update operation here
-            return NoContent();
+            
+            var createdProductId = await _productService.AddProductAsync(createProductDto);
+           
+            return CreatedAtAction(nameof(GetProductById), new { productId = createdProductId }, createProductDto);
         }
 
-        // DELETE: api/product/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(int id)
+        [HttpDelete("{productId}")]
+        public async Task<IActionResult> DeleteProduct(int productId)
         {
-            // Add validation and logic to delete a product here
-            // For demonstration, let's assume the deletion is successful
-            // In real-world applications, you would implement the delete logic
-
-            return NoContent();
-        }*/
+            try
+            {
+                await _productService.DeleteProductAsync(productId);
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
     }
 }

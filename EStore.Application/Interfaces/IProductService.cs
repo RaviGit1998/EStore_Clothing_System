@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace EStore.Application.Interfaces
 {
-    public interface IProductRepository
+    public interface IProductService
     {
-        Task<IEnumerable<Product>> GetAllProducts();
-
-        Task<Product> GetProductsByIdAsync(int id);
+        Task<IEnumerable<Product>> GetAllProductsAsync();
+        Task<Product> GetProductByIdAsync(int id);
     }
 }

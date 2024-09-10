@@ -16,10 +16,6 @@ namespace EStore.Infrastructure.Data
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
-
-
-        //public DbSet<Product> Products { get; set; }
-
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
@@ -114,7 +110,9 @@ namespace EStore.Infrastructure.Data
                 .HasMany(w => w.ProductVariants)
                 .WithOne(pv => pv.Wishlists)
                 .HasForeignKey(w => w.ProductId);
-*/
+         */
+
+         
             //WishList and User 
             modelBuilder.Entity<WishList>()
                 .HasOne(w => w.User)

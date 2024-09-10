@@ -1,5 +1,6 @@
-﻿using EStore.Application.Interfaces;
-using EStore.Application.Service_Interfaces;
+﻿
+using EStore.Application.Interfaces;
+using EStore.Application.IRepositories;
 using EStore.Domain.Entities;
 using System;
 using System.Collections.Generic;

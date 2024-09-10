@@ -14,7 +14,7 @@ namespace EStore.Domain.Entities
         public DateTime OrderDate { get; set; }
 
         public decimal TotalAmount { get; set; }
-      public int? CouponId { get; set; }
+        public int? CouponId { get; set; }
         public int OrderQuantity {  get; set; }
         public bool IsCancelled { get; set; }
 

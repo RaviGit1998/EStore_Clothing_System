@@ -1,14 +1,15 @@
-﻿using EStore.Application.Interfaces;
+﻿
 using EStore.Domain.Entities;
 using EStore.Infrastructure.Data;
+using EStore.Infrastructure.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace EStore.Infrastructure.Repositories
 {
     public class ProductRepository : IProductRepository
     {
-        private EStoreContext _context;
-        public ProductRepository(EStoreContext context) 
+        private EStoreDbContext _context;
+        public ProductRepository(EStoreDbContext context) 
         {
             _context = context;
         }

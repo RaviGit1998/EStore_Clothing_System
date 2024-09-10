@@ -1,6 +1,8 @@
-﻿using EStore.Application.Interfaces;
+﻿using AutoMapper;
+using EStore.Application.Interfaces;
 using EStore.Application.IRepositories;
 using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,19 +14,21 @@ namespace EStore.Application.Services
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
-
-        public CategoryService(ICategoryRepository categoryRepository)
+        private readonly IMapper _mapper;
+        public CategoryService(ICategoryRepository categoryRepository, IMapper mapper)
         {
             _categoryRepository = categoryRepository;
+            _mapper = mapper;
         }
 
-        public async Task<Category> CreateCategoryAsync(Category category)
+        public async Task<Category> CreateCategoryAsync(CategoryReq category)
         {
             if(category == null)
             {
                 throw new ArgumentNullException();
             }
-           return await _categoryRepository.CreateCategoryAsync(category);    
+            var categoryDto = _mapper.Map<Category>(category);
+           return await _categoryRepository.CreateCategoryAsync(categoryDto);    
         }
 
         public async Task<bool> DeleteCategoryAsync(int id)
@@ -60,13 +64,15 @@ namespace EStore.Application.Services
             return await _categoryRepository.GetCategoryAsync(name);
         }
 
-        public async Task<Category> UpdateCategoryAsync(Category category)
+        public async Task<Category> UpdateCategoryAsync(CategoryReq category)
         {
             if (category == null)
             {
                 throw new ArgumentNullException();
             }
-            return await _categoryRepository.UpdateCategoryAsync(category);
-        } 
-    }
+            var categoryDto = _mapper.Map<Category>(category);
+            return await _categoryRepository.UpdateCategoryAsync(categoryDto);
+        }
+       
+        }
 }

@@ -1,4 +1,5 @@
 ﻿using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;

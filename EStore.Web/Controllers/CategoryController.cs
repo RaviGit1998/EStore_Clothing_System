@@ -1,6 +1,7 @@
 ﻿using EStore.Application.Interfaces;
 using EStore.Application.Services;
 using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ namespace EStore.Web.Api.Controllers
             return Ok(categories);
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategoryById([FromRoute] int id)
+        public async Task<ActionResult<Category>> GetCategoryById(int id)
         {
             if (id <= 0)
             {
@@ -40,7 +41,7 @@ namespace EStore.Web.Api.Controllers
             }
         }
         [HttpGet("{name}")]
-        public async Task<ActionResult<Category>> GetCategoryById([FromRoute] string name)
+        public async Task<ActionResult<Category>> GetCategoryByName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -57,7 +58,7 @@ namespace EStore.Web.Api.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory([FromRoute] int id)
+        public async Task<IActionResult> DeleteCategoryAsync([FromRoute] int id)
         {
             if (id <= 0)
             {
@@ -79,10 +80,10 @@ namespace EStore.Web.Api.Controllers
                 return NotFound();
             }
 
-            return NoContent();
+            return NoContent();//204
         }
         [HttpPost]
-        public async Task<IActionResult> CreateCategory([FromBody] Category category)
+        public async Task<IActionResult> CreateCategoryAsync([FromBody] CategoryReq category)
         {
             if (category == null)
             {
@@ -108,6 +109,28 @@ namespace EStore.Web.Api.Controllers
             }
           
         }
-        [HttpPut]
-    }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCategoryAsync([FromBody] CategoryReq category)
+        {
+            if (category == null)
+            {
+                return BadRequest("Category cannot be null");
+            }
+            if (string.IsNullOrWhiteSpace(category.CategoryName))
+            {
+                return BadRequest("Category name cannot be null or empty");
+            }
+            try
+            {
+                var result = await _categoryService.UpdateCategoryAsync(category);
+              
+                return Ok(result);
+            }
+            catch
+            {
+                return BadRequest("Invalid Input");
+            }
+
+
+    }   }
 }

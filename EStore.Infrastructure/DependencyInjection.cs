@@ -1,4 +1,6 @@
-﻿using EStore.Infrastructure.Data;
+﻿using EStore.Application.IRepositories;
+using EStore.Infrastructure.Data;
+using EStore.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -12,13 +14,15 @@ namespace EStore.Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructureDI(this IServiceCollection services)
-        {
-            return services.AddDbContext<EStoreDbContext>(options =>
-            {
-                options.UseSqlServer("Server=10.90.1.27;Initial Catalog=EStoreClothing;User Id=pidc2225;Password=sql@shaik123;TrustServerCertificate=True;");
-            }); 
-            
-        }
+        //public static IServiceCollection AddInfrastructureDI(this IServiceCollection services)
+        //{
+        //    services.AddDbContext<EStoreDbContext>(options =>
+        //    {
+        //        options.UseSqlServer("Server=10.90.1.27;Initial Catalog=EStoreClothing;User Id=pidc2225;Password=sql@shaik123;TrustServerCertificate=True;");
+        //    });
+        //    services.AddScoped<IProductRepository, ProductRepository>();
+
+        //    return services;
+        //}
     }
 }

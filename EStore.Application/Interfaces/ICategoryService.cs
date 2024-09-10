@@ -1,4 +1,5 @@
 ﻿using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,8 @@ namespace EStore.Application.Interfaces
         Task<Category> GetCategoryAsync(int id);
         Task<Category> GetCategoryAsync(string name);
         Task<List<Category>> GetAllCategoriesAsync();
-        Task<Category> CreateCategoryAsync(Category category);
-        Task<Category> UpdateCategoryAsync(Category category);
+        Task<Category> CreateCategoryAsync(CategoryReq category);
+        Task<Category> UpdateCategoryAsync(CategoryReq category);
         Task<bool> DeleteCategoryAsync(int id);
     }
 }

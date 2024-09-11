@@ -14,7 +14,7 @@ namespace EStore.Application.Interfaces
         Task<OrderRes> CreateAnOrderAsync(OrderReq orderReq);
 
         //Getting and order by its Id
-        Task<Order> GetOrderByIdAsync(int orderId);
+        Task<OrderRes> GetOrderByIdAsync(int orderId);
 
         //Getting all Orders of a Specific User
         Task<IEnumerable<OrderRes>> GetOrdersByUserIdAsync(int userId);
@@ -23,15 +23,17 @@ namespace EStore.Application.Interfaces
         Task<Order> CancelOrderAsync(int orderId);
 
         //Remove an Order item from the Orders
-        Task<Order> RemoveOrderItemAsync(int orderItemId);
+        Task<OrderRes> RemoveOrderItemAsync(int orderItemId);
 
         //Applying a Coupon
         Task<bool> ApplyCouponAsync(int orderId, string couponCode);
 
         //Calculating the Total amount of Order
-        Task<decimal> CalculateTotalAmountAsync(int orderId);
+        Task<decimal> CalculateTotalAmountAsync(int orderId, string? couponCode);
 
         //IsPayment Success or not for Order
         Task<bool> ProcessPayment(int orderId);
+
+      
     }
 }

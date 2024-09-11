@@ -39,25 +39,38 @@ namespace EStore.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<decimal> CalculateTotalAmountAsync(int orderId)
+        public async Task<decimal> CalculateTotalAmountAsync(int orderId, string? couponCode)
         {
-            var order=await GetOrderByIdAsync(orderId);
+            var order = await GetOrderByIdAsync(orderId);
 
             if (order == null)
                 throw new ArgumentException("Order was Not Found");
 
             decimal totalAmount = 0;
-              totalAmount=order.OrderItems.Sum(o=>o.Quantity*o.Price);
+            totalAmount = order.OrderItems.Sum(o => o.Quantity * o.Price);
 
             //Applying Coupon 
-            if (order.CouponId.HasValue)
+            if (!string.IsNullOrWhiteSpace(couponCode))
             {
-                var coupon = await _eStoreDbContext.Coupons.FindAsync(order.CouponId.HasValue);
-                if(coupon !=null && coupon.IsActive && coupon.ExpirationDate >= DateTime.Now)
+                var coupon = await _eStoreDbContext.Coupons
+                                .FirstOrDefaultAsync(c => c.CouponCode == couponCode);
+
+                if (coupon != null && coupon.IsActive && coupon.ExpirationDate >= DateTime.Now)
                 {
+                    // Apply the coupon to the order and update it
+                    order.CouponId = coupon.CouponId;
                     totalAmount -= coupon.DiscountedAmount;
                 }
+                else
+                {
+                    throw new ArgumentException("Invalid or Expired coupon.");
+                }
             }
+
+            order.TotalAmount = totalAmount;
+            _eStoreDbContext.Orders.Update(order);
+            await _eStoreDbContext.SaveChangesAsync();
+
             return totalAmount;
         }
 
@@ -85,6 +98,7 @@ namespace EStore.Infrastructure.Repositories
         public async Task<Order> GetOrderByIdAsync(int orderId)
         {
             var order=await _eStoreDbContext.Orders
+                            .Include(o=>o.User)
                             .Include(o=>o.OrderItems)
                             .Include(o=>o.Coupon)
                             .Include(o=>o.Payment)
@@ -128,7 +142,7 @@ namespace EStore.Infrastructure.Repositories
 
         public async Task<Order> RemoveOrderItemAsync(int orderItemId)
         {
-           var orderItem=await _eStoreDbContext.OrderItems.FindAsync(orderItemId);
+           var orderItem=await GetOrderItemByIdAsync(orderItemId);
 
             if (orderItem == null)
                 return null;
@@ -140,7 +154,21 @@ namespace EStore.Infrastructure.Repositories
             _eStoreDbContext.OrderItems.Remove(orderItem);
             await _eStoreDbContext.SaveChangesAsync();
 
+            order.OrderItems.Remove(orderItem);
+            await UpdateOrderasync(order);
+
             return order;
+        }
+
+        public async Task<OrderItem> GetOrderItemByIdAsync(int orderItemId)
+        {
+            return await _eStoreDbContext.OrderItems.FindAsync(orderItemId);
+        }
+
+        public async Task UpdateOrderasync(Order order)
+        {
+            _eStoreDbContext.Orders.Update(order);
+            await _eStoreDbContext.SaveChangesAsync();
         }
     }
 }

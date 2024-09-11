@@ -1,4 +1,5 @@
 ﻿using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace EStore.Application.Interfaces
 {
      public interface IUserService
      {
-        Task<User> RegisterUser(User user);
+        Task<User> RegisterUser(UserReq user);
      }
 } 

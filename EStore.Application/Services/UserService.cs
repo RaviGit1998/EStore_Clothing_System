@@ -1,5 +1,8 @@
-﻿using EStore.Application.IRepositories;
+﻿using AutoMapper;
+using EStore.Application.Interfaces;
+using EStore.Application.IRepositories;
 using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,15 +11,21 @@ using System.Threading.Tasks;
 
 namespace EStore.Application.Services
 {
-    public class UserService : IUserRepository
+    public class UserService : IUserService
     {
-        public Task<User> RegisterUser(User user)
+        private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
+        public UserService(IUserRepository userRepository, IMapper mapper)
         {
-            var existingUser = await _context.Users.FirstOrDefaultAsync(c => c.Email == user.Email);
-            if (existingUser != null)
-            {
-                return null;
-            }
+            _userRepository = userRepository;
+            _mapper = mapper;
+        }
+        public async Task<User> RegisterUser(UserReq user)
+        {
+            var userDto= _mapper.Map<User>(user);
+
+          return await _userRepository.RegisterUser(userDto);
+
         }
     }
 }

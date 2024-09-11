@@ -15,6 +15,8 @@ namespace EStore.Application.Interfaces
         Task<IEnumerable<ProductDto>> SearchProductAsync(string keyword);
         Task<int> AddProductAsync(CreateProductDto createProductDto);
         Task DeleteProductAsync(int productId);
-        //Task<ProductDto> GetByIdAsync(int productId);
+        Task UpdateProductAsync(int productId, UpdateProductDto updateProductDto);
+
+
     }
 }

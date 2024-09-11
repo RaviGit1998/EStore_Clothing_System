@@ -45,17 +45,6 @@ namespace EStore.Application.Services
 
             return product;
         }
-
-        /*public async Task<ProductDto> GetByIdAsync(int productId)
-        {
-            var product = await _productRepository.GetProductsByIdAsync(productId);
-            if (product == null)
-            {
-                throw new InvalidOperationException($"Product with ID {productId} not found.");
-            }
-            return _mapper.Map<ProductDto>(product);
-        }*/
-
         public async Task<IEnumerable<ProductDto>> SearchProductAsync(string keyword)
         {
             var products = await _productRepository.SearchProductAsync(keyword);
@@ -79,6 +68,25 @@ namespace EStore.Application.Services
                 throw new InvalidOperationException($"Product with ID {productId} not found.");
             }
             await _productRepository.DeleteProductAsync(productId);
+        }
+
+        public async Task UpdateProductAsync(int productId, UpdateProductDto updateProductDto)
+        {
+            if (updateProductDto == null)
+            {
+                throw new ArgumentNullException(nameof(updateProductDto));
+            }
+            
+            var existingProduct = await _productRepository.GetProductsByIdAsync(productId);
+            if (existingProduct == null)
+            {
+                throw new KeyNotFoundException($"Product with ID {productId} not found.");
+            }            
+            _mapper.Map(updateProductDto, existingProduct);
+            existingProduct.CreatedDate = DateTime.UtcNow;
+            existingProduct.ModifiedDate = DateTime.UtcNow; 
+           
+            await _productRepository.UpdateProductAsync(existingProduct);
         }
 
     }

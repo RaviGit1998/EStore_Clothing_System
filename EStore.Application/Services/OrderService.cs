@@ -28,11 +28,11 @@ namespace EStore.Application.Services
             if (!success)
                 throw new InvalidOperationException("Failed to apply Coupon");
 
-            await CalculateTotalAmountAsync(orderId);
+            await CalculateTotalAmountAsync(orderId, couponCode);
             return success;
         }
 
-        public async Task<decimal> CalculateTotalAmountAsync(int orderId)
+        public async Task<decimal> CalculateTotalAmountAsync(int orderId,string? couponCode)
         {
             if(orderId <= 0)
             {
@@ -40,7 +40,7 @@ namespace EStore.Application.Services
             }
 
             var order=await GetOrderByIdAsync(orderId);
-           return await _orderRepository.CalculateTotalAmountAsync(orderId);
+           return await _orderRepository.CalculateTotalAmountAsync(orderId,couponCode);
         }
 
         public async Task<Order> CancelOrderAsync(int orderId)
@@ -65,7 +65,7 @@ namespace EStore.Application.Services
             return _mapper.Map<OrderRes>(createdOrder);
         }
 
-        public async Task<Order> GetOrderByIdAsync(int orderId)
+        public async Task<OrderRes> GetOrderByIdAsync(int orderId)
         {
             if (orderId <= 0)
                 throw new ArgumentException("Invalid order ID.");
@@ -74,7 +74,13 @@ namespace EStore.Application.Services
             if (order == null)
                 throw new KeyNotFoundException($"Order with ID {orderId} not found");
 
-            return order;
+            return _mapper.Map<OrderRes>(order);
+        }
+
+        public async Task<OrderItem> GetOrderItemByIdAsync(int orderItemid)
+        {
+           var orderItem=await _orderRepository.GetOrderItemByIdAsync(orderItemid);
+            return orderItem;
         }
 
         public async Task<IEnumerable<OrderRes>> GetOrdersByUserIdAsync(int userId)
@@ -99,17 +105,27 @@ namespace EStore.Application.Services
              return success;
         }
 
-        public async Task<Order> RemoveOrderItemAsync(int orderItemId)
+        public async Task<OrderRes> RemoveOrderItemAsync(int orderItemId)
         {
             if (orderItemId <= 0)
                 throw new ArgumentException("Invalid order ID.");
 
-            var orderItem=await _orderRepository.RemoveOrderItemAsync(orderItemId);
-            var order = await GetOrderByIdAsync(orderItem.Id);
+            var orderItem=await _orderRepository.GetOrderItemByIdAsync(orderItemId);
+            var order = await GetOrderByIdAsync(orderItem.OrderId);
             if (order == null)
-                throw new KeyNotFoundException($"Order with ID {orderItem.Id} not found");
+                throw new KeyNotFoundException($"Order with ID {orderItem.OrderId} not found");
 
-            return order;
+            await _orderRepository.RemoveOrderItemAsync(orderItemId);
+         await  UpdateOrderasync(_mapper.Map<OrderReq>(order));
+
+            var updatedOrder=await _orderRepository.GetOrderByIdAsync(order.Id);
+
+            return _mapper.Map<OrderRes>(updatedOrder);
+        }
+        public async Task UpdateOrderasync(OrderReq ordeRreq)
+        {
+            var order = _mapper.Map<Order>(ordeRreq);
+            await _orderRepository.UpdateOrderasync(order);
         }
     }
 

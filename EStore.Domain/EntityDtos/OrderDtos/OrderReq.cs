@@ -7,17 +7,16 @@ using System.Threading.Tasks;
 
 namespace EStore.Domain.EntityDtos.NewFolder
 {
-    public class OrderRes
+    public class OrderReq
     {
-        public int Id { get; set; }
+        public DateTime OrderDate { get; set; } 
        
-        public DateTime OrderDate { get; set; }
         public decimal TotalAmount { get; set; }
-        public int? CouponId { get; set; }
+        public int orderQuantity { get; set; }
         public bool IsCancelled { get; set; }
-        public List<OrderItemRes> OrderItems { get; set; }
-       
-        
+        public int? couponId { get; set; }
 
+      
+       
     }
 }

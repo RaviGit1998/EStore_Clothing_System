@@ -2,6 +2,7 @@
 using EStore.Domain.Entities;
 using EStore.Domain.EntityDtos;
 using EStore.Domain.EntityDtos.NewFolder;
+using EStore.Domain.EntityDtos.OrderDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,10 +34,40 @@ namespace EStore.Domain.AutoMapper
                 .ForMember(dest => dest.Coupon, opt => opt.Ignore())
                 .ForMember(dest => dest.Payment, opt => opt.Ignore())
                 .ForMember(dest => dest.User, opt => opt.Ignore());
-            CreateMap<OrderItemreq,OrderItem>();
+                         
+
+            
             //Map from order to orderres
             CreateMap<Order, OrderRes>()
-              .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems));                         
+              .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems))
+              .ForMember(dest => dest.User, opt => opt.MapFrom(src => new UserDto
+              {
+                  UserId = src.User.UserId,
+                  FirstName = src.User.FirstName,
+                  Email = src.User.Email
+              }))
+                .ForMember(dest => dest.Coupon, opt => opt.MapFrom(src => new CouponDto
+                {
+                    CouponId = src.Coupon.CouponId,
+                    CouponCode = src.Coupon.CouponCode,
+                    DiscountedAmount = src.Coupon.DiscountedAmount
+                }))
+                .ForMember(dest => dest.Payment, opt => opt.MapFrom(src => new PaymentDto
+                {
+                    PaymentId = src.Payment.PaymentId,
+                    Amount = src.Payment.Amount,
+                    PaymentMode = src.Payment.PaymentMode
+                }))
+                .ForMember(dest => dest.Shipping, opt => opt.MapFrom(src => new ShippingDto
+                {
+                    ShippingId = src.Shipping.ShippingId,
+                    TrackingNumber = src.Shipping.TrackingNumber,
+                    EstimatedDeliveryDate = src.Shipping.EstimatedDeliveryDate
+                }));
+
+            CreateMap<OrderItemreq, OrderItem>();
+
+
             CreateMap<OrderItem, OrderItemRes>();
             //categoryReq to Category
             CreateMap<CategoryReq, Category>()
@@ -49,6 +80,11 @@ namespace EStore.Domain.AutoMapper
               .ForMember(dest => dest.Orders, opt => opt.Ignore())
               .ForMember(dest => dest.WishList, opt => opt.Ignore())
               .ForMember(dest => dest.CreatedDate, opt => opt.Ignore());
+
+            CreateMap<ShippingAddress, ShippingAddressResponse>();
+
+            // DTO to Entity
+            CreateMap<ShippingAddressRequest, ShippingAddress>();
         }
     }
 }

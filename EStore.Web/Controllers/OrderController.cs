@@ -52,7 +52,6 @@ namespace EStore.Web.Api.Controllers
             {
                 return BadRequest("userId cannot be null");
             }
-
             try
             {
                var orders= await _orderService.GetOrdersByUserIdAsync(userId);
@@ -80,6 +79,38 @@ namespace EStore.Web.Api.Controllers
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("RemoveOrderItem{orderItemid}")]
+        public async Task<IActionResult> RemoveItemFromOrder(int orderItemid)
+        {
+            try
+            {
+                var updateOrder = await _orderService.RemoveOrderItemAsync(orderItemid);
+                return Ok(updateOrder);
+            }
+            catch(Exception ex) 
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("{orderId}/total-amount")]
+        public async Task<ActionResult<decimal>> GetTotalAmount(int orderId, [FromQuery] string couponCode = null)
+        {
+            try
+            {
+                var totalAmount = await _orderService.CalculateTotalAmountAsync(orderId, couponCode);
+
+                // Return the updated total amount
+                return Ok(totalAmount);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
         }
     }

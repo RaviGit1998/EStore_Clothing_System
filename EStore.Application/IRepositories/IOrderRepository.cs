@@ -28,9 +28,15 @@ namespace EStore.Application.IRepositories
         Task<bool> ApplyCouponAsync(int orderId, string couponCode);
 
         //Calculating the Total amount of Order
-        Task<decimal> CalculateTotalAmountAsync(int orderId);
+        Task<decimal> CalculateTotalAmountAsync(int orderId,string? couponCode);
 
         //IsPayment Success or not for Order
         Task<bool> ProcessPayment(int orderId);
+
+
+        Task<OrderItem> GetOrderItemByIdAsync(int orderItemid);
+        Task UpdateOrderasync(Order order); 
+       
+
     }
 }

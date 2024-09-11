@@ -67,7 +67,6 @@ namespace EStore.Domain.AutoMapper
 
             CreateMap<OrderItemreq, OrderItem>();
 
-
             CreateMap<OrderItem, OrderItemRes>();
             //categoryReq to Category
             CreateMap<CategoryReq, Category>()

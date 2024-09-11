@@ -22,7 +22,6 @@ namespace EStore.Application.Interfaces
         //Cancelling and Order
         Task<Order> CancelOrderAsync(int orderId);
 
-        //Remove an Order item from the Orders
         Task<OrderRes> RemoveOrderItemAsync(int orderItemId);
 
         //Applying a Coupon

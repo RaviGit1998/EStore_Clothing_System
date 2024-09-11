@@ -21,8 +21,12 @@ namespace EStore.Infrastructure.Repositories
 
         public async Task<IEnumerable<ShippingAddress>> GetAllAddressesAsync()
         {
-            return await _dbContext.ShippingAddresses.Include(sa => sa.User).ToListAsync();
+            return await _dbContext.ShippingAddresses
+                .AsNoTracking() 
+                .Include(sa => sa.User)
+                .ToListAsync();
         }
+
 
         public async Task<ShippingAddress> GetAddressByIdAsync(int shippingId)
         {

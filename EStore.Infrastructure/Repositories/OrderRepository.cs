@@ -95,6 +95,17 @@ namespace EStore.Infrastructure.Repositories
                    
         }
 
+        public async Task<bool> DeleteOderByIdAsync(int orderId)
+        {
+            var order =await GetOrderByIdAsync(orderId);
+
+            if (order == null) return false;
+
+            _eStoreDbContext.Orders.Remove(order);
+            await _eStoreDbContext.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<Order> GetOrderByIdAsync(int orderId)
         {
             var order=await _eStoreDbContext.Orders
@@ -140,7 +151,7 @@ namespace EStore.Infrastructure.Repositories
 
         }
 
-        public async Task<Order> RemoveOrderItemAsync(int orderItemId)
+      /*  public async Task<Order> RemoveOrderItemAsync(int orderItemId)
         {
             var orderItem = await GetOrderItemByIdAsync(orderItemId);
 
@@ -158,13 +169,13 @@ namespace EStore.Infrastructure.Repositories
             await UpdateOrderasync(order);
 
             return order;
-        }
+        }*/
 
-        public async Task<OrderItem> GetOrderItemByIdAsync(int orderItemId)
+       /* public async Task<OrderItem> GetOrderItemByIdAsync(int orderItemId)
         {
             return await _eStoreDbContext.OrderItems.FindAsync(orderItemId);
         }
-
+*/
 
         public async Task UpdateOrderasync(Order order)
         {

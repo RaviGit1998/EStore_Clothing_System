@@ -1,4 +1,5 @@
 ﻿using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos.NewFolder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,10 @@ namespace EStore.Application.IRepositories
 
         //Remove an Order item from the Orders
         Task<Order> RemoveOrderItemAsync(int orderItemId);
+
+        Task<bool> AddOrderItemAsync(OrderItem orderItem);
+
+        Task<OrderItem> UpdateOrderItemAsync(int orderItemId,OrderItem orderItem);
+       
     }
 }

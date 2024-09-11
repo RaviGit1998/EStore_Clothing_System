@@ -98,7 +98,7 @@ namespace EStore.Web.Api.Controllers
             }
         }
 
-        [HttpDelete]
+      /*  [HttpDelete]
         [Route("RemoveOrderItem/{orderItemid}")]
         public async Task<IActionResult> RemoveItemFromOrder(int orderItemid)
         {
@@ -111,7 +111,7 @@ namespace EStore.Web.Api.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
-        }
+        }*/
 
         [HttpGet]
         [Route("{orderId}/total-amount")]
@@ -129,5 +129,32 @@ namespace EStore.Web.Api.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-    }
+
+        [HttpDelete]
+        [Route("delete/{orderId}")]
+        public async Task<IActionResult> DeleteOrder(int orderId)
+        {
+            try
+            {
+                // Call the service to delete the order
+                var result = await _orderService.DeleteOrderByIdAsync(orderId);
+
+                if (result)
+                {
+                    
+                    return Ok("Order deleted successfully.");
+                }
+                else
+                {
+                   
+                    return NotFound("Order not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
+        }
+        }
 }

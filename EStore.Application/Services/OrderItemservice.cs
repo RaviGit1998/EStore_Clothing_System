@@ -22,6 +22,24 @@ namespace EStore.Application.Services
             _mapper = mapper;
             _orderRepository = orderRepository;
         }
+
+        public async Task<OrderRes> AddOrderItemAsync(int orderId, OrderItemreq ordertemReq)
+        {
+           var order=await _orderRepository.GetOrderByIdAsync(orderId);
+            if (order == null) return null;
+
+
+           // order.OrderItems.Add(_mapper.Map<OrderItem>(ordertemReq));
+           var orderItem=_mapper.Map<OrderItem>(ordertemReq);
+            orderItem.OrderId = orderId;
+            order.OrderItems.Add(orderItem);
+            await _orderItemRepository.AddOrderItemAsync(orderItem);
+           await _orderRepository.UpdateOrderasync(order);
+
+            return _mapper.Map<OrderRes>(order);
+
+        }
+
         public async Task<OrderItem> GetOrderItemByIdAsync(int orderItemid)
         {
             var orderItem = await _orderItemRepository.GetOrderItemByIdAsync(orderItemid);
@@ -46,6 +64,20 @@ namespace EStore.Application.Services
             return _mapper.Map<OrderRes>(updatedOrder);
         }
 
-    
+        public async Task<OrderItemRes> UpdateOrderItemAsync(int orderItemId, OrderItemreq orderItemReq)
+        {
+            var existingOrderItem = await _orderItemRepository.GetOrderItemByIdAsync(orderItemId);
+
+            if (existingOrderItem == null)
+                return null;
+
+            existingOrderItem.ProductVariantId = orderItemReq.ProductVariantId;
+            existingOrderItem.Quantity = orderItemReq.Quantity;
+
+            //var orderItem=_mapper.Map<OrderItem>(orderItemId);
+          var updatedorderItemRes=  await _orderItemRepository.UpdateOrderItemAsync(orderItemId, existingOrderItem);
+
+            return _mapper.Map<OrderItemRes>(updatedorderItemRes);
+        }
     }
 }

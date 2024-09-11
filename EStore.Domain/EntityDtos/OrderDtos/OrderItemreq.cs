@@ -8,8 +8,9 @@ namespace EStore.Domain.EntityDtos.NewFolder
 {
     public class OrderItemreq
     {
+       // public int OrderId { get; set; }
         public int ProductVariantId { get; set; }
         public int Quantity { get; set; }
-        public decimal Price { get; set; }
+      
     }
 }

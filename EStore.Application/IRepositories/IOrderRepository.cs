@@ -21,9 +21,6 @@ namespace EStore.Application.IRepositories
         //Cancelling and Order
         Task<Order> CancelOrderAsync(int orderId);
 
-        //Remove an Order item from the Orders
-        Task<Order> RemoveOrderItemAsync(int orderItemId);
-
         //Applying a Coupon
         Task<bool> ApplyCouponAsync(int orderId, string couponCode);
 
@@ -33,7 +30,7 @@ namespace EStore.Application.IRepositories
         //IsPayment Success or not for Order
         Task<bool> ProcessPayment(int orderId);
 
-
+        Task<Order> RemoveOrderItemAsync(int orderItemId);
         Task<OrderItem> GetOrderItemByIdAsync(int orderItemid);
         Task UpdateOrderasync(Order order); 
        

@@ -102,8 +102,8 @@ namespace EStore.Infrastructure.Repositories
                             .Include(o=>o.OrderItems)
                             .Include(o=>o.Coupon)
                             .Include(o=>o.Payment)
+                            .Include(o=>o.Shipping)
                             .FirstOrDefaultAsync(o=>o.Id==orderId);
-
             return order;
         }
 
@@ -142,12 +142,12 @@ namespace EStore.Infrastructure.Repositories
 
         public async Task<Order> RemoveOrderItemAsync(int orderItemId)
         {
-           var orderItem=await GetOrderItemByIdAsync(orderItemId);
+            var orderItem = await GetOrderItemByIdAsync(orderItemId);
 
             if (orderItem == null)
                 return null;
 
-            var order=await GetOrderByIdAsync(orderItem.OrderId);
+            var order = await GetOrderByIdAsync(orderItem.OrderId);
             if (order == null)
                 return null;
 
@@ -164,6 +164,7 @@ namespace EStore.Infrastructure.Repositories
         {
             return await _eStoreDbContext.OrderItems.FindAsync(orderItemId);
         }
+
 
         public async Task UpdateOrderasync(Order order)
         {

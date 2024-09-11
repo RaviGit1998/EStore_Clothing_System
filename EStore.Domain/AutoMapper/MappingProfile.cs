@@ -42,6 +42,11 @@ namespace EStore.Domain.AutoMapper
             CreateMap<CategoryReq, Category>()
              .ForMember(dest => dest.SubCategories, opt => opt.Ignore())
              .ForMember(dest => dest.Products, opt => opt.Ignore());
+
+            CreateMap<ShippingAddress, ShippingAddressResponse>();
+
+            // DTO to Entity
+            CreateMap<ShippingAddressRequest, ShippingAddress>();
         }
     }
 }

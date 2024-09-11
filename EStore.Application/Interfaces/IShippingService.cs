@@ -11,10 +11,10 @@ namespace EStore.Application.Interfaces
     public interface IShippingAddressService
     {
         Task<IEnumerable<ShippingAddressResponse>> GetAllAddressesAsync();
-        Task<ShippingAddressResponse> GetAddressByIdAsync(int id);
+        Task<ShippingAddressResponse> GetAddressByIdAsync(int shippingId);
         Task<IEnumerable<ShippingAddressResponse>> GetAddressesByUserIdAsync(int userId);
         Task AddAddressAsync(ShippingAddressRequest addressRequest);
-        Task UpdateAddressAsync(int id, ShippingAddressRequest addressRequest);
-        Task DeleteAddressAsync(int id);
+        Task UpdateAddressAsync(int shippingId, ShippingAddressRequest addressRequest);
+        Task DeleteAddressAsync(int shippingId);
     }
 }

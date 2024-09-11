@@ -10,10 +10,10 @@ namespace EStore.Application.IRepositories
     public interface IShippingAddressRepository
     {   
             Task<IEnumerable<ShippingAddress>> GetAllAddressesAsync();
-            Task<ShippingAddress> GetAddressByIdAsync(int id);
+            Task<ShippingAddress> GetAddressByIdAsync(int shippingId);
             Task<IEnumerable<ShippingAddress>> GetAddressesByUserIdAsync(int userId);
             Task AddAddressAsync(ShippingAddress address);
             Task UpdateAddressAsync(ShippingAddress address);
-            Task DeleteAddressAsync(int id);        
+            Task DeleteAddressAsync(int shippingId);        
     }
 }

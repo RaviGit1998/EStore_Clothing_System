@@ -31,12 +31,12 @@ namespace EStore.Web.Api.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ShippingAddressResponse>> GetAddress(int id)
+        [HttpGet("{shippingId}")]
+        public async Task<ActionResult<ShippingAddressResponse>> GetAddress(int shippingId)
         {
             try
             {
-                var address = await _service.GetAddressByIdAsync(id);
+                var address = await _service.GetAddressByIdAsync(shippingId);
                 if (address == null)
                 {
                     return NotFound();

@@ -24,12 +24,12 @@ namespace EStore.Infrastructure.Repositories
             return await _dbContext.ShippingAddresses.Include(sa => sa.User).ToListAsync();
         }
 
-        public async Task<ShippingAddress> GetAddressByIdAsync(int id)
+        public async Task<ShippingAddress> GetAddressByIdAsync(int shippingId)
         {
-            if(id <= 0)
-                throw new ArgumentOutOfRangeException(nameof(id));
+            if(shippingId <= 0)
+                throw new ArgumentOutOfRangeException(nameof(shippingId));
             return await _dbContext.ShippingAddresses.Include(sa => sa.User)
-                                                   .FirstOrDefaultAsync(sa => sa.ShippingAddressId == id);
+                                                   .FirstOrDefaultAsync(sa => sa.ShippingAddressId == shippingId);
         }
 
         public async Task<IEnumerable<ShippingAddress>> GetAddressesByUserIdAsync(int userId)
@@ -51,9 +51,9 @@ namespace EStore.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAddressAsync(int id)
+        public async Task DeleteAddressAsync(int shippingId)
         {
-            var address = await _dbContext.ShippingAddresses.FindAsync(id);
+            var address = await _dbContext.ShippingAddresses.FindAsync(shippingId);
             if (address != null)
             {
                 _dbContext.ShippingAddresses.Remove(address);

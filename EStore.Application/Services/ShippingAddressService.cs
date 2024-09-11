@@ -46,16 +46,16 @@ namespace EStore.Application.Services
             await _repository.AddAddressAsync(address);
         }
 
-        public async Task UpdateAddressAsync(int id, ShippingAddressRequest addressRequest)
+        public async Task UpdateAddressAsync(int shippingId, ShippingAddressRequest addressRequest)
         {
             var address = _mapper.Map<ShippingAddress>(addressRequest);
-            address.ShippingAddressId = id; 
+            address.ShippingAddressId = shippingId; 
             await _repository.UpdateAddressAsync(address);
         }
 
-        public async Task DeleteAddressAsync(int id)
+        public async Task DeleteAddressAsync(int shippingId)
         {
-            await _repository.DeleteAddressAsync(id);
+            await _repository.DeleteAddressAsync(shippingId);
         }
     }
 }

@@ -69,10 +69,17 @@ namespace EStore.Domain.AutoMapper
 
 
             CreateMap<OrderItem, OrderItemRes>();
-            //
+            //categoryReq to Category
             CreateMap<CategoryReq, Category>()
              .ForMember(dest => dest.SubCategories, opt => opt.Ignore())
              .ForMember(dest => dest.Products, opt => opt.Ignore());
+            //userReq to User
+            CreateMap<UserReq, User>()
+              .ForMember(dest => dest.ShippingAddresses, opt => opt.Ignore())
+              .ForMember(dest => dest.ProductReviews, opt => opt.Ignore())
+              .ForMember(dest => dest.Orders, opt => opt.Ignore())
+              .ForMember(dest => dest.WishList, opt => opt.Ignore())
+              .ForMember(dest => dest.CreatedDate, opt => opt.Ignore());
 
             CreateMap<ShippingAddress, ShippingAddressResponse>();
 

@@ -80,6 +80,16 @@ namespace EStore.Domain.AutoMapper
               .ForMember(dest => dest.Orders, opt => opt.Ignore())
               .ForMember(dest => dest.WishList, opt => opt.Ignore())
               .ForMember(dest => dest.CreatedDate, opt => opt.Ignore());
+            //loginreq to User
+
+            CreateMap<LoginReq, User>()
+             .ForMember(dest => dest.Email,opt=>opt.MapFrom(src=>src.Email))
+             .ForMember(dest=>dest.PasswordHash,opt=>opt.MapFrom(src=>src.PasswordHash))
+             .ForMember(dest => dest.ShippingAddresses, opt => opt.Ignore())
+             .ForMember(dest => dest.ProductReviews, opt => opt.Ignore())
+             .ForMember(dest => dest.Orders, opt => opt.Ignore())
+             .ForMember(dest => dest.WishList, opt => opt.Ignore())
+             .ForMember(dest => dest.CreatedDate, opt => opt.Ignore());
 
             CreateMap<ShippingAddress, ShippingAddressResponse>();
 

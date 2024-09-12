@@ -1,5 +1,6 @@
 ﻿using EStore.Application.IRepositories;
 using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos.NewFolder;
 using EStore.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -21,6 +22,15 @@ namespace EStore.Infrastructure.Repositories
            
             _orderRepository = orderRepository;
                 _eStoreDbContext = eStoreDbContext;
+        }
+
+        public async Task<bool> AddOrderItemAsync(OrderItem orderItem)
+        {
+             _eStoreDbContext.OrderItems.Add(orderItem);
+
+            await  _eStoreDbContext.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<OrderItem> GetOrderItemByIdAsync(int orderItemid)
@@ -48,5 +58,26 @@ namespace EStore.Infrastructure.Repositories
             return order;
         }
 
+        public async Task<OrderItem> UpdateOrderItemAsync(int orderItemId,OrderItem orderItem)
+        {
+            var existingOrderItem = await _eStoreDbContext.OrderItems
+                                      .FirstOrDefaultAsync(oi => oi.OrderItemId == orderItemId);
+            if (existingOrderItem == null)
+                return null;
+            // Fetch the product variant to get the latest price
+            var productVariant = await _eStoreDbContext.ProductVariants
+                .FirstOrDefaultAsync(pv => pv.ProductVariantId == orderItem.ProductVariantId);
+            if (productVariant == null)
+                throw new KeyNotFoundException("Product variant not found.");
+
+            existingOrderItem.Price=productVariant.PricePerUnit;
+         
+            existingOrderItem.ProductVariantId= orderItem.ProductVariantId;
+
+            _eStoreDbContext.OrderItems.Update(existingOrderItem);
+            await _eStoreDbContext.SaveChangesAsync();
+
+            return existingOrderItem;
+        }
     }
 }

@@ -60,6 +60,7 @@ namespace EStore.Web.Api.Controllers
             }
         }
         [HttpDelete("{id}")]
+       [Authorize]
         public async Task<IActionResult> DeleteCategoryAsync([FromRoute] int id)
         {
             if (id <= 0)
@@ -85,6 +86,7 @@ namespace EStore.Web.Api.Controllers
             return NoContent();//204
         }
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateCategoryAsync([FromBody] CategoryReq category)
         {
             if (category == null)
@@ -112,6 +114,7 @@ namespace EStore.Web.Api.Controllers
           
         }
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateCategoryAsync([FromBody] CategoryReq category)
         {
             if (category == null)

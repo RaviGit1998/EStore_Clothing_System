@@ -30,10 +30,11 @@ namespace EStore.Application.IRepositories
         //IsPayment Success or not for Order
         Task<bool> ProcessPayment(int orderId);
 
-        Task<Order> RemoveOrderItemAsync(int orderItemId);
-        Task<OrderItem> GetOrderItemByIdAsync(int orderItemid);
-        Task UpdateOrderasync(Order order); 
-       
+       // Task<Order> RemoveOrderItemAsync(int orderItemId);
+       // Task<OrderItem> GetOrderItemByIdAsync(int orderItemid);
+        Task UpdateOrderasync(Order order);
+
+        Task<bool> DeleteOderByIdAsync(int orderId);
 
     }
 }

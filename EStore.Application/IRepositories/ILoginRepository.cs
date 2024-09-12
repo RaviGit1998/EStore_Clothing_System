@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace EStore.Application.IRepositories
 {
-    public interface IUserRepository
+    public interface ILoginRepository
     {
-        Task<User> RegisterUser(User user);
-        Task<User> GetUserByEmail(string email);
+        Task<User> GetUserByCredentails(string email,string password);
     }
 }

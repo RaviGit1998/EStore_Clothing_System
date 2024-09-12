@@ -1,4 +1,5 @@
 ﻿using EStore.Application.Interfaces;
+using EStore.Domain.Entities;
 using EStore.Domain.EntityDtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,25 @@ namespace EStore.Web.Api.Controllers
         public UserController(IUserService userService)
         {
             _userService = userService;
+        }
+        [HttpGet()]
+        [Route("email/{email}")]
+        public async Task<ActionResult<User>> GetUserByEmailAsync(string email)
+        {
+            try
+            {               
+                var result = await _userService.GetUserByEmail(email);
+                if(result == null)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
+            }
+            catch (Exception ex) 
+            { 
+                return BadRequest(ex.Message);
+            }
+
         }
         [HttpPost("RegisterUser")]
         public async Task<IActionResult> RegisterUser([FromBody] UserReq userReq)

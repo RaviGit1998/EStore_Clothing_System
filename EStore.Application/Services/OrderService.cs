@@ -65,6 +65,12 @@ namespace EStore.Application.Services
             return _mapper.Map<OrderRes>(createdOrder);
         }
 
+        public async Task<bool> DeleteOrderByIdAsync(int orderId)
+        {
+           return await _orderRepository.DeleteOderByIdAsync(orderId);
+            
+        }
+
         public async Task<OrderRes> GetOrderByIdAsync(int orderId)
         {
             if (orderId <= 0)
@@ -101,7 +107,7 @@ namespace EStore.Application.Services
              return success;
         }
 
-        public async Task<OrderRes> RemoveOrderItemAsync(int orderItemId)
+     /*   public async Task<OrderRes> RemoveOrderItemAsync(int orderItemId)
         {
             if (orderItemId <= 0)
                 throw new ArgumentException("Invalid order ID.");
@@ -119,7 +125,7 @@ namespace EStore.Application.Services
             var updatedOrder = await _orderRepository.GetOrderByIdAsync(order.Id);
 
             return _mapper.Map<OrderRes>(updatedOrder);
-        }
+        }*/
 
         public async Task UpdateOrderasync(OrderReq ordeRreq)
         {

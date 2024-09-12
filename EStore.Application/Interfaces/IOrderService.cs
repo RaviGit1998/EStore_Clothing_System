@@ -22,7 +22,7 @@ namespace EStore.Application.Interfaces
         //Cancelling and Order
         Task<Order> CancelOrderAsync(int orderId);
 
-        Task<OrderRes> RemoveOrderItemAsync(int orderItemId);
+       // Task<OrderRes> RemoveOrderItemAsync(int orderItemId);
 
         //Applying a Coupon
         Task<bool> ApplyCouponAsync(int orderId, string couponCode);
@@ -33,6 +33,9 @@ namespace EStore.Application.Interfaces
         //IsPayment Success or not for Order
         Task<bool> ProcessPayment(int orderId);
 
+
+        Task<bool> DeleteOrderByIdAsync(int orderId);
+        
       
     }
 }

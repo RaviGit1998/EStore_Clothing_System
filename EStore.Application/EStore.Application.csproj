@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EStore.Domain\EStore.Domain.csproj" />
+    <ProjectReference Include="..\EStore.Domain\EStore.Domain.csproj"/>
   </ItemGroup>
 
 </Project>

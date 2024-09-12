@@ -56,7 +56,7 @@ namespace EStore.Application.Services
             if (order == null)
                 throw new KeyNotFoundException($"Order with ID {orderItem.OrderId} not found");
 
-            await RemoveOrderItemAsync(orderItemId);
+            await _orderItemRepository.RemoveOrderItemAsync(orderItemId);
             await _orderRepository.UpdateOrderasync(order);
 
             var updatedOrder = await _orderRepository.GetOrderByIdAsync(order.Id);

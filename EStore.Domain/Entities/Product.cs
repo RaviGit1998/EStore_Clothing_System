@@ -18,7 +18,7 @@ namespace EStore.Domain.Entities
         public int CategoryId { get; set; }
         public int SubCategoryId { get; set; }
         public Category Category { get; set; }
-       public SubCategory SubCategory { get; set; }
+        public SubCategory SubCategory { get; set; }
      
         public virtual ICollection<ProductVariant> ProductVariants { get; set; }
       

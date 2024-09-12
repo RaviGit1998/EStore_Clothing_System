@@ -15,5 +15,8 @@ namespace EStore.Application.Interfaces
         //Remove an Order item from the Orders
         Task<OrderRes> RemoveOrderItemAsync(int orderItemId);
 
+        Task<OrderRes> AddOrderItemAsync(int orderId, OrderItemreq ordertemReq);
+        Task<OrderItemRes> UpdateOrderItemAsync(int orderItemId, OrderItemreq orderItemReq);
+
     }
 }

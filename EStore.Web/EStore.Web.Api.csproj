@@ -29,4 +29,8 @@
     <ProjectReference Include="..\EStore.Infrastructure\EStore.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\products\" />
+  </ItemGroup>
+
 </Project>

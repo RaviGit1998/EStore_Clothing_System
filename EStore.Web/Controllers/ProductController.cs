@@ -18,19 +18,19 @@ namespace EStore.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllProducts()
         {
             var products = await _productService.GetAllProductsAsync();
             return Ok(products);
         }
 
         [HttpGet("{productId}")]
-        public async Task<ActionResult<Product>> GetProductById(int productId)
+        public async Task<ActionResult<ProductDto>> GetProductById(int productId)
         {
             try
             {
-                var product = await _productService.GetProductByIdAsync(productId);
-                return Ok(product);
+                var productDto = await _productService.GetProductByIdAsync(productId);
+                return Ok(productDto);
             }
             catch (KeyNotFoundException)
             {
@@ -46,7 +46,7 @@ namespace EStore.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProduct([FromBody] CreateProductDto createProductDto)
+        public async Task<IActionResult> AddProduct([FromForm] CreateProductDto createProductDto)
         {
             if (!ModelState.IsValid)
             {
@@ -57,6 +57,8 @@ namespace EStore.Web.Controllers
 
             return CreatedAtAction(nameof(GetProductById), new { productId = createdProductId }, createProductDto);
         }
+
+
 
         [HttpDelete("{productId}")]
         public async Task<IActionResult> DeleteProduct(int productId)
@@ -73,7 +75,7 @@ namespace EStore.Web.Controllers
         }
 
         [HttpPut("{productId}")]
-        public async Task<IActionResult> UpdateProduct(int productId, [FromBody] UpdateProductDto updateProductDto)
+        public async Task<IActionResult> UpdateProduct(int productId, [FromForm] UpdateProductDto updateProductDto)
         {
             if (updateProductDto == null)
             {
@@ -95,4 +97,5 @@ namespace EStore.Web.Controllers
             }
         }
     }
+    
 }

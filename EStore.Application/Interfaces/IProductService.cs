@@ -10,8 +10,8 @@ namespace EStore.Application.Interfaces
 {
     public interface IProductService
     {
-        Task<IEnumerable<Product>> GetAllProductsAsync();
-        Task<Product> GetProductByIdAsync(int id);
+        Task<IEnumerable<ProductDto>> GetAllProductsAsync();
+        Task<ProductDto> GetProductByIdAsync(int id);
         Task<IEnumerable<ProductDto>> SearchProductAsync(string keyword);
         Task<int> AddProductAsync(CreateProductDto createProductDto);
         Task DeleteProductAsync(int productId);

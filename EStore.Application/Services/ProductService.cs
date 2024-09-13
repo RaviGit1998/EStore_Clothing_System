@@ -22,28 +22,46 @@ namespace EStore.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Product>> GetAllProductsAsync()
+        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
         {
-            
-            return await _productRepository.GetAllProducts();
+            var products = await _productRepository.GetAllProducts();
+            var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
+
+            foreach (var productDto in productDtos)
+            {
+                var product = products.FirstOrDefault(p => p.ProductId == productDto.ProductId);
+                if (product?.ImageData != null)
+                {
+                    productDto.ImageBase64 = Convert.ToBase64String(product.ImageData);
+                }
+            }
+
+            return productDtos;
         }
 
-        public async Task<Product> GetProductByIdAsync(int productId)
+        public async Task<ProductDto> GetProductByIdAsync(int productId)
         {
-           
             if (productId <= 0)
             {
                 throw new ArgumentException("Invalid product ID", nameof(productId));
             }
 
             var product = await _productRepository.GetProductsByIdAsync(productId);
-
             if (product == null)
             {
                 throw new KeyNotFoundException($"Product with ID {productId} not found.");
             }
 
-            return product;
+            var productDto = _mapper.Map<ProductDto>(product);
+
+            // Convert image data to base64 string
+            if (product.ImageData != null && product.ImageData.Length > 0)
+            {
+                productDto.ImageBase64 = Convert.ToBase64String(product.ImageData);
+            }
+
+            return productDto;
+
         }
         public async Task<IEnumerable<ProductDto>> SearchProductAsync(string keyword)
         {
@@ -54,10 +72,18 @@ namespace EStore.Application.Services
         public async Task<int> AddProductAsync(CreateProductDto createProductDto)
         {
             var product = _mapper.Map<Product>(createProductDto);
+            if (createProductDto.ImageFile != null && createProductDto.ImageFile.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await createProductDto.ImageFile.CopyToAsync(memoryStream);
+                    product.ImageData = memoryStream.ToArray();
+                }
+            }         
             product.CreatedDate = DateTime.UtcNow;
-            product.ModifiedDate = DateTime.UtcNow;        
+            product.ModifiedDate = DateTime.UtcNow;
             await _productRepository.AddProductAsync(product);
-            return product.ProductId; 
+            return product.ProductId;
         }
 
         public async Task DeleteProductAsync(int productId)
@@ -76,16 +102,24 @@ namespace EStore.Application.Services
             {
                 throw new ArgumentNullException(nameof(updateProductDto));
             }
-            
+
             var existingProduct = await _productRepository.GetProductsByIdAsync(productId);
             if (existingProduct == null)
             {
                 throw new KeyNotFoundException($"Product with ID {productId} not found.");
-            }            
+            }
+
             _mapper.Map(updateProductDto, existingProduct);
-            existingProduct.CreatedDate = DateTime.UtcNow;
-            existingProduct.ModifiedDate = DateTime.UtcNow; 
-           
+            if (updateProductDto.ImageFile != null && updateProductDto.ImageFile.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await updateProductDto.ImageFile.CopyToAsync(memoryStream);
+                    existingProduct.ImageData = memoryStream.ToArray();
+                }
+            }
+            existingProduct.ModifiedDate = DateTime.UtcNow;
+
             await _productRepository.UpdateProductAsync(existingProduct);
         }
 

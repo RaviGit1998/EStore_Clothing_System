@@ -22,8 +22,8 @@ namespace EStore.Domain.AutoMapper
             // Map from Product to ProductDto
             CreateMap<Product, ProductDto>()
                 .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId))
-                .ForMember(dest => dest.SubCategoryId, opt => opt.MapFrom(src => src.SubCategoryId));
-
+                .ForMember(dest => dest.SubCategoryId, opt => opt.MapFrom(src => src.SubCategoryId))
+                .ForMember(dest => dest.ImageBase64, opt => opt.Ignore());
             // Map from CreateProductDto to Product
             CreateMap<CreateProductDto, Product>()
                 .ForMember(dest => dest.CreatedDate, opt => opt.Ignore()) 
@@ -37,6 +37,8 @@ namespace EStore.Domain.AutoMapper
             .ForMember(dest => dest.Payment, opt => opt.Ignore())
             .ForMember(dest => dest.Shipping, opt => opt.Ignore());
 
+              
+            
             //Map from order to orderres
             CreateMap<Order, OrderRes>()
                .ForMember(dest=>dest.Id,opt =>opt.MapFrom(src => src.Id))

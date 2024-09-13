@@ -30,7 +30,6 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderItemService, OrderItemservice>();
 builder.Services.AddScoped<IOrderItemRepository, OrderItemRepository>();
 
-
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -58,7 +57,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3005") 
+            builder.WithOrigins("http://localhost:3003") 
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
@@ -72,6 +71,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 

@@ -146,25 +146,7 @@ namespace EStore.Application.Services
              return success;
         }
 
-     /*   public async Task<OrderRes> RemoveOrderItemAsync(int orderItemId)
-        {
-            if (orderItemId <= 0)
-                throw new ArgumentException("Invalid order ID.");
-
-            var orderItem = await _orderRepository.GetOrderItemByIdAsync(orderItemId);
-            var order = await GetOrderByIdAsync(orderItem.OrderId);
-            if (order == null)
-                throw new KeyNotFoundException($"Order with ID {orderItem.OrderId} not found");
-
-            await _orderRepository.RemoveOrderItemAsync(orderItemId);
-
-
-            await UpdateOrderasync(_mapper.Map<OrderReq>(order));
-
-            var updatedOrder = await _orderRepository.GetOrderByIdAsync(order.Id);
-
-            return _mapper.Map<OrderRes>(updatedOrder);
-        }*/
+     
 
         public async Task UpdateOrderasync(OrderReq ordeRreq)
         {

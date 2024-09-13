@@ -28,7 +28,7 @@ namespace EStore.Application.Services
            var order=await _orderRepository.GetOrderByIdAsync(orderId);
             if (order == null) return null;
 
-            // order.OrderItems.Add(_mapper.Map<OrderItem>(ordertemReq));
+         
             var orderItem=_mapper.Map<OrderItem>(ordertemReq);
             orderItem.OrderId = orderId;
             order.OrderItems.Add(orderItem);
@@ -73,7 +73,7 @@ namespace EStore.Application.Services
             existingOrderItem.ProductVariantId = orderItemReq.ProductVariantId;
             existingOrderItem.Quantity = orderItemReq.Quantity;
 
-            //var orderItem=_mapper.Map<OrderItem>(orderItemId);
+          
           var updatedorderItemRes=  await _orderItemRepository.UpdateOrderItemAsync(orderItemId, existingOrderItem);
 
             return _mapper.Map<OrderItemRes>(updatedorderItemRes);

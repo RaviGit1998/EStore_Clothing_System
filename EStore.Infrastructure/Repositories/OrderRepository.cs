@@ -32,7 +32,7 @@ namespace EStore.Infrastructure.Repositories
             if (coupon == null || !coupon.IsActive || coupon.ExpirationDate<DateTime.Now) 
                 return false;
 
-            //Applying Coupon Siscount to the Order
+            //Applying Coupon Discount to the Order
             order.CouponId = coupon.CouponId;
             _eStoreDbContext.Orders.Update(order);
             await _eStoreDbContext.SaveChangesAsync();

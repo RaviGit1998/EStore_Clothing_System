@@ -59,7 +59,10 @@ namespace EStore.Infrastructure.Repositories
                 {
                     // Apply the coupon to the order and update it
                     order.CouponId = coupon.CouponId;
-                    totalAmount -= coupon.DiscountedAmount;
+                    if (totalAmount >= 999)
+                    {
+                        totalAmount -= coupon.DiscountedAmount;
+                    }                 
                 }
                 else
                 {
@@ -70,7 +73,6 @@ namespace EStore.Infrastructure.Repositories
             order.TotalAmount = totalAmount;
             _eStoreDbContext.Orders.Update(order);
             await _eStoreDbContext.SaveChangesAsync();
-
             return totalAmount;
         }
 
@@ -89,7 +91,6 @@ namespace EStore.Infrastructure.Repositories
 
         public async Task<Order> CreateAnOrderAsync(Order order)
         {
-          //  var price = await GetProductVariantPricesAsync(order.OrderItems.Select(item => item.ProductVariantId).ToList());
             _eStoreDbContext.Orders.Add(order);
             await _eStoreDbContext.SaveChangesAsync();
             return order;   

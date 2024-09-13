@@ -89,6 +89,7 @@ namespace EStore.Infrastructure.Repositories
 
         public async Task<Order> CreateAnOrderAsync(Order order)
         {
+          //  var price = await GetProductVariantPricesAsync(order.OrderItems.Select(item => item.ProductVariantId).ToList());
             _eStoreDbContext.Orders.Add(order);
             await _eStoreDbContext.SaveChangesAsync();
             return order;   
@@ -111,9 +112,6 @@ namespace EStore.Infrastructure.Repositories
             var order=await _eStoreDbContext.Orders
                             .Include(o=>o.User)
                             .Include(o=>o.OrderItems)
-                            .Include(o=>o.Coupon)
-                            .Include(o=>o.Payment)
-                            .Include(o=>o.Shipping)
                             .FirstOrDefaultAsync(o=>o.Id==orderId);
             return order;
         }
@@ -123,9 +121,10 @@ namespace EStore.Infrastructure.Repositories
         {
             var userOrders = await _eStoreDbContext.Orders
                             .Where(o => o.UserId == userId)
+                          
                             .Include(o => o.OrderItems)
-                            .Include(o => o.Coupon)
-                            .Include(o => o.Payment)
+                           
+                            .Include(o=>o.User)
                             .ToListAsync();
             return userOrders;
         }
@@ -182,5 +181,16 @@ namespace EStore.Infrastructure.Repositories
             _eStoreDbContext.Orders.Update(order);
             await _eStoreDbContext.SaveChangesAsync();
         }
+
+        public async Task<Dictionary<int, decimal>> GetProductVariantPricesAsync(List<int> productVariantIds)
+        {
+            // Assuming _dbContext is your Entity Framework context
+            var prices = await _eStoreDbContext.ProductVariants
+                                         .Where(pv => productVariantIds.Contains(pv.ProductVariantId))
+                                         .ToDictionaryAsync(pv => pv.ProductVariantId, pv => pv.PricePerUnit); // Replace 'Price' with the actual field name
+            return prices;
+        }
+
+      
     }
 }

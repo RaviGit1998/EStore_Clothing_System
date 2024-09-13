@@ -57,11 +57,51 @@ namespace EStore.Application.Services
 
         public async Task<OrderRes> CreateAnOrderAsync(OrderReq orderReq)
         {
-            var order=_mapper.Map<Order>(orderReq);
+            /*var order=_mapper.Map<Order>(orderReq);
             if (order.OrderItems == null || !order.OrderItems.Any())
                 throw new ArgumentException("Order must contain at least one order item.");
-
+           
             var createdOrder= await _orderRepository.CreateAnOrderAsync(order);
+            return _mapper.Map<OrderRes>(createdOrder);*/
+        
+            var productVariantPrices = await _orderRepository.GetProductVariantPricesAsync(orderReq.OrderItemreq.Select(item => item.ProductVariantId).ToList());
+
+           // var order = _mapper.Map<Order>(orderReq);
+
+            if (orderReq.OrderItemreq == null || !orderReq.OrderItemreq.Any())
+                throw new ArgumentException("Order must contain at least one order item.");
+
+            var orderItems=new List<OrderItem>();
+            int totalQuantity = 0;
+            foreach (var itemReq in orderReq.OrderItemreq)
+            {
+                if (productVariantPrices.TryGetValue(itemReq.ProductVariantId, out var price))
+                {
+                    var orderItem = new OrderItem
+                    {
+                        ProductVariantId = itemReq.ProductVariantId,
+                        Quantity=itemReq.Quantity,
+                        Price=price
+                        
+                    };
+                    orderItems.Add(orderItem); // Add to the order's items
+
+                    totalQuantity += itemReq.Quantity;
+                }
+                else
+                {
+                    throw new KeyNotFoundException($"Product variant price not found for ID {itemReq.ProductVariantId}");
+                }
+            }
+          
+            var order=_mapper.Map<Order>(orderReq);
+            
+            order.OrderItems = orderItems;
+            order.OrderQuantity = totalQuantity;
+          
+            var createdOrder = await _orderRepository.CreateAnOrderAsync(order);
+            await _orderRepository.UpdateOrderasync(createdOrder);
+
             return _mapper.Map<OrderRes>(createdOrder);
         }
 
@@ -90,8 +130,7 @@ namespace EStore.Application.Services
             if (userId <= 0) throw new ArgumentException("Invalid User Id");
 
            var orders= await _orderRepository.GetOrdersByUserIdAsync(userId);
-            var orderResponses = _mapper.Map<IEnumerable<OrderRes>>(orders);
-           
+            var orderResponses = _mapper.Map<IEnumerable<OrderRes>>(orders);         
             return orderResponses.ToList();
         }
 
@@ -132,6 +171,8 @@ namespace EStore.Application.Services
             var order = _mapper.Map<Order>(ordeRreq);
             await _orderRepository.UpdateOrderasync(order);
         }
+
+      
     }
 
 }

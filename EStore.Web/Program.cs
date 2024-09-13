@@ -30,7 +30,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderItemService, OrderItemservice>();
 builder.Services.AddScoped<IOrderItemRepository, OrderItemRepository>();
 
-builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -58,7 +58,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3003") 
+            builder.WithOrigins("http://localhost:3005") 
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });

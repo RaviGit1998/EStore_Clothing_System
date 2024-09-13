@@ -28,9 +28,8 @@ namespace EStore.Application.Services
            var order=await _orderRepository.GetOrderByIdAsync(orderId);
             if (order == null) return null;
 
-
-           // order.OrderItems.Add(_mapper.Map<OrderItem>(ordertemReq));
-           var orderItem=_mapper.Map<OrderItem>(ordertemReq);
+            // order.OrderItems.Add(_mapper.Map<OrderItem>(ordertemReq));
+            var orderItem=_mapper.Map<OrderItem>(ordertemReq);
             orderItem.OrderId = orderId;
             order.OrderItems.Add(orderItem);
             await _orderItemRepository.AddOrderItemAsync(orderItem);

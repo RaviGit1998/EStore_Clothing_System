@@ -1,4 +1,5 @@
 ﻿using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos.OrderDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +11,15 @@ namespace EStore.Domain.EntityDtos.NewFolder
     public class OrderReq
     {
         public DateTime OrderDate { get; set; } 
-       
-        public decimal TotalAmount { get; set; }
-        public int orderQuantity { get; set; }
+        public int UserId { get; set; }
         public bool IsCancelled { get; set; }
-        public int? couponId { get; set; }
+       // public int? CouponId { get; set; }
+        public ICollection<OrderItemreq> OrderItemreq { get; set; }
+       //  public UserDto User { get; set; }
+      //  public CouponDto Coupon { get; set; }
+       // public PaymentDto Payment { get; set; }
+       // public ShippingDto Shipping { get; set; }
 
-      
-       
+
     }
 }

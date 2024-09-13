@@ -15,6 +15,8 @@ namespace EStore.Domain.EntityDtos
         public string Brand { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
+        public string ImageData { get; set; }
+        public string ImageBase64 { get; set; }
         public int CategoryId { get; set; }
         public int SubCategoryId { get; set; }
     }

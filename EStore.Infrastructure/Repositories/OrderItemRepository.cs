@@ -26,7 +26,10 @@ namespace EStore.Infrastructure.Repositories
 
         public async Task<bool> AddOrderItemAsync(OrderItem orderItem)
         {
-             _eStoreDbContext.OrderItems.Add(orderItem);
+            var productVariant = await _eStoreDbContext.ProductVariants
+                                 .FirstOrDefaultAsync(pv => pv.ProductVariantId == orderItem.ProductVariantId);
+            orderItem.Price = productVariant.PricePerUnit;
+            _eStoreDbContext.OrderItems.Add(orderItem);
 
             await  _eStoreDbContext.SaveChangesAsync();
 

@@ -30,6 +30,8 @@ namespace EStore.Application.IRepositories
         //IsPayment Success or not for Order
         Task<bool> ProcessPayment(int orderId);
 
+        Task<Dictionary<int, decimal>> GetProductVariantPricesAsync(List<int> productVariantIds);
+
        // Task<Order> RemoveOrderItemAsync(int orderItemId);
        // Task<OrderItem> GetOrderItemByIdAsync(int orderItemid);
         Task UpdateOrderasync(Order order);

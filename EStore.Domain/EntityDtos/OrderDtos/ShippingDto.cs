@@ -8,7 +8,7 @@ namespace EStore.Domain.EntityDtos.OrderDtos
 {
     public class ShippingDto
     {
-        public int ShippingId { get; set; }
+      
         public string TrackingNumber { get; set; }      
         public DateTime EstimatedDeliveryDate { get; set; }
     }

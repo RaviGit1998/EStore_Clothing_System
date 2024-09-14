@@ -8,7 +8,7 @@ namespace EStore.Domain.EntityDtos.OrderDtos
 {
     public class PaymentDto
     {
-        public int PaymentId { get; set; }
+      
         public decimal Amount { get; set; }
 
         public string PaymentMode { get; set; }

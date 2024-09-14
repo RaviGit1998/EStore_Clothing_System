@@ -15,27 +15,29 @@ namespace EStore.Domain.AutoMapper
     {
         public MappingProfile()
         {
+            CreateMap<ProductVariant, ProductVariantDto>();
+
             CreateMap<UpdateProductDto, Product>()
             .ForMember(dest => dest.ModifiedDate, opt => opt.Ignore()) 
             .ForMember(dest => dest.CreatedDate, opt => opt.Ignore()); 
-
-            // Map from Product to ProductDto
+        
             CreateMap<Product, ProductDto>()
                 .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId))
                 .ForMember(dest => dest.SubCategoryId, opt => opt.MapFrom(src => src.SubCategoryId))
-                .ForMember(dest => dest.ImageBase64, opt => opt.Ignore());
-            // Map from CreateProductDto to Product
+                .ForMember(dest => dest.ImageBase64, opt => opt.Ignore())
+                .ForMember(dest => dest.ProductVariants, opt => opt.MapFrom(src => src.ProductVariants));
+           
             CreateMap<CreateProductDto, Product>()
                 .ForMember(dest => dest.CreatedDate, opt => opt.Ignore()) 
                 .ForMember(dest => dest.ModifiedDate, opt => opt.Ignore());
 
-            //Map from OrderReq to Order
+            
             CreateMap<OrderReq, Order>()
                 .ForMember(dest => dest.Coupon, opt => opt.Ignore())
                 .ForMember(dest => dest.Payment, opt => opt.Ignore())
                 .ForMember(dest => dest.User, opt => opt.Ignore());
             
-            //Map from order to orderres
+            
             CreateMap<Order, OrderRes>()
               .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems))
               .ForMember(dest => dest.User, opt => opt.MapFrom(src => new UserDto

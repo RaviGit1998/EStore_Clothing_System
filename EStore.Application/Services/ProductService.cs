@@ -66,7 +66,18 @@ namespace EStore.Application.Services
         public async Task<IEnumerable<ProductDto>> SearchProductAsync(string keyword)
         {
             var products = await _productRepository.SearchProductAsync(keyword);
-            return _mapper.Map<IEnumerable<ProductDto>>(products);
+            var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
+
+            foreach (var productDto in productDtos)
+            {
+                var product = products.FirstOrDefault(p => p.ProductId == productDto.ProductId);
+                if (product?.ImageData != null)
+                {
+                    productDto.ImageBase64 = Convert.ToBase64String(product.ImageData);
+                }
+            }
+
+            return productDtos;
         }
 
         public async Task<int> AddProductAsync(CreateProductDto createProductDto)
@@ -121,6 +132,22 @@ namespace EStore.Application.Services
             existingProduct.ModifiedDate = DateTime.UtcNow;
 
             await _productRepository.UpdateProductAsync(existingProduct);
+        }
+        public async Task<IEnumerable<ProductDto>> GetProductsByCategoryAsync(int categoryId)
+        {
+            var products = await _productRepository.GetProductsByCategoryAsync(categoryId);
+            var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
+
+            foreach (var productDto in productDtos)
+            {
+                var product = products.FirstOrDefault(p => p.ProductId == productDto.ProductId);
+                if (product?.ImageData != null)
+                {
+                    productDto.ImageBase64 = Convert.ToBase64String(product.ImageData);
+                }
+            }
+
+            return productDtos;
         }
 
     }

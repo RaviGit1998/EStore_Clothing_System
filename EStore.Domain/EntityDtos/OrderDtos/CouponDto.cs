@@ -8,8 +8,7 @@ namespace EStore.Domain.EntityDtos.OrderDtos
 {
     public class CouponDto
     {
-        public int CouponId { get; set; }
-
+      public int CouponId { get; set; }
         public string CouponCode { get; set; }
         public decimal DiscountedAmount { get; set; }
     }

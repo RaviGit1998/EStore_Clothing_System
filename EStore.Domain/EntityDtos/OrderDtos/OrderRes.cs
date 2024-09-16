@@ -11,13 +11,8 @@ namespace EStore.Domain.EntityDtos.NewFolder
     public class OrderRes
     {
         public int Id { get; set; }
-       
         public DateTime OrderDate { get; set; }
-        public decimal TotalAmount { get; set; }
-        public int? CouponId { get; set; }
         public bool IsCancelled { get; set; }
-        public List<OrderItemRes> OrderItems { get; set; }
-
         public ICollection<OrderItemRes> OrderItemRes { get; set; }
         public UserDto User { get; set; }
         public CouponDto Coupon { get; set; }

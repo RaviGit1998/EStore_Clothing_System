@@ -58,8 +58,6 @@ namespace EStore.Web.Controllers
             return CreatedAtAction(nameof(GetProductById), new { productId = createdProductId }, createProductDto);
         }
 
-
-
         [HttpDelete("{productId}")]
         public async Task<IActionResult> DeleteProduct(int productId)
         {
@@ -96,6 +94,14 @@ namespace EStore.Web.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpGet("category/{categoryId}")]
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetProductsByCategory(int categoryId)
+        {
+            var products = await _productService.GetProductsByCategoryAsync(categoryId);
+            return Ok(products);
+        }
+
     }
-    
+
 }

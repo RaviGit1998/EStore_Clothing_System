@@ -16,18 +16,22 @@ namespace EStore.Infrastructure.Repositories
 
         public async Task<IEnumerable<Product>> GetAllProducts()
         {
-            return await _dbContext.Products.ToListAsync();
+            return await _dbContext.Products
+                .Include(pv => pv.ProductVariants)
+                .ToListAsync();
+
         }
 
         public async Task<Product> GetProductsByIdAsync(int productId)
         {
-            return await _dbContext.Products.FirstOrDefaultAsync(x => x.ProductId == productId);
+            return await _dbContext.Products.Include(pv => pv.ProductVariants).
+                FirstOrDefaultAsync(x => x.ProductId == productId);
         }
 
         public async Task<IEnumerable<Product>> SearchProductAsync(string keyword)
         {
             return await _dbContext.Products
-                .Where(p => p.Name.Contains(keyword) || p.ShortDescription.Contains(keyword) || p.LongDesrciption.Contains(keyword))
+                .Where(p => p.Name.Contains(keyword) || p.ShortDescription.Contains(keyword) || p.LongDesrciption.Contains(keyword) || p.Brand.Contains(keyword))
                 .Include(p => p.Category)
                 .Include(p => p.SubCategory)
                 .Include(p => p.ProductVariants)
@@ -39,6 +43,17 @@ namespace EStore.Infrastructure.Repositories
             await _dbContext.Products.AddAsync(product);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId)
+        {
+            return await _dbContext.Products
+                .Where(p => p.CategoryId == categoryId)
+                .Include(p => p.ProductVariants)
+                .Include(p => p.Category)
+                .Include(p => p.SubCategory)
+                .ToListAsync();
+        }
+
 
         public async Task DeleteProductAsync(int productId)
         {

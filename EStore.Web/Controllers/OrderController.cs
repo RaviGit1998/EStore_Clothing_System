@@ -98,20 +98,6 @@ namespace EStore.Web.Api.Controllers
             }
         }
 
-      /*  [HttpDelete]
-        [Route("RemoveOrderItem/{orderItemid}")]
-        public async Task<IActionResult> RemoveItemFromOrder(int orderItemid)
-        {
-            try
-            {
-                var updateOrder = await _orderService.RemoveOrderItemAsync(orderItemid);
-                return Ok(updateOrder);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }*/
 
         [HttpGet]
         [Route("{orderId}/total-amount")]

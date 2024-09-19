@@ -65,8 +65,8 @@ namespace EStore.Infrastructure.Data
             //orderItem Product variant
             modelBuilder.Entity<OrderItem>()
                 .HasOne(oi => oi.Productvariants)
-                .WithMany(pv=>pv.OrderItems)
-                .HasForeignKey(oi=>oi.ProductVariantId);
+                .WithOne(pv=>pv.OrderItems)
+                .HasForeignKey<OrderItem>(oi=>oi.ProductVariantId);
             //payment and order
             modelBuilder.Entity<Payment>()
                 .HasOne(p => p.Order)

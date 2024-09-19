@@ -19,7 +19,7 @@ namespace EStore.Application.IRepositories
         Task<IEnumerable<Order>> GetOrdersByUserIdAsync(int userId);
 
         //Cancelling and Order
-        Task<Order> ConfirmationOrder(int orderId);
+        Task<Order> CancelOrderAsync(int orderId);
 
         //Applying a Coupon
         Task<bool> ApplyCouponAsync(int orderId, string couponCode);

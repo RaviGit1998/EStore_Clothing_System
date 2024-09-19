@@ -76,14 +76,14 @@ namespace EStore.Infrastructure.Repositories
             return totalAmount;
         }
 
-        public async Task<Order> ConfirmationOrder(int orderId)
+        public async Task<Order> CancelOrderAsync(int orderId)
         {
            var order=await GetOrderByIdAsync(orderId);
             if(order == null)
             {
                 return null;
             }
-            order.IsConfirmed = true;
+            order.IsCancelled = true;
             _eStoreDbContext.Orders.Update(order);
             await _eStoreDbContext.SaveChangesAsync();
             return order;

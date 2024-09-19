@@ -104,7 +104,7 @@ namespace EStore.Infrastructure.Migrations
                     b.Property<int?>("CouponId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsConfirmed")
+                    b.Property<bool>("IsCancelled")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("OrderDate")
@@ -154,7 +154,8 @@ namespace EStore.Infrastructure.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("ProductVariantId");
+                    b.HasIndex("ProductVariantId")
+                        .IsUnique();
 
                     b.ToTable("OrderItems");
                 });
@@ -525,8 +526,8 @@ namespace EStore.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("EStore.Domain.Entities.ProductVariant", "Productvariants")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("ProductVariantId")
+                        .WithOne("OrderItems")
+                        .HasForeignKey("EStore.Domain.Entities.OrderItem", "ProductVariantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -687,7 +688,8 @@ namespace EStore.Infrastructure.Migrations
 
             modelBuilder.Entity("EStore.Domain.Entities.ProductVariant", b =>
                 {
-                    b.Navigation("OrderItems");
+                    b.Navigation("OrderItems")
+                        .IsRequired();
 
                     b.Navigation("ProductReviews");
                 });

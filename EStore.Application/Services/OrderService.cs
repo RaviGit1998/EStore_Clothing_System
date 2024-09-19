@@ -43,7 +43,7 @@ namespace EStore.Application.Services
            return await _orderRepository.CalculateTotalAmountAsync(orderId,couponCode);
         }
 
-      /*  public async Task<Order> CancelOrderAsync(int orderId)
+        public async Task<Order> CancelOrderAsync(int orderId)
         {
             if (orderId <= 0)
                 throw new ArgumentException("Invalid order ID.");
@@ -53,7 +53,7 @@ namespace EStore.Application.Services
                 throw new InvalidOperationException("Order is already cancelled");
 
             return await _orderRepository.CancelOrderAsync(orderId);
-        }*/
+        }
 
         public async Task<OrderRes> CreateAnOrderAsync(OrderReq orderReq)
         {

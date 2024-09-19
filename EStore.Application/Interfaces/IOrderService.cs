@@ -20,7 +20,7 @@ namespace EStore.Application.Interfaces
         Task<IEnumerable<OrderRes>> GetOrdersByUserIdAsync(int userId);
 
         //Cancelling and Order
-      //  Task<Order> CancelOrderAsync(int orderId);
+        Task<Order> CancelOrderAsync(int orderId);
 
        // Task<OrderRes> RemoveOrderItemAsync(int orderItemId);
 

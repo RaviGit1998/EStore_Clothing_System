@@ -83,7 +83,7 @@ namespace EStore.Web.Api.Controllers
             }
         }
 
-        /*[HttpPost]
+        [HttpPost]
         [Route("cancel/{orderId}")]
         public async Task<IActionResult> CancelOrder(int orderId)
         {
@@ -96,7 +96,7 @@ namespace EStore.Web.Api.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
-        }*/
+        }
 
 
         [HttpGet]

@@ -23,13 +23,13 @@ namespace EStore.Web.Api.Controllers
         {
             try
             {
-
+               
                 var updateOrder = await _orderItemService.RemoveOrderItemAsync(orderItemid);
-
-                if (updateOrder == null)
-                {
-                    return NotFound("No Orders found for the specific order ID.");
-                }
+               
+                    if (updateOrder == null)
+                    {
+                        return NotFound("No Orders found for the specific order ID.");
+                    }
                 return Ok(updateOrder);
             }
             catch (Exception ex)
@@ -45,7 +45,7 @@ namespace EStore.Web.Api.Controllers
             try
             {
                 var orderItem = await _orderItemService.GetOrderItemByIdAsync(orderrItemId);
-                if (orderItem == null)
+                if(orderItem == null)
                 {
                     return NotFound("No OrderItem found for the specific OrderItem ID.");
                 }

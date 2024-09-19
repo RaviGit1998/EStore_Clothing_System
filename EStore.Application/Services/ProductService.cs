@@ -133,6 +133,7 @@ namespace EStore.Application.Services
 
             await _productRepository.UpdateProductAsync(existingProduct);
         }
+        
         public async Task<IEnumerable<ProductDto>> GetProductsByCategoryAsync(int categoryId)
         {
             var products = await _productRepository.GetProductsByCategoryAsync(categoryId);
@@ -149,6 +150,43 @@ namespace EStore.Application.Services
 
             return productDtos;
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         public async Task<IEnumerable<ProductDto>> GetFilteredAndSortedProductsAsync(
             int categoryId,

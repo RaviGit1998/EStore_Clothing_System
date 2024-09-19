@@ -71,6 +71,54 @@ namespace EStore.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public async Task<IEnumerable<Product>> GetFilteredAndSortedProducts(
            int categoryId,
            decimal? minPrice,

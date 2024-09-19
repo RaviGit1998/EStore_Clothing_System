@@ -19,6 +19,7 @@ namespace EStore.Application.IRepositories
         Task<bool> AddOrderItemAsync(OrderItem orderItem);
 
         Task<OrderItem> UpdateOrderItemAsync(int orderItemId,OrderItem orderItem);
-       
+       // Task<List<ProductVariant>> GetProductVariantsByIdsAsync(List<int> productVariantIds);
+      //  Task GetProductVariantsByIdsAsync(int productVariantId);
     }
 }

@@ -16,7 +16,7 @@ namespace EStore.Application.Services
         private readonly IOrderItemRepository _orderItemRepository;
         private readonly IMapper _mapper;
         private readonly IOrderRepository _orderRepository;
-        public OrderItemservice(IOrderItemRepository orderIteRepository,IMapper mapper, IOrderRepository orderRepository)
+        public OrderItemservice(IOrderItemRepository orderIteRepository, IMapper mapper, IOrderRepository orderRepository)
         {
             _orderItemRepository = orderIteRepository;
             _mapper = mapper;
@@ -25,15 +25,15 @@ namespace EStore.Application.Services
 
         public async Task<OrderRes> AddOrderItemAsync(int orderId, OrderItemreq ordertemReq)
         {
-           var order=await _orderRepository.GetOrderByIdAsync(orderId);
+            var order = await _orderRepository.GetOrderByIdAsync(orderId);
             if (order == null) return null;
 
-         
-            var orderItem=_mapper.Map<OrderItem>(ordertemReq);
+
+            var orderItem = _mapper.Map<OrderItem>(ordertemReq);
             orderItem.OrderId = orderId;
             order.OrderItems.Add(orderItem);
             await _orderItemRepository.AddOrderItemAsync(orderItem);
-           await _orderRepository.UpdateOrderasync(order);
+            await _orderRepository.UpdateOrderasync(order);
 
             return _mapper.Map<OrderRes>(order);
 
@@ -73,10 +73,65 @@ namespace EStore.Application.Services
             existingOrderItem.ProductVariantId = orderItemReq.ProductVariantId;
             existingOrderItem.Quantity = orderItemReq.Quantity;
 
-          
-          var updatedorderItemRes=  await _orderItemRepository.UpdateOrderItemAsync(orderItemId, existingOrderItem);
+
+            var updatedorderItemRes = await _orderItemRepository.UpdateOrderItemAsync(orderItemId, existingOrderItem);
 
             return _mapper.Map<OrderItemRes>(updatedorderItemRes);
         }
+
+        /*   public async Task<OrderRes> AddOrderItemAsync(int orderId, OrderItemreq orderItemReq)
+           {
+               var order = await _orderRepository.GetOrderByIdAsync(orderId);
+               if (order == null) return null;
+
+               var orderItem = _mapper.Map<OrderItem>(orderItemReq);
+               orderItem.OrderId = orderId;
+
+               // Ensure order item can have multiple product variants
+               order.OrderItems.Add(orderItem);
+
+               await _orderItemRepository.AddOrderItemAsync(orderItem);
+               await _orderRepository.UpdateOrderasync(order);
+
+               return _mapper.Map<OrderRes>(order);
+           }
+
+           public async Task<OrderItem> GetOrderItemByIdAsync(int orderItemId)
+           {
+               return await _orderItemRepository.GetOrderItemByIdAsync(orderItemId);
+           }
+
+           public async Task<OrderRes> RemoveOrderItemAsync(int orderItemId)
+           {
+               if (orderItemId <= 0)
+                   throw new ArgumentException("Invalid order item ID.");
+
+               var orderItem = await GetOrderItemByIdAsync(orderItemId);
+               var order = await _orderRepository.GetOrderByIdAsync(orderItem.OrderId);
+               if (order == null)
+                   throw new KeyNotFoundException($"Order with ID {orderItem.OrderId} not found");
+
+               await _orderItemRepository.RemoveOrderItemAsync(orderItemId);
+               await _orderRepository.UpdateOrderasync(order);
+
+               var updatedOrder = await _orderRepository.GetOrderByIdAsync(order.Id);
+               return _mapper.Map<OrderRes>(updatedOrder);
+           }
+
+           public async Task<OrderItemRes> UpdateOrderItemAsync(int orderItemId, OrderItemreq orderItemReq)
+           {
+               var existingOrderItem = await _orderItemRepository.GetOrderItemByIdAsync(orderItemId);
+               if (existingOrderItem == null) return null;
+
+               existingOrderItem.ProductVariantId = orderItemReq.ProductVariantId; // Assuming this is now a collection
+               existingOrderItem.Quantity = orderItemReq.Quantity;
+
+               // Handle pricing and details for each product variant if needed
+               var productVariants = await _orderItemRepository.GetProductVariantsByIdsAsync(existingOrderItem.ProductVariantId);
+               existingOrderItem.Price = productVariants.Sum(pv => pv.PricePerUnit * existingOrderItem.Quantity); // Example logic
+
+               var updatedOrderItemRes = await _orderItemRepository.UpdateOrderItemAsync(orderItemId, existingOrderItem);
+               return _mapper.Map<OrderItemRes>(updatedOrderItemRes);
+           }*/
     }
 }

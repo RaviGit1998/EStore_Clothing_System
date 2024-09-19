@@ -14,7 +14,7 @@ namespace EStore.Domain.Entities
         public decimal TotalAmount { get; set; }
         public int? CouponId { get; set; }
         public int OrderQuantity {  get; set; }
-        public bool IsCancelled { get; set; }
+        public string status { get; set; }
 
         // Navigation Properties
         public virtual User User { get; set; }

@@ -162,6 +162,13 @@ namespace EStore.Infrastructure.Repositories
         }
 
         
+
+        public async Task<IEnumerable<ProductVariant>> GetProductVariants()
+        {
+            var productVariants = await _dbContext.ProductVariants.ToListAsync();
+
+            return productVariants;
+        }
     }
 }
     

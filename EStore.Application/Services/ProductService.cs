@@ -209,5 +209,10 @@ namespace EStore.Application.Services
             }
             return productDtos;
         }
+        public async Task<IEnumerable<ProductVariant>> GetProductVariants()
+        {
+            var productVariants = await _productRepository.GetProductVariants();
+            return productVariants;
+        }
     }
 }

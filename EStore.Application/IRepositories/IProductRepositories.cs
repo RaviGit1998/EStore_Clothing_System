@@ -19,5 +19,6 @@ namespace EStore.Application.IRepositories
 
 
         Task<IEnumerable<Product>> GetFilteredAndSortedProducts(int categoryId, decimal? minPrice, decimal? maxPrice, string size, string color, string sortOrder);
+        Task<IEnumerable<ProductVariant>> GetProductVariants();
     }
 }

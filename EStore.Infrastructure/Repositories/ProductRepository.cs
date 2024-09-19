@@ -70,5 +70,12 @@ namespace EStore.Infrastructure.Repositories
             _dbContext.Products.Update(product);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<ProductVariant>> GetProductVariants()
+        {
+            var productVariants = await _dbContext.ProductVariants.ToListAsync();
+
+            return productVariants;
+        }
     }
 }

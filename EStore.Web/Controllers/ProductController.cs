@@ -1,4 +1,5 @@
 ﻿using EStore.Application.Interfaces;
+using EStore.Application.Services;
 using EStore.Domain.Entities;
 using EStore.Domain.EntityDtos;
 using Microsoft.AspNetCore.Http;
@@ -100,6 +101,27 @@ namespace EStore.Web.Controllers
         {
             var products = await _productService.GetProductsByCategoryAsync(categoryId);
             return Ok(products);
+        }
+
+        [HttpGet]
+        [Route("ProductVariants")]
+        public async Task<IActionResult> GetProductVAriantId()
+        {
+
+
+            try
+            {
+                var productVariant = await _productService.GetProductVariants();
+                if (productVariant == null)
+                {
+                    return NotFound($"Unable to fetch the product variants");
+                }
+                return Ok(productVariant);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
         }
 
     }

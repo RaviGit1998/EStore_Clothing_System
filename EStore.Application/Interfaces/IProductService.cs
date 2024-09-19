@@ -17,6 +17,7 @@ namespace EStore.Application.Interfaces
         Task DeleteProductAsync(int productId);
         Task UpdateProductAsync(int productId, UpdateProductDto updateProductDto);
         Task<IEnumerable<ProductDto>> GetProductsByCategoryAsync(int categoryId);
+        Task<IEnumerable<ProductVariant>> GetProductVariants();
 
     }
 }

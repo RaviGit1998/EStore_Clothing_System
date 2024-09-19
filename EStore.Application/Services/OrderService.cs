@@ -43,16 +43,17 @@ namespace EStore.Application.Services
            return await _orderRepository.CalculateTotalAmountAsync(orderId,couponCode);
         }
 
-        public async Task<Order> CancelOrderAsync(int orderId)
+        public async Task<OrderRes> ChangeStatusOfOrder(int orderId)
         {
             if (orderId <= 0)
                 throw new ArgumentException("Invalid order ID.");
 
             var order = await GetOrderByIdAsync(orderId);
-            if (order.IsCancelled)
-                throw new InvalidOperationException("Order is already cancelled");
+            if (order.status=="paid")
+                throw new InvalidOperationException("Order is in Pending");
 
-            return await _orderRepository.CancelOrderAsync(orderId);
+            var orderRes= await _orderRepository.ChangeStatusOfOrder(orderId);
+            return _mapper.Map<OrderRes>(orderRes);
         }
 
         public async Task<OrderRes> CreateAnOrderAsync(OrderReq orderReq)

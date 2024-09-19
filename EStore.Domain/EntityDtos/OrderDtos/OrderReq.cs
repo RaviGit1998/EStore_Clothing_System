@@ -12,7 +12,7 @@ namespace EStore.Domain.EntityDtos.NewFolder
     {
         public DateTime OrderDate { get; set; } 
         public int UserId { get; set; }
-        public bool IsCancelled { get; set; }
+        public bool IsConfirmed { get; set; }
        // public int? CouponId { get; set; }
         public ICollection<OrderItemreq> OrderItemreq { get; set; }
        //  public UserDto User { get; set; }

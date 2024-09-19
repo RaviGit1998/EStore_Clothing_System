@@ -43,16 +43,16 @@ namespace EStore.Application.Services
            return await _orderRepository.CalculateTotalAmountAsync(orderId,couponCode);
         }
 
-        public async Task<Order> CancelOrderAsync(int orderId)
+        public async Task<Order> ConfirmationOrder(int orderId)
         {
             if (orderId <= 0)
                 throw new ArgumentException("Invalid order ID.");
 
             var order = await GetOrderByIdAsync(orderId);
-            if (order.IsCancelled)
-                throw new InvalidOperationException("Order is already cancelled");
+            if (order.IsConfirmed)
+                throw new InvalidOperationException("Order is already confirmed");
 
-            return await _orderRepository.CancelOrderAsync(orderId);
+            return await _orderRepository.ConfirmationOrder(orderId);
         }
 
         public async Task<OrderRes> CreateAnOrderAsync(OrderReq orderReq)

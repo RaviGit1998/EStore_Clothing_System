@@ -84,12 +84,12 @@ namespace EStore.Web.Api.Controllers
         }
 
         [HttpPost]
-        [Route("cancel/{orderId}")]
-        public async Task<IActionResult> CancelOrder(int orderId)
+        [Route("Confirnation/{orderId}")]
+        public async Task<IActionResult> ConfimationOfOrder(int orderId)
         {
             try
             {
-                var orderResponse = await _orderService.CancelOrderAsync(orderId);
+                var orderResponse = await _orderService.ConfirmationOrder(orderId);
                 return Ok(orderResponse);
             }
             catch (Exception ex)

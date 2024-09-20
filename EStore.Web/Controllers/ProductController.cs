@@ -105,7 +105,7 @@ namespace EStore.Web.Controllers
 
         [HttpGet]
         [Route("ProductVariants")]
-        public async Task<IActionResult> GetProductVAriantId()
+        public async Task<IActionResult> GetProductVariantId()
         {
 
 
@@ -123,6 +123,28 @@ namespace EStore.Web.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
             }
         }
+        [HttpGet("variant/{productVariantId}")]
+        public async Task<ActionResult<ProductRespDto>> GetProductByVariantId(int productVariantId)
+        {
+            try
+            {
+                var productRespDto = await _productService.GetProductByVariantIdAsync(productVariantId);
+                if (productRespDto == null)
+                {
+                    return NotFound($"Product variant with ID {productVariantId} not found.");
+                }
+                return Ok(productRespDto);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound($"Product variant with ID {productVariantId} not found.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
 
     }
 

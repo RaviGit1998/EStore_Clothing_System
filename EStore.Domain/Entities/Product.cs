@@ -18,9 +18,10 @@ namespace EStore.Domain.Entities
         public byte[] ImageData { get; set; }
         public int CategoryId { get; set; }
         public int SubCategoryId { get; set; }
+        //navigation in product
         public Category Category { get; set; }
         public SubCategory SubCategory { get; set; }
-     
+      //this is product detail navigation
         public virtual ICollection<ProductVariant> ProductVariants { get; set; }
       
        

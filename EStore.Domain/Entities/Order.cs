@@ -16,7 +16,7 @@ namespace EStore.Domain.Entities
         public int OrderQuantity {  get; set; }
         public string status { get; set; }
 
-        // Navigation Properties
+        // Navigation Properties in order
         public virtual User User { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; } //= null;
         public virtual Coupon Coupon { get; set; }

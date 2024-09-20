@@ -1,4 +1,5 @@
 ﻿using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,5 +18,6 @@ namespace EStore.Application.IRepositories
         Task UpdateProductAsync(Product product);
         Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId);
         Task<IEnumerable<ProductVariant>> GetProductVariants();
+        Task<ProductRespDto> GetProductByVariantIdAsync(int productVariantId);
     }
 }

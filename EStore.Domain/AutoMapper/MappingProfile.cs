@@ -26,22 +26,22 @@ namespace EStore.Domain.AutoMapper
                 .ForMember(dest => dest.SubCategoryId, opt => opt.MapFrom(src => src.SubCategoryId))
                 .ForMember(dest => dest.ImageBase64, opt => opt.Ignore())
                 .ForMember(dest => dest.ProductVariants, opt => opt.MapFrom(src => src.ProductVariants));
-           
+         /*   CreateMap<Product, ProductRespDto>()
+                  .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
+                  .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                  .ForMember(dest => dest.ImageData, opt => opt.MapFrom(src => src.ImageData))
+                  .ForMember(dest => dest.ShortDescription, opt => opt.MapFrom(src => src.ShortDescription));*/
             CreateMap<CreateProductDto, Product>()
                 .ForMember(dest => dest.CreatedDate, opt => opt.Ignore()) 
                 .ForMember(dest => dest.ModifiedDate, opt => opt.Ignore());
-
-            
+           
             CreateMap<OrderReq, Order>()
                 .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItemreq))
               .ForMember(dest => dest.User, opt => opt.Ignore())
             .ForMember(dest => dest.Coupon, opt => opt.Ignore())
             .ForMember(dest => dest.Payment, opt => opt.Ignore())
             .ForMember(dest => dest.Shipping, opt => opt.Ignore());
-
-              
-            
-            
+                      
             CreateMap<Order, OrderRes>()
                .ForMember(dest=>dest.Id,opt =>opt.MapFrom(src => src.Id))
               .ForMember(dest => dest.OrderItemRes, opt => opt.MapFrom(src => src.OrderItems))

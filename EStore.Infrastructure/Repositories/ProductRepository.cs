@@ -1,6 +1,7 @@
 ﻿
 using EStore.Application.IRepositories;
 using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos;
 using EStore.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -76,6 +77,30 @@ namespace EStore.Infrastructure.Repositories
             var productVariants = await _dbContext.ProductVariants.ToListAsync();
 
             return productVariants;
+        }
+
+        public async Task<ProductRespDto> GetProductByVariantIdAsync(int productVariantId)
+        {
+            var productVariant = await _dbContext.ProductVariants
+                .Include(pv => pv.Product)
+                    .ThenInclude(p => p.Category)
+                .Include(pv => pv.Product)
+                    .ThenInclude(p => p.SubCategory)
+                .FirstOrDefaultAsync(pv => pv.ProductVariantId == productVariantId);
+            if (productVariant == null)
+            {
+                return null;
+            }
+            var productResDto = new ProductRespDto
+              {
+                ProductId = productVariant.Product.ProductId,
+                Name = productVariant.Product.Name,
+                ShortDescription = productVariant.Product.ShortDescription,
+                ImageData = Convert.ToBase64String(productVariant.Product.ImageData)
+              };
+          
+
+            return productResDto;
         }
     }
 }

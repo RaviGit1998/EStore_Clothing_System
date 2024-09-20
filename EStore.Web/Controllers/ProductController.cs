@@ -53,7 +53,6 @@ namespace EStore.Web.Controllers
             {
                 return BadRequest(ModelState);
             }
-
             var createdProductId = await _productService.AddProductAsync(createProductDto);
 
             return CreatedAtAction(nameof(GetProductById), new { productId = createdProductId }, createProductDto);
@@ -80,7 +79,6 @@ namespace EStore.Web.Controllers
             {
                 return BadRequest("Update data is required.");
             }
-
             try
             {
                 await _productService.UpdateProductAsync(productId, updateProductDto);
@@ -103,6 +101,18 @@ namespace EStore.Web.Controllers
             return Ok(products);
         }
 
+        [HttpGet("category/{categoryId}/filter")]
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetFilteredAndSortedProducts(
+           int categoryId,
+           [FromQuery] decimal? minPrice,
+           [FromQuery] decimal? maxPrice,
+           [FromQuery] string size,
+           [FromQuery] string color,
+           [FromQuery] string sortOrder)
+        {
+            var products = await _productService.GetFilteredAndSortedProductsAsync(categoryId, minPrice, maxPrice, size, color, sortOrder);
+            return Ok(products);
+        }
         [HttpGet]
         [Route("ProductVariants")]
         public async Task<IActionResult> GetProductVariantId()

@@ -151,43 +151,6 @@ namespace EStore.Application.Services
             return productDtos;
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         public async Task<IEnumerable<ProductDto>> GetFilteredAndSortedProductsAsync(
             int categoryId,
             decimal? minPrice,
@@ -209,10 +172,12 @@ namespace EStore.Application.Services
             }
             return productDtos;
         }
+
         public async Task<IEnumerable<ProductVariant>> GetProductVariants()
         {
             var productVariants = await _productRepository.GetProductVariants();
             return productVariants;
+
         }
     }
 }

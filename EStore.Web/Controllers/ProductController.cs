@@ -101,26 +101,6 @@ namespace EStore.Web.Controllers
             return Ok(products);
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         [HttpGet("category/{categoryId}/filter")]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetFilteredAndSortedProducts(
            int categoryId,

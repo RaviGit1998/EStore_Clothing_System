@@ -71,54 +71,6 @@ namespace EStore.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         public async Task<IEnumerable<Product>> GetFilteredAndSortedProducts(
            int categoryId,
            decimal? minPrice,
@@ -160,8 +112,6 @@ namespace EStore.Infrastructure.Repositories
 
             return await query.ToListAsync();
         }
-
-        
 
         public async Task<IEnumerable<ProductVariant>> GetProductVariants()
         {

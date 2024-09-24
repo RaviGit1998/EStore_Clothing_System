@@ -63,6 +63,7 @@ namespace EStore.Web.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route("user/{userId}")]
         public async Task<IActionResult> GetOrdersByUserId(int userId)
         {

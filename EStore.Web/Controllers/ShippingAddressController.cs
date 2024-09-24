@@ -63,7 +63,7 @@ namespace EStore.Web.Api.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("AddAddress")]
         public async Task<ActionResult> CreateAddress([FromBody] ShippingAddressRequest addressRequest)
         {
             if (!ModelState.IsValid)
@@ -74,7 +74,7 @@ namespace EStore.Web.Api.Controllers
             try
             {
                 await _service.AddAddressAsync(addressRequest);
-                return CreatedAtAction(nameof(GetAddress), new { id = addressRequest.ShippingAddressId }, addressRequest);
+                return CreatedAtAction(nameof(GetAddress), new { ShippingId = addressRequest.ShippingAddressId }, addressRequest);
             }
             catch (Exception ex)
             {

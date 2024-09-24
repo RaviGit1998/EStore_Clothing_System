@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,6 +63,33 @@ builder.Services.AddCors(options =>
                    .AllowAnyMethod();
         });
 });
+
+builder.Services.AddSwaggerGen(Options =>
+{
+    Options.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme,
+        securityScheme: new OpenApiSecurityScheme
+        {
+            Name = "Authorization",
+            Description = "Enter the Bearer token: `Bearer Generated-Jwt-Token`",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.ApiKey,
+            Scheme = "Bearer"
+        });
+    Options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+        new OpenApiSecurityScheme
+        {
+            Reference=new OpenApiReference
+            {
+                Type=ReferenceType.SecurityScheme,
+                Id=JwtBearerDefaults.AuthenticationScheme
+
+            }
+        },new string[]{ }
+       }
+    });
+});
 var app = builder.Build();
 
 app.UseCors("AllowSpecificOrigin");
@@ -71,6 +99,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
 
 app.UseStaticFiles();
 

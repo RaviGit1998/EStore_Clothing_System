@@ -2,6 +2,7 @@
 using EStore.Application.Interfaces;
 using EStore.Domain.Entities;
 using EStore.Domain.EntityDtos.NewFolder;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -61,6 +62,7 @@ namespace EStore.Web.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route("user/{userId}")]
         public async Task<IActionResult> GetOrdersByUserId(int userId)
         {

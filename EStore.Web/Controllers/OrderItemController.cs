@@ -1,6 +1,7 @@
 ﻿using EStore.Application.Interfaces;
 using EStore.Application.Services;
 using EStore.Domain.EntityDtos.NewFolder;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,7 @@ namespace EStore.Web.Api.Controllers
         }
         [HttpDelete]
         [Route("RemoveOrderItem/{orderItemid}")]
+        [Authorize]
         public async Task<IActionResult> RemoveItemFromOrder(int orderItemid)
         {
             try
@@ -59,6 +61,7 @@ namespace EStore.Web.Api.Controllers
 
         [HttpPost]
         [Route("AddOrderItem/{orderId}")]
+        [Authorize]
         public async Task<IActionResult> AddOrderItemToOrder(int orderId, [FromBody] OrderItemreq orderItemReq)
         {
             if (orderItemReq == null)
@@ -85,6 +88,7 @@ namespace EStore.Web.Api.Controllers
 
         [HttpPut]
         [Route("UpdateOrderItem/{orderItemId}")]
+        [Authorize]
         public async Task<IActionResult> UpdateOrderItem(int orderItemId, [FromBody] OrderItemreq orderItemreq)
         {
             if (orderItemreq == null)

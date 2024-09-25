@@ -1,6 +1,7 @@
 ﻿using EStore.Application.Interfaces;
 using EStore.Domain.Entities;
 using EStore.Domain.EntityDtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,6 +36,7 @@ namespace EStore.Web.Api.Controllers
 
         }
         [HttpPost("RegisterUser")]
+        [AllowAnonymous]
         public async Task<IActionResult> RegisterUser([FromBody] UserReq userReq)
         {
             //validation of model 

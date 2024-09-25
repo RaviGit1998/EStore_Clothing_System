@@ -1,6 +1,7 @@
 ﻿using EStore.Application.Interfaces;
 using EStore.Domain.Entities;
 using EStore.Domain.EntityDtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -63,7 +64,8 @@ namespace EStore.Web.Api.Controllers
             }
         }
 
-        [HttpPost("AddAddress")]
+        [HttpPost]
+        [Authorize]
         public async Task<ActionResult> CreateAddress([FromBody] ShippingAddressRequest addressRequest)
         {
             if (!ModelState.IsValid)
@@ -74,7 +76,7 @@ namespace EStore.Web.Api.Controllers
             try
             {
                 await _service.AddAddressAsync(addressRequest);
-                return CreatedAtAction(nameof(GetAddress), new { ShippingId = addressRequest.ShippingAddressId }, addressRequest);
+                return CreatedAtAction(nameof(GetAddress), new { shippingId = addressRequest.ShippingAddressId }, addressRequest);
             }
             catch (Exception ex)
             {
@@ -83,6 +85,8 @@ namespace EStore.Web.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
+
         public async Task<ActionResult> UpdateAddress(int id, [FromBody] ShippingAddressRequest addressRequest)
         {
             if (!ModelState.IsValid)
@@ -111,6 +115,7 @@ namespace EStore.Web.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult> DeleteAddress(int id)
         {
             try

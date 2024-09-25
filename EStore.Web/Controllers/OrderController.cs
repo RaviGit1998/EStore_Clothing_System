@@ -89,6 +89,7 @@ namespace EStore.Web.Api.Controllers
 
         [HttpPost]
         [Route("Confirmation/{orderId}")]
+        [Authorize]
         public async Task<IActionResult> ChangeStatusOfOrder(int orderId)
         {
             try
@@ -136,6 +137,7 @@ namespace EStore.Web.Api.Controllers
 
         [HttpDelete]
         [Route("delete/{orderId}")]
+        [Authorize]
         public async Task<IActionResult> DeleteOrder(int orderId)
         {
             try

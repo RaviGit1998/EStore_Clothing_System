@@ -2,6 +2,7 @@
 using EStore.Application.Services;
 using EStore.Domain.Entities;
 using EStore.Domain.EntityDtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -47,6 +48,7 @@ namespace EStore.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddProduct([FromForm] CreateProductDto createProductDto)
         {
             if (!ModelState.IsValid)
@@ -59,6 +61,7 @@ namespace EStore.Web.Controllers
         }
 
         [HttpDelete("{productId}")]
+        [Authorize]
         public async Task<IActionResult> DeleteProduct(int productId)
         {
             try
@@ -73,6 +76,7 @@ namespace EStore.Web.Controllers
         }
 
         [HttpPut("{productId}")]
+        [Authorize]
         public async Task<IActionResult> UpdateProduct(int productId, [FromForm] UpdateProductDto updateProductDto)
         {
             if (updateProductDto == null)

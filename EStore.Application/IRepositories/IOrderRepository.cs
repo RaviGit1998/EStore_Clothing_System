@@ -37,6 +37,7 @@ namespace EStore.Application.IRepositories
         Task UpdateOrderasync(Order order);
 
         Task<bool> DeleteOderByIdAsync(int orderId);
+        Task<Order> CancelOrderById(int orderId);
 
     }
 }

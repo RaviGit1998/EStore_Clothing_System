@@ -39,6 +39,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IShippingsRepository, ShippingRepository>();
+builder.Services.AddScoped<IShippingService, ShippingService>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -93,6 +96,8 @@ builder.Services.AddSwaggerGen(Options =>
 var app = builder.Build();
 
 app.UseCors("AllowSpecificOrigin");
+app.UseAuthentication(); // Must be before UseAuthorization
+app.UseAuthorization();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -106,7 +111,6 @@ app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 
 app.MapControllers();
 

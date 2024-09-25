@@ -37,16 +37,14 @@ namespace EStore.Application.Services
             return user;
         }
 
-        
-
         public string GenerateToken(User user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_Config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(_Config["Jwt:Issuer"], _Config["Jwt:Audience"], null, expires: DateTime.Now.AddMinutes(300), signingCredentials: credentials);
+            var token = new JwtSecurityToken(_Config["Jwt:Issuer"], _Config["Jwt:Audience"], null, expires: DateTime.Now.AddMinutes(30), signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);
-
         }
+
         public async Task<string> ProvideToken(LoginReq login)
         {
             var user = await AuthenticateUser(login);

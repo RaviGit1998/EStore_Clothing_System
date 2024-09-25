@@ -39,6 +39,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IShippingsRepository, ShippingRepository>();
+builder.Services.AddScoped<IShippingService, ShippingService>();
+
 builder.Services.AddScoped<IEmailRepository, EmailRepository>();
 builder.Services.AddScoped<IPasswordRecoveryService, PasswordRecoveryService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -96,6 +99,8 @@ var app = builder.Build();
 
 //app.UseAuthentication();
 app.UseCors("AllowSpecificOrigin");
+app.UseAuthentication(); // Must be before UseAuthorization
+app.UseAuthorization();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

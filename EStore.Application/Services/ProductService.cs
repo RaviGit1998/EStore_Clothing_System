@@ -185,11 +185,16 @@ namespace EStore.Application.Services
                 throw new Exception("An error occurred while fetching products", ex);
             }
         }
-
         public async Task<IEnumerable<ProductVariant>> GetProductVariants()
         {
             var productVariants = await _productRepository.GetProductVariants();
             return productVariants;
+        }
+
+        public async Task<ProductRespDto> GetProductByVariantIdAsync(int productVariantId)
+        {
+            var productResDto= await _productRepository.GetProductByVariantIdAsync(productVariantId);           
+            return productResDto;
         }
     }
 }

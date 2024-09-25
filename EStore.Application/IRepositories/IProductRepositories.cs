@@ -1,4 +1,5 @@
 ﻿using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,5 +25,6 @@ namespace EStore.Application.IRepositories
             string color,
             string sortOrder);
         Task<IEnumerable<ProductVariant>> GetProductVariants();
+        Task<ProductRespDto> GetProductByVariantIdAsync(int productVariantId);
     }
 }

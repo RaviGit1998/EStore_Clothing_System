@@ -2,6 +2,7 @@
 using EStore.Application.Services;
 using EStore.Domain.Entities;
 using EStore.Domain.EntityDtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -47,6 +48,7 @@ namespace EStore.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddProduct([FromForm] CreateProductDto createProductDto)
         {
             if (!ModelState.IsValid)
@@ -59,6 +61,7 @@ namespace EStore.Web.Controllers
         }
 
         [HttpDelete("{productId}")]
+        [Authorize]
         public async Task<IActionResult> DeleteProduct(int productId)
         {
             try
@@ -73,6 +76,7 @@ namespace EStore.Web.Controllers
         }
 
         [HttpPut("{productId}")]
+        [Authorize]
         public async Task<IActionResult> UpdateProduct(int productId, [FromForm] UpdateProductDto updateProductDto)
         {
             if (updateProductDto == null)
@@ -126,7 +130,7 @@ namespace EStore.Web.Controllers
 
         [HttpGet]
         [Route("ProductVariants")]
-        public async Task<IActionResult> GetProductVAriantId()
+        public async Task<IActionResult> GetProductVariantId()
         {
             try
             {
@@ -142,6 +146,28 @@ namespace EStore.Web.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
             }
         }
+        [HttpGet("variant/{productVariantId}")]
+        public async Task<ActionResult<ProductRespDto>> GetProductByVariantId(int productVariantId)
+        {
+            try
+            {
+                var productRespDto = await _productService.GetProductByVariantIdAsync(productVariantId);
+                if (productRespDto == null)
+                {
+                    return NotFound($"Product variant with ID {productVariantId} not found.");
+                }
+                return Ok(productRespDto);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound($"Product variant with ID {productVariantId} not found.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
 
     }
 

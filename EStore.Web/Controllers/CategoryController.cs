@@ -60,7 +60,7 @@ namespace EStore.Web.Api.Controllers
             }
         }
         [HttpDelete("{id}")]
-       [Authorize]
+        [Authorize]
         public async Task<IActionResult> DeleteCategoryAsync([FromRoute] int id)
         {
             if (id <= 0)

@@ -152,32 +152,44 @@ namespace EStore.Application.Services
         }
 
         public async Task<IEnumerable<ProductDto>> GetFilteredAndSortedProductsAsync(
-            int categoryId,
-            decimal? minPrice,
-            decimal? maxPrice,
-            string size,
-            string color,
-            string sortOrder)
-        {
-            var products = await _productRepository.GetFilteredAndSortedProducts(categoryId, minPrice, maxPrice, size, color, sortOrder);
-            var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
+           int categoryId,
+           decimal? minPrice,
+           decimal? maxPrice,
+           string size,
+           string color,
+           string sortOrder)
+        {         
+            size = string.IsNullOrWhiteSpace(size) ? null : size;
+            color = string.IsNullOrWhiteSpace(color) ? null : color;
 
-            foreach (var productDto in productDtos)
+            try
             {
-                var product = products.FirstOrDefault(p => p.ProductId == productDto.ProductId);
-                if (product?.ImageData != null)
+                var products = await _productRepository.GetFilteredAndSortedProducts(
+                    categoryId, minPrice, maxPrice, size, color, sortOrder
+                );              
+                var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
+             
+                foreach (var productDto in productDtos)
                 {
-                    productDto.ImageBase64 = Convert.ToBase64String(product.ImageData);
+                    var product = products.FirstOrDefault(p => p.ProductId == productDto.ProductId);
+                    if (product?.ImageData != null)
+                    {
+                        productDto.ImageBase64 = Convert.ToBase64String(product.ImageData);
+                    }
                 }
+
+                return productDtos;
             }
-            return productDtos;
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while fetching products", ex);
+            }
         }
 
         public async Task<IEnumerable<ProductVariant>> GetProductVariants()
         {
             var productVariants = await _productRepository.GetProductVariants();
             return productVariants;
-
         }
     }
 }

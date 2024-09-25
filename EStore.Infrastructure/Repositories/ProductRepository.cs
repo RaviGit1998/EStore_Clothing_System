@@ -72,22 +72,23 @@ namespace EStore.Infrastructure.Repositories
         }
 
         public async Task<IEnumerable<Product>> GetFilteredAndSortedProducts(
-           int categoryId,
-           decimal? minPrice,
-           decimal? maxPrice,
-           string size,
-           string color,
-           string sortOrder)
+            int categoryId,
+            decimal? minPrice,
+            decimal? maxPrice,
+            string size,
+            string color,
+            string sortOrder)
         {
             var query = _dbContext.Products
                 .Where(p => p.CategoryId == categoryId)
                 .Include(p => p.ProductVariants)
                 .AsQueryable();
-          
+
             if (minPrice.HasValue)
             {
                 query = query.Where(p => p.ProductVariants.Any(v => v.PricePerUnit >= minPrice.Value));
             }
+
             if (maxPrice.HasValue)
             {
                 query = query.Where(p => p.ProductVariants.Any(v => v.PricePerUnit <= maxPrice.Value));
@@ -95,14 +96,16 @@ namespace EStore.Infrastructure.Repositories
 
             if (!string.IsNullOrEmpty(size))
             {
-                query = query.Where(p => p.ProductVariants.Any(v => v.Size == size));
+                var sizes = size.Split(',');
+                query = query.Where(p => p.ProductVariants.Any(v => sizes.Contains(v.Size)));
             }
-        
+
             if (!string.IsNullOrEmpty(color))
             {
-                query = query.Where(p => p.ProductVariants.Any(v => v.Color == color));
+                var colors = color.Split(',');
+                query = query.Where(p => p.ProductVariants.Any(v => colors.Contains(v.Color)));
             }
-           
+
             query = sortOrder switch
             {
                 "price_asc" => query.OrderBy(p => p.ProductVariants.Min(v => v.PricePerUnit)),
@@ -113,6 +116,7 @@ namespace EStore.Infrastructure.Repositories
             return await query.ToListAsync();
         }
 
+
         public async Task<IEnumerable<ProductVariant>> GetProductVariants()
         {
             var productVariants = await _dbContext.ProductVariants.ToListAsync();
@@ -122,4 +126,12 @@ namespace EStore.Infrastructure.Repositories
     }
 }
     
+
+
+
+
+
+
+
+
 

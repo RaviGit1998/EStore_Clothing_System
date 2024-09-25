@@ -5,6 +5,7 @@ using EStore.Domain.Entities;
 using EStore.Domain.EntityDtos.OrderDtos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -42,7 +43,7 @@ namespace EStore.Application.Services
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_Config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(_Config["Jwt:Issuer"], _Config["Jwt:Audience"], null, expires: DateTime.Now.AddMinutes(2), signingCredentials: credentials);
+            var token = new JwtSecurityToken(_Config["Jwt:Issuer"], _Config["Jwt:Audience"], null, expires: DateTime.Now.AddMinutes(300), signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);
 
         }
@@ -57,5 +58,11 @@ namespace EStore.Application.Services
             var token = GenerateToken(user);
             return token;
         }
+        public string GeneratePasswordResetToken(User user)
+        {
+            var token =  GenerateToken(user);
+            return token;
+        }
+     
     }
 }

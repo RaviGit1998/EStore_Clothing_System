@@ -1,5 +1,7 @@
 ﻿using EStore.Application.Interfaces;
+using EStore.Application.Services;
 using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos;
 using EStore.Domain.EntityDtos.OrderDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,15 +14,18 @@ namespace EStore.Web.Api.Controllers
     public class LoginController : ControllerBase
     {
         private readonly ILoginService _loginService;
-        public LoginController(ILoginService loginService)
+        private readonly IPasswordRecoveryService _passwordRecoveryService;
+        public LoginController(ILoginService loginService, IPasswordRecoveryService passwordRecoveryService)
         {
             _loginService = loginService;
+            _passwordRecoveryService = passwordRecoveryService;
         }
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginReq login)
         {
             var token = await _loginService.ProvideToken(login);
+
 
             if (string.IsNullOrEmpty(token))
             {
@@ -30,5 +35,28 @@ namespace EStore.Web.Api.Controllers
 
             return Ok(new { token });
         }
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordReq request)
+        {
+            var result = await _passwordRecoveryService.ResetPasswordAsync(request.Email, request.Token, request.PasswordHash);
+            if (result)
+            {
+                return Ok(new { message = "Password has been reset successfully." });
+            }
+
+            return BadRequest(new { message = "Invalid token or email." });
+        }
+        [HttpPost("send-reset-link")]
+        public async Task<IActionResult> SendResetLink([FromBody] string email)
+        {
+            var result = await _passwordRecoveryService.SendResetLinkAsync(email);
+            if (result)
+            {
+                return Ok(new { message = "Password reset link sent successfully." });
+            }
+
+            return BadRequest(new { message = "User not found or error sending email." });
+        }
+
     }
 }

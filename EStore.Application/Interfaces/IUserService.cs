@@ -12,5 +12,6 @@ namespace EStore.Application.Interfaces
      {
         Task<User> RegisterUser(UserReq user);
         Task<User> GetUserByEmail(string email);
+        Task<User> UpdateUserPassword(User user);
     }
 } 

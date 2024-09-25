@@ -83,7 +83,7 @@ namespace EStore.Infrastructure.Repositories
             {
                 return null;
             }
-            order.status = "Paid";
+            order.status = "Confirmed";
             _eStoreDbContext.Orders.Update(order);
             await _eStoreDbContext.SaveChangesAsync();
             return order;
@@ -124,7 +124,7 @@ namespace EStore.Infrastructure.Repositories
                             .Where(o => o.UserId == userId)
                           
                             .Include(o => o.OrderItems)
-                           
+                          
                             .Include(o=>o.User)
                             .ToListAsync();
             return userOrders;
@@ -192,6 +192,19 @@ namespace EStore.Infrastructure.Repositories
             return prices;
         }
 
-      
+        public async Task<Order> CancelOrderById(int orderId)
+        {
+            var order = await _eStoreDbContext.Orders
+                         .Include(o => o.Shipping) // Include the Shipping entity
+                         .FirstOrDefaultAsync(o => o.Id == orderId);
+            if (order.Shipping.ShippigDate < DateTime.Now)
+            {
+                return order;
+            }
+            order.status = "Cancelled";
+            _eStoreDbContext.Orders.Update(order);
+            await _eStoreDbContext.SaveChangesAsync();
+            return order;
+        }
     }
 }

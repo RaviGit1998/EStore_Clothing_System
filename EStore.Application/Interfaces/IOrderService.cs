@@ -35,7 +35,8 @@ namespace EStore.Application.Interfaces
 
 
         Task<bool> DeleteOrderByIdAsync(int orderId);
-        
-      
+        Task<OrderRes> CancelOrderById(int orderId);
+
+
     }
 }

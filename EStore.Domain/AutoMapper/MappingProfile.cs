@@ -100,6 +100,9 @@ namespace EStore.Domain.AutoMapper
 
             // DTO to Entity
             CreateMap<ShippingAddressRequest, ShippingAddress>();
+
+            CreateMap<ShippingDto, Shipping>();
+            CreateMap<Shipping, ShippingDto>();
         }
     }
 }

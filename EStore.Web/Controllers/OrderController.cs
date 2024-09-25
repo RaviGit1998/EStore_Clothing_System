@@ -21,7 +21,7 @@ namespace EStore.Web.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+ 
         public async Task<IActionResult> CreateAnOder([FromBody] OrderReq orderReq)
         {
             if (orderReq == null) return BadRequest("Order Cannot be null");
@@ -63,8 +63,8 @@ namespace EStore.Web.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [Route("user/{userId}")]
+        [Authorize]
         public async Task<IActionResult> GetOrdersByUserId(int userId)
         {
             if (userId == null)
@@ -88,12 +88,26 @@ namespace EStore.Web.Api.Controllers
 
         [HttpPost]
         [Route("Confirmation/{orderId}")]
-        [Authorize]
+      
         public async Task<IActionResult> ChangeStatusOfOrder(int orderId)
         {
             try
             {
                 var orderResponse = await _orderService.ChangeStatusOfOrder(orderId);
+                return Ok(orderResponse);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+        [HttpPut]
+        [Route("cancel/{orderId}")]
+        public async Task<IActionResult> CancelOrderByIdasync(int orderId)
+        {
+            try
+            {
+                var orderResponse = await _orderService.CancelOrderById(orderId);
                 return Ok(orderResponse);
             }
             catch (Exception ex)
@@ -122,7 +136,6 @@ namespace EStore.Web.Api.Controllers
 
         [HttpDelete]
         [Route("delete/{orderId}")]
-        [Authorize]
         public async Task<IActionResult> DeleteOrder(int orderId)
         {
             try

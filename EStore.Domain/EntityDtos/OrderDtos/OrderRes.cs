@@ -13,6 +13,7 @@ namespace EStore.Domain.EntityDtos.NewFolder
         public int Id { get; set; }
         public DateTime OrderDate { get; set; }
         public string status { get; set; }
+        public decimal TotalAmount { get; set; }
         public ICollection<OrderItemRes> OrderItemRes { get; set; }
         public UserDto User { get; set; }
         public CouponDto Coupon { get; set; }

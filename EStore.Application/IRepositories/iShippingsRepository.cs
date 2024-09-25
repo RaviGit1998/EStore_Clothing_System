@@ -1,4 +1,5 @@
 ﻿using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos.OrderDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace EStore.Application.IRepositories
 {
-    public interface IUserRepository
+    public interface IShippingsRepository
     {
-        Task<User> RegisterUser(User user);
-        Task<User> GetUserByEmail(string email);
-        Task<User> UpdateUserPassword(User user);
+        Task<Shipping> Createshipping(Shipping shipping);
     }
 }

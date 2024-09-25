@@ -21,14 +21,24 @@ namespace EStore.Infrastructure.Repositories
         public async Task<User> GetUserByEmail(string email)
         {
             
-            var result= await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
+            var result= await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (result == null)
             {
                 return null;
             }
             return result;  
         }
-
+        public async Task<User> UpdateUserPassword(User user)
+        {
+            var existingUser = await _context.Users.FirstOrDefaultAsync(c => c.UserId==user.UserId);
+            if (existingUser == null)
+            {
+                return null;
+            }
+            existingUser.PasswordHash = user.PasswordHash;
+            await _context.SaveChangesAsync();
+            return user;
+        }
         public async Task<User> RegisterUser(User user)
         {
             var existingUser = await _context.Users.FirstOrDefaultAsync(c => c.Email == user.Email);

@@ -8,11 +8,8 @@ using System.Threading.Tasks;
 
 namespace EStore.Application.Interfaces
 {
-    public interface ILoginService
+    public interface IShippingService
     {
-        Task<User> AuthenticateUser(LoginReq loginDetails);
-        Task<string> ProvideToken(LoginReq login);
-        string GeneratePasswordResetToken(User user);
-        
+        Task<ShippingDto> Createshipping(ShippingDto shippingDto);
     }
 }

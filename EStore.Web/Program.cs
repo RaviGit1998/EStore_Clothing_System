@@ -39,6 +39,11 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IShippingsRepository, ShippingRepository>();
+builder.Services.AddScoped<IShippingService, ShippingService>();
+
+builder.Services.AddScoped<IEmailRepository, EmailRepository>();
+builder.Services.AddScoped<IPasswordRecoveryService, PasswordRecoveryService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -52,7 +57,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
-
+builder.Services.AddSingleton<InMemoryTokenStore>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -64,7 +69,7 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddSwaggerGen(Options =>
+/*builder.Services.AddSwaggerGen(Options =>
 {
     Options.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme,
         securityScheme: new OpenApiSecurityScheme
@@ -89,10 +94,13 @@ builder.Services.AddSwaggerGen(Options =>
         },new string[]{ }
        }
     });
-});
+});*/
 var app = builder.Build();
 
+//app.UseAuthentication();
 app.UseCors("AllowSpecificOrigin");
+app.UseAuthentication(); // Must be before UseAuthorization
+app.UseAuthorization();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -103,10 +111,10 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseStaticFiles();
-
+app.UseAuthorization();
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+
 
 app.MapControllers();
 

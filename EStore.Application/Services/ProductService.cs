@@ -209,7 +209,6 @@ namespace EStore.Application.Services
         {
             var productVariants = await _productRepository.GetProductVariants();
             return productVariants;
-
         }
 
         public async Task<ProductRespDto> GetProductByVariantIdAsync(int productVariantId)

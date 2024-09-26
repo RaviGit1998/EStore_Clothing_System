@@ -144,8 +144,6 @@ namespace EStore.Web.Controllers
         [Route("ProductVariants")]
         public async Task<IActionResult> GetProductVariantId()
         {
-
-
             try
             {
                 var productVariant = await _productService.GetProductVariants();

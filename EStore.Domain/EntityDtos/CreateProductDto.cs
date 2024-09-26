@@ -14,7 +14,7 @@ namespace EStore.Domain.EntityDtos
         public string ShortDescription { get; set; }
         public string LongDesrciption { get; set; }
         public string Brand { get; set; }
-        public IFormFile ImageFile { get; set; }  // Change this line
+        public IFormFile ImageFile { get; set; }  
         public int CategoryId { get; set; }
         public int SubCategoryId { get; set; }
        

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.OpenApi.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,7 +56,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -68,7 +67,7 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddSwaggerGen(Options =>
+/*builder.Services.AddSwaggerGen(Options =>
 {
     Options.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme,
         securityScheme: new OpenApiSecurityScheme
@@ -93,9 +92,10 @@ builder.Services.AddSwaggerGen(Options =>
         },new string[]{ }
        }
     });
-});
+});*/
 var app = builder.Build();
 
+//app.UseAuthentication();
 app.UseCors("AllowSpecificOrigin");
 app.UseAuthentication(); // Must be before UseAuthorization
 app.UseAuthorization();
@@ -109,8 +109,9 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseStaticFiles();
-
+app.UseAuthorization();
 app.UseHttpsRedirection();
+
 
 
 app.MapControllers();

@@ -11,5 +11,6 @@ namespace EStore.Application.Interfaces
     public interface IShippingService
     {
         Task<ShippingDto> Createshipping(ShippingDto shippingDto);
+        Task<ShippingDto>  GetShippingByOrderId(int orderId);
     }
 }

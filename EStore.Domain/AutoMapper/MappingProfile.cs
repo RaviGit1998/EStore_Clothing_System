@@ -101,8 +101,11 @@ namespace EStore.Domain.AutoMapper
             // DTO to Entity
             CreateMap<ShippingAddressRequest, ShippingAddress>();
 
-            CreateMap<ShippingDto, Shipping>();
-            CreateMap<Shipping, ShippingDto>();
+            CreateMap<ShippingDto, Shipping>()
+                .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.OrderId));
+
+            CreateMap<Shipping, ShippingDto>()
+                  .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.OrderId));
         }
     }
 }

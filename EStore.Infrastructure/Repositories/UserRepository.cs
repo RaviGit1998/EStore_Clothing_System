@@ -21,14 +21,13 @@ namespace EStore.Infrastructure.Repositories
         public async Task<User> GetUserByEmail(string email)
         {
             
-            var result= await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
+            var result= await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (result == null)
             {
                 return null;
             }
             return result;  
         }
-
         public async Task<User> RegisterUser(User user)
         {
             var existingUser = await _context.Users.FirstOrDefaultAsync(c => c.Email == user.Email);

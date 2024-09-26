@@ -17,7 +17,13 @@ namespace EStore.Application.IRepositories
         Task DeleteProductAsync(int productId);
         Task UpdateProductAsync(Product product);
         Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId);
-        Task<IEnumerable<Product>> GetFilteredAndSortedProducts(int categoryId, decimal? minPrice, decimal? maxPrice, string size, string color, string sortOrder);
+        Task<IEnumerable<Product>> GetFilteredAndSortedProducts(
+            int categoryId,
+            decimal? minPrice,
+            decimal? maxPrice,
+            string size,
+            string color,
+            string sortOrder);
         Task<IEnumerable<ProductVariant>> GetProductVariants();
         Task<ProductRespDto> GetProductByVariantIdAsync(int productVariantId);
     }

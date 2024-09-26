@@ -30,7 +30,6 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderItemService, OrderItemservice>();
 builder.Services.AddScoped<IOrderItemRepository, OrderItemRepository>();
-
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -41,7 +40,9 @@ builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IShippingsRepository, ShippingRepository>();
 builder.Services.AddScoped<IShippingService, ShippingService>();
-
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IPasswordRecoveryService, PasswordRecoveryService>();
+builder.Services.AddSingleton<InMemoryTokenStore>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

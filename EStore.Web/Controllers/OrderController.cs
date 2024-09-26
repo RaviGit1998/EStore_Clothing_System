@@ -21,7 +21,6 @@ namespace EStore.Web.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> CreateAnOder([FromBody] OrderReq orderReq)
         {
             if (orderReq == null) return BadRequest("Order Cannot be null");
@@ -63,9 +62,7 @@ namespace EStore.Web.Api.Controllers
         }
 
         [HttpGet]
-    
         [Route("user/{userId}")]
-        [Authorize]
         public async Task<IActionResult> GetOrdersByUserId(int userId)
         {
             if (userId == null)
@@ -89,7 +86,6 @@ namespace EStore.Web.Api.Controllers
 
         [HttpPost]
         [Route("Confirmation/{orderId}")]
-        [Authorize]
         public async Task<IActionResult> ChangeStatusOfOrder(int orderId)
         {
             try
@@ -137,7 +133,6 @@ namespace EStore.Web.Api.Controllers
 
         [HttpDelete]
         [Route("delete/{orderId}")]
-        [Authorize]
         public async Task<IActionResult> DeleteOrder(int orderId)
         {
             try

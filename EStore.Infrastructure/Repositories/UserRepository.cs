@@ -40,5 +40,16 @@ namespace EStore.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return user;
         }
+        public async Task<User> UpdateUserPassword(User user)
+        {
+            var existingUser = await _context.Users.FirstOrDefaultAsync(c => c.UserId == user.UserId);
+            if (existingUser == null)
+            {
+                return null;
+            }
+            existingUser.PasswordHash = user.PasswordHash;
+            await _context.SaveChangesAsync();
+            return user;
+        }
     }
 } 

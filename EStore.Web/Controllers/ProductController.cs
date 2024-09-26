@@ -5,6 +5,7 @@ using EStore.Domain.EntityDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Pqc.Crypto.Lms;
 
 namespace EStore.Web.Controllers
 {
@@ -105,18 +106,40 @@ namespace EStore.Web.Controllers
             return Ok(products);
         }
 
+        /*  [HttpGet("category/{categoryId}/filter")]
+          public async Task<ActionResult<IEnumerable<ProductDto>>> GetFilteredAndSortedProducts(
+             int categoryId,
+             [FromQuery] decimal? minPrice,
+             [FromQuery] decimal? maxPrice,
+             [FromQuery] string size,
+             [FromQuery] string color,
+             [FromQuery] string sortOrder)
+          {
+              var products = await _productService.GetFilteredAndSortedProductsAsync(categoryId, minPrice, maxPrice, size, color, sortOrder);
+              return Ok(products);
+          }*/
         [HttpGet("category/{categoryId}/filter")]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetFilteredAndSortedProducts(
-           int categoryId,
-           [FromQuery] decimal? minPrice,
-           [FromQuery] decimal? maxPrice,
-           [FromQuery] string size,
-           [FromQuery] string color,
-           [FromQuery] string sortOrder)
+    int categoryId,
+    [FromQuery] decimal? minPrice,
+    [FromQuery] decimal? maxPrice,
+    [FromQuery] string size,
+    [FromQuery] string color,
+    [FromQuery] string sortOrder)
         {
-            var products = await _productService.GetFilteredAndSortedProductsAsync(categoryId, minPrice, maxPrice, size, color, sortOrder);
-            return Ok(products);
+            try
+            {
+                var products = await _productService.GetFilteredAndSortedProductsAsync(
+                    categoryId, minPrice, maxPrice, size, color, sortOrder
+                );
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "An error occurred while fetching products.", error = ex.Message });
+            }
         }
+       
         [HttpGet]
         [Route("ProductVariants")]
         public async Task<IActionResult> GetProductVariantId()

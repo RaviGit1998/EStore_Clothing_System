@@ -11,6 +11,6 @@ namespace EStore.Application.IRepositories
     {
         Task<User> RegisterUser(User user);
         Task<User> GetUserByEmail(string email);
-        Task<User> UpdateUserPassword(User user);
+
     }
 }

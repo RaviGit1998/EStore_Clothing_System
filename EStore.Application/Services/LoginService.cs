@@ -56,11 +56,7 @@ namespace EStore.Application.Services
             var token = GenerateToken(user);
             return token;
         }
-        public string GeneratePasswordResetToken(User user)
-        {
-            var token =  GenerateToken(user);
-            return token;
-        }
+     
      
     }
 }

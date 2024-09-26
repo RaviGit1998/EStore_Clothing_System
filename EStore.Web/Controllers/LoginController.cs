@@ -14,11 +14,11 @@ namespace EStore.Web.Api.Controllers
     public class LoginController : ControllerBase
     {
         private readonly ILoginService _loginService;
-        private readonly IPasswordRecoveryService _passwordRecoveryService;
-        public LoginController(ILoginService loginService, IPasswordRecoveryService passwordRecoveryService)
+     
+        public LoginController(ILoginService loginService )
         {
             _loginService = loginService;
-            _passwordRecoveryService = passwordRecoveryService;
+           
         }
         [AllowAnonymous]
         [HttpPost]
@@ -34,29 +34,7 @@ namespace EStore.Web.Api.Controllers
             }
 
             return Ok(new { token });
-        }
-        [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordReq request)
-        {
-            var result = await _passwordRecoveryService.ResetPasswordAsync(request.Email, request.Token, request.PasswordHash);
-            if (result)
-            {
-                return Ok(new { message = "Password has been reset successfully." });
-            }
-
-            return BadRequest(new { message = "Invalid token or email." });
-        }
-        [HttpPost("send-reset-link")]
-        public async Task<IActionResult> SendResetLink([FromBody] string email)
-        {
-            var result = await _passwordRecoveryService.SendResetLinkAsync(email);
-            if (result)
-            {
-                return Ok(new { message = "Password reset link sent successfully." });
-            }
-
-            return BadRequest(new { message = "User not found or error sending email." });
-        }
+        }      
 
     }
 }

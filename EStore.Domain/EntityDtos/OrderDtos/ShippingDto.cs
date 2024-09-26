@@ -11,7 +11,7 @@ namespace EStore.Domain.EntityDtos.OrderDtos
         public int ShippingId { get; set; }
 
         public int OrderId { get; set; }
-
+         
         public string TrackingNumber { get; set; }
 
         public DateTime ShippigDate { get; set; }

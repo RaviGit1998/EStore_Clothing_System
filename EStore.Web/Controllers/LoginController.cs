@@ -25,16 +25,19 @@ namespace EStore.Web.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginReq login)
         {
-            var token = await _loginService.ProvideToken(login);
+            var loginRes = await _loginService.ProvideToken(login);
 
 
-            if (string.IsNullOrEmpty(token))
+            if (loginRes==null)
             {
-              // if token is emoty it returns  401 
+              // if loginRes is empty it returns 401 
                 return Unauthorized(new { message = "Invalid email or password." });
             }
 
-            return Ok(new { token });
+            return Ok(new 
+            { token= loginRes.Token,
+              role= loginRes.Role
+            });
         }
         [HttpPost("send-reset-link")]
         public async Task<IActionResult> SendResetLink([FromBody] string email)

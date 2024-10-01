@@ -72,19 +72,22 @@ namespace EStore.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
+
         public async Task<IEnumerable<Product>> GetFilteredAndSortedProducts(
-      int categoryId,
-      decimal? minPrice,
-      decimal? maxPrice,
-      string size,
-      string color,
-      string sortOrder)
+           int categoryId,
+           decimal? minPrice,
+           decimal? maxPrice,
+           string size,
+           string color,
+           string sortOrder)
         {
+            // Start query by filtering by category
             var query = _dbContext.Products
                 .Where(p => p.CategoryId == categoryId)
                 .Include(p => p.ProductVariants)
                 .AsQueryable();
 
+            // Apply price range filters if provided
             if (minPrice.HasValue)
             {
                 query = query.Where(p => p.ProductVariants.Any(v => v.PricePerUnit >= minPrice.Value));
@@ -95,18 +98,21 @@ namespace EStore.Infrastructure.Repositories
                 query = query.Where(p => p.ProductVariants.Any(v => v.PricePerUnit <= maxPrice.Value));
             }
 
+            // Apply size filter only if size is provided
             if (!string.IsNullOrEmpty(size))
             {
                 var sizes = size.Split(',');
                 query = query.Where(p => p.ProductVariants.Any(v => sizes.Contains(v.Size)));
             }
 
+            // Apply color filter only if color is provided
             if (!string.IsNullOrEmpty(color))
             {
                 var colors = color.Split(',');
                 query = query.Where(p => p.ProductVariants.Any(v => colors.Contains(v.Color)));
             }
 
+            // Sorting logic
             query = sortOrder switch
             {
                 "price_asc" => query.OrderBy(p => p.ProductVariants.Min(v => v.PricePerUnit)),
@@ -116,6 +122,9 @@ namespace EStore.Infrastructure.Repositories
 
             return await query.ToListAsync();
         }
+
+
+
         public async Task<IEnumerable<ProductVariant>> GetProductVariants()
         {
             var productVariants = await _dbContext.ProductVariants.ToListAsync();
@@ -135,7 +144,7 @@ namespace EStore.Infrastructure.Repositories
             {
                 return null;
             }
-            var productResDto = new ProductRespDto
+              var productResDto = new ProductRespDto
               {
                 ProductId = productVariant.Product.ProductId,
                 Name = productVariant.Product.Name,
@@ -146,6 +155,32 @@ namespace EStore.Infrastructure.Repositories
 
             return productResDto;
         }
+
+        public async Task<IEnumerable<Product>> GetProductsByPriceRangeAsync(
+           int categoryId,
+           decimal? minPrice,
+           decimal? maxPrice)
+        {
+            var query = _dbContext.Products
+                .Where(p => p.CategoryId == categoryId)
+                .Include(p => p.ProductVariants)
+                .AsQueryable();
+
+            if (minPrice.HasValue)
+            {
+                query = query.Where(p => p.ProductVariants.Any(v => v.PricePerUnit >= minPrice.Value));
+            }
+
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(p => p.ProductVariants.Any(v => v.PricePerUnit <= maxPrice.Value));
+            }
+
+            return await query.ToListAsync();
+        }
+
+
+
     }
 }
     

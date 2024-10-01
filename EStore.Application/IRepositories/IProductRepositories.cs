@@ -26,5 +26,9 @@ namespace EStore.Application.IRepositories
             string sortOrder);
         Task<IEnumerable<ProductVariant>> GetProductVariants();
         Task<ProductRespDto> GetProductByVariantIdAsync(int productVariantId);
+        Task<IEnumerable<Product>> GetProductsByPriceRangeAsync(
+          int categoryId,
+          decimal? minPrice,
+          decimal? maxPrice);
     }
 }

@@ -34,7 +34,6 @@ namespace EStore.Application.Services
         }
         public async Task<bool> ResetPasswordAsync(string email, string token, string password)
         {
-
             var isValidToken = await ValidateTokenAsync(email, token);
             if (!isValidToken)
             {
@@ -58,7 +57,7 @@ namespace EStore.Application.Services
                 return false; // No token found for this email
             }
 
-            // Check if the provided token matches the stored token
+            // Check if the provided token matches the stored token 
             if (storedTokenInfo.Value.Token != token)
             {
                 return false; // Tokens do not match

@@ -195,5 +195,34 @@ namespace EStore.Application.Services
             var productResDto= await _productRepository.GetProductByVariantIdAsync(productVariantId);           
             return productResDto;
         }
+
+        public async Task<IEnumerable<ProductDto>> GetProductsByPriceRangeAsync(
+         int categoryId,
+         decimal? minPrice,
+         decimal? maxPrice)
+        {
+            try
+            {
+                var products = await _productRepository.GetProductsByPriceRangeAsync(categoryId, minPrice, maxPrice);
+                var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
+
+                // If you need to handle ImageData to ImageBase64 mapping
+                foreach (var productDto in productDtos)
+                {
+                    var product = products.FirstOrDefault(p => p.ProductId == productDto.ProductId);
+                    if (product?.ImageData != null)
+                    {
+                        productDto.ImageBase64 = Convert.ToBase64String(product.ImageData);
+                    }
+                }
+
+                return productDtos;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while fetching products", ex);
+            }
+        }
+
     }
 }

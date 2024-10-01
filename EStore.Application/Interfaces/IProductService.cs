@@ -19,12 +19,17 @@ namespace EStore.Application.Interfaces
         Task<IEnumerable<ProductDto>> GetProductsByCategoryAsync(int categoryId);
         Task<IEnumerable<ProductVariant>> GetProductVariants();
         Task<ProductRespDto> GetProductByVariantIdAsync(int productVariantId);
-     Task<IEnumerable<ProductDto>> GetFilteredAndSortedProductsAsync(
+       Task<IEnumerable<ProductDto>> GetFilteredAndSortedProductsAsync(
              int categoryId,
              decimal? minPrice,
              decimal? maxPrice,
              string size,
              string color,
              string sortOrder);
+
+        Task<IEnumerable<ProductDto>> GetProductsByPriceRangeAsync(
+         int categoryId,
+         decimal? minPrice,
+         decimal? maxPrice);
     }
 }

@@ -37,19 +37,28 @@ namespace EStore.Domain.AutoMapper
            
             CreateMap<OrderReq, Order>()
                 .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItemreq))
+                .ForMember(dest=>dest.Id, opt=>opt.MapFrom(src=>src.Id))
               .ForMember(dest => dest.User, opt => opt.Ignore())
             .ForMember(dest => dest.Coupon, opt => opt.Ignore())
             .ForMember(dest => dest.Payment, opt => opt.Ignore())
             .ForMember(dest => dest.Shipping, opt => opt.Ignore());
-                      
+
             CreateMap<Order, OrderRes>()
-               .ForMember(dest=>dest.Id,opt =>opt.MapFrom(src => src.Id))
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
               .ForMember(dest => dest.OrderItemRes, opt => opt.MapFrom(src => src.OrderItems))
+
+              .ForMember(dest => dest.Shipping, opt => opt.MapFrom(src => new ShippingDto
+              {
+                  TrackingNumber = src.Shipping.TrackingNumber,
+                  ShippingId = src.Shipping.ShippingId,
+                  ShippigDate = src.Shipping.ShippigDate,
+                  EstimatedDeliveryDate = src.Shipping.EstimatedDeliveryDate,
+              }))
               .ForMember(dest => dest.User, opt => opt.MapFrom(src => new UserDto
               {
-                  UserId=src.User.UserId,
-                 // FirstName = src.User.FirstName,
-                 // Email = src.User.Email
+                  UserId = src.User.UserId,
+                  // FirstName = src.User.FirstName,
+                  // Email = src.User.Email
               }))
                 .ForMember(dest => dest.Coupon, opt => opt.MapFrom(src => new CouponDto
                 {
@@ -62,8 +71,8 @@ namespace EStore.Domain.AutoMapper
 
                     Amount = src.Payment.Amount,
                     PaymentMode = src.Payment.PaymentMode
-                }))
-                .ForMember(dest => dest.Shipping, opt => opt.Ignore());
+                }));
+             
 
 
             CreateMap<OrderItemreq, OrderItem>()

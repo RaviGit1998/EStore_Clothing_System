@@ -14,11 +14,15 @@ namespace EStore.Application.Services
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IEmailService _emailservice;
         private readonly IMapper _mapper;
+        private readonly IUserService _userservice;
 
-        public OrderService(IOrderRepository orderRepository,IMapper mapper)
+        public OrderService(IOrderRepository orderRepository,IMapper mapper, IEmailService emailservice, IUserService userservice)
         {
             _orderRepository = orderRepository;
+            _emailservice = emailservice;
+            _userservice = userservice;
             _mapper = mapper;   
         }
 
@@ -168,7 +172,6 @@ namespace EStore.Application.Services
             await _orderRepository.UpdateOrderasync(order);
         }
 
-      
     }
 
 }

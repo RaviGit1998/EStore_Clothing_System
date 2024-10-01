@@ -10,5 +10,7 @@ namespace EStore.Application.Interfaces
     {
         Task<bool> SendResetLinkAsync(string email);
         Task<bool> ResetPasswordAsync(string email, string token, string password);
+
+
     }
 }

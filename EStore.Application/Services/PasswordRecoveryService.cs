@@ -1,4 +1,7 @@
-﻿using EStore.Application.Interfaces;
+﻿using AutoMapper;
+using EStore.Application.Interfaces;
+using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos.NewFolder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +16,14 @@ namespace EStore.Application.Services
         private readonly IUserService _userService; 
         private readonly ILoginService _loginService;
         private readonly InMemoryTokenStore _inMemoryTokenStore;
-        public PasswordRecoveryService(IEmailService emailService,IUserService userService,ILoginService loginService, InMemoryTokenStore inMemoryTokenStore)
+        private readonly IMapper _mapper;
+        public PasswordRecoveryService(IEmailService emailService,IUserService userService,IMapper mapper ,ILoginService loginService, InMemoryTokenStore inMemoryTokenStore)
         {
             _emailService = emailService;
             _userService = userService;
             _loginService = loginService;
             _inMemoryTokenStore= inMemoryTokenStore;
+            _mapper = mapper;
         }
         public async Task<bool> SendResetLinkAsync(string email)
         {
@@ -28,10 +33,12 @@ namespace EStore.Application.Services
             _inMemoryTokenStore.StoreToken(email, token, TimeSpan.FromHours(1));
             var resetLink = $"http://localhost:3000/passwordReset?token={token}&email={email}";
 
-            var message = $"<p>To reset your password, click the link below:</p><p><a href='{resetLink}'>Reset Password</a></p>";
+            var message = $"<p>To reset your password, click the link below:</p><p><a href='{resetLink}'>Reset Password</a></p><p>This Link expires in 30 Minutes</p>";
             _emailService.SendMailNotification(email, "Password Reset", message);
             return true;
         }
+
+
         public async Task<bool> ResetPasswordAsync(string email, string token, string password)
         {
 
@@ -50,6 +57,8 @@ namespace EStore.Application.Services
             _inMemoryTokenStore.InvalidateToken(email);
             return true;
         }
+
+
         private async Task<bool> ValidateTokenAsync(string email, string token)
         {
             var storedTokenInfo = _inMemoryTokenStore.GetToken(email);

@@ -91,10 +91,12 @@ namespace EStore.Infrastructure.Repositories
 
         public async Task<Order> CreateAnOrderAsync(Order order)
         {
-            _eStoreDbContext.Orders.Add(order);
-            await _eStoreDbContext.SaveChangesAsync();
-            return order;   
-                   
+           
+                _eStoreDbContext.Orders.Add(order);
+                await _eStoreDbContext.SaveChangesAsync();
+                return order;
+            
+           
         }
 
         public async Task<bool> DeleteOderByIdAsync(int orderId)
@@ -124,7 +126,7 @@ namespace EStore.Infrastructure.Repositories
                             .Where(o => o.UserId == userId)
                           
                             .Include(o => o.OrderItems)
-                          
+                             .Include(o=>o.Shipping)
                             .Include(o=>o.User)
                             .ToListAsync();
             return userOrders;
@@ -201,6 +203,7 @@ namespace EStore.Infrastructure.Repositories
             {
                 return order;
             }
+
             order.status = "Cancelled";
             _eStoreDbContext.Orders.Update(order);
             await _eStoreDbContext.SaveChangesAsync();

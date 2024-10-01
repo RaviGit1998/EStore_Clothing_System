@@ -31,5 +31,12 @@ namespace EStore.Application.Services
             return _mapper.Map<ShippingDto>(shippingRes);
             
         }
+
+        public async Task<ShippingDto> GetShippingByOrderId(int orderId)
+        {
+            var shipping=_shippingRepository.GetShippingDetailsById(orderId);
+
+            return _mapper.Map<ShippingDto>(shipping);
+        }
     }
 }

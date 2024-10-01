@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace EStore.Application.Services
 {
-     public class InMemoryTokenStore
-     {
-            private static readonly ConcurrentDictionary<string, (string Token, DateTime Expiration)> _tokens = new();
+    public class InMemoryTokenStore
+    {
+        private static readonly ConcurrentDictionary<string, (string Token, DateTime Expiration)> _tokens = new();
 
         public void StoreToken(string email, string token, TimeSpan expiration)
         {

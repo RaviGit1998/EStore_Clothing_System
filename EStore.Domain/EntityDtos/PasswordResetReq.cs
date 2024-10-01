@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace EStore.Domain.EntityDtos
 {
-     public  class ResetPasswordReq
-     {
+    public  class PasswordResetReq
+    {
         public string Email {  get; set; }
-        public string PasswordHash { get; set; }
-        public string Token {  get; set; } 
-     }
+        public string NewPassword { get; set; }
+        public string Token {  get; set; }
+    }
 }

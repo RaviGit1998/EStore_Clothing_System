@@ -35,5 +35,22 @@ namespace EStore.Web.Api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpGet]
+        [Route("GetShipping/{orderId}")]
+        public async Task<IActionResult> GetShippingsetailsByOrderId(int orderId)
+        {
+            if (orderId == 0) return BadRequest("OrderId cannot be null");
+            try
+            {
+                var shippingdetails = await _shippingService.GetShippingByOrderId(orderId);
+
+                return Ok(shippingdetails);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

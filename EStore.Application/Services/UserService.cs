@@ -35,7 +35,6 @@ namespace EStore.Application.Services
           return await _userRepository.RegisterUser(userDto);
 
         }
-
         public async Task<User> UpdateUserPassword(User user)
         {
             return await _userRepository.UpdateUserPassword(user);

@@ -1,5 +1,4 @@
 ﻿using EStore.Application.Interfaces;
-using EStore.Application.IRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace EStore.Application.Services
 {
-    public class PasswordRecoveryService:IPasswordRecoveryService
+     public  class PasswordRecoveryService:IPasswordRecoveryService
     {
-        private readonly IUserService _userService;
+        private readonly IEmailService _emailService;
+        private readonly IUserService _userService; 
         private readonly ILoginService _loginService;
-        private readonly IEmailRepository _emailRepository;
         private readonly InMemoryTokenStore _inMemoryTokenStore;
-        public PasswordRecoveryService(IUserService userService, ILoginService loginService, IEmailRepository emailRepository, InMemoryTokenStore inMemoryTokenStore)
+        public PasswordRecoveryService(IEmailService emailService,IUserService userService,ILoginService loginService, InMemoryTokenStore inMemoryTokenStore)
         {
+            _emailService = emailService;
             _userService = userService;
             _loginService = loginService;
-            _emailRepository = emailRepository;
-            _inMemoryTokenStore = inMemoryTokenStore;
+            _inMemoryTokenStore= inMemoryTokenStore;
         }
         public async Task<bool> SendResetLinkAsync(string email)
         {
@@ -30,7 +29,7 @@ namespace EStore.Application.Services
             var resetLink = $"http://localhost:3000/passwordReset?token={token}&email={email}";
 
             var message = $"<p>To reset your password, click the link below:</p><p><a href='{resetLink}'>Reset Password</a></p>";
-           _emailRepository.SendMailNotification(email,"Password Reset", message);
+            _emailService.SendMailNotification(email, "Password Reset", message);
             return true;
         }
         public async Task<bool> ResetPasswordAsync(string email, string token, string password)
@@ -43,8 +42,8 @@ namespace EStore.Application.Services
             var user = await _userService.GetUserByEmail(email);
             if (user == null)
             {
-                return false; 
-            }        
+                return false;
+            }
             user.PasswordHash = password;
             await _userService.UpdateUserPassword(user);
             _inMemoryTokenStore.InvalidateToken(email);
@@ -72,6 +71,5 @@ namespace EStore.Application.Services
 
             return true; // Token is valid
         }
-
     }
 }

@@ -13,6 +13,5 @@ namespace EStore.Application.Interfaces
         Task<User> AuthenticateUser(LoginReq loginDetails);
         Task<string> ProvideToken(LoginReq login);
         string GeneratePasswordResetToken(User user);
-        
     }
 }

@@ -57,10 +57,14 @@ namespace EStore.Application.Services
             return token;
         }
         public string GeneratePasswordResetToken(User user)
+
         {
-            var token =  GenerateToken(user);
+
+            var token = GenerateToken(user);
+
             return token;
+
         }
-     
+
     }
 }

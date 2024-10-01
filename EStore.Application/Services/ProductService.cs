@@ -151,14 +151,35 @@ namespace EStore.Application.Services
             return productDtos;
         }
 
+        /* public async Task<IEnumerable<ProductDto>> GetFilteredAndSortedProductsAsync(
+             int categoryId,
+             decimal? minPrice,
+             decimal? maxPrice,
+             string size,
+             string color,
+             string sortOrder)
+         {
+             var products = await _productRepository.GetFilteredAndSortedProducts(categoryId, minPrice, maxPrice, size, color, sortOrder);
+             var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
+
+             foreach (var productDto in productDtos)
+             {
+                 var product = products.FirstOrDefault(p => p.ProductId == productDto.ProductId);
+                 if (product?.ImageData != null)
+                 {
+                     productDto.ImageBase64 = Convert.ToBase64String(product.ImageData);
+                 }
+             }
+             return productDtos;
+         }*/
         public async Task<IEnumerable<ProductDto>> GetFilteredAndSortedProductsAsync(
-           int categoryId,
-           decimal? minPrice,
-           decimal? maxPrice,
-           string size,
-           string color,
-           string sortOrder)
-        {         
+     int categoryId,
+     decimal? minPrice,
+     decimal? maxPrice,
+     string size,
+     string color,
+     string sortOrder)
+        {
             size = string.IsNullOrWhiteSpace(size) ? null : size;
             color = string.IsNullOrWhiteSpace(color) ? null : color;
 
@@ -166,9 +187,8 @@ namespace EStore.Application.Services
             {
                 var products = await _productRepository.GetFilteredAndSortedProducts(
                     categoryId, minPrice, maxPrice, size, color, sortOrder
-                );              
+                );
                 var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
-             
                 foreach (var productDto in productDtos)
                 {
                     var product = products.FirstOrDefault(p => p.ProductId == productDto.ProductId);

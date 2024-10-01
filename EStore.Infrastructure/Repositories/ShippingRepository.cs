@@ -1,6 +1,7 @@
 ﻿using EStore.Application.IRepositories;
 using EStore.Domain.Entities;
 using EStore.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,5 +29,14 @@ namespace EStore.Infrastructure.Repositories
            await _eStoreDbContext.SaveChangesAsync();
             return shipping;
         }
+
+        public async Task<IEnumerable<Shipping>> GetShippingDetailsById(int orderId)
+        {
+            var Shippings = await _eStoreDbContext.Shippings
+                             .Where(o => o.OrderId == orderId).ToListAsync();
+
+            return Shippings;
+        }
+
     }
 }

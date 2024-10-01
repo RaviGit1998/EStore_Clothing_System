@@ -35,17 +35,6 @@ namespace EStore.Web.Api.Controllers
 
             return Ok(new { token });
         }
-        [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordReq request)
-        {
-            var result = await _passwordRecoveryService.ResetPasswordAsync(request.Email, request.Token, request.PasswordHash);
-            if (result)
-            {
-                return Ok(new { message = "Password has been reset successfully." });
-            }
-
-            return BadRequest(new { message = "Invalid token or email." });
-        }
         [HttpPost("send-reset-link")]
         public async Task<IActionResult> SendResetLink([FromBody] string email)
         {
@@ -57,6 +46,16 @@ namespace EStore.Web.Api.Controllers
 
             return BadRequest(new { message = "User not found or error sending email." });
         }
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] PasswordResetReq request)
+        {
+            var result = await _passwordRecoveryService.ResetPasswordAsync(request.Email, request.Token, request.NewPassword);
+            if (result)
+            {
+                return Ok(new { message = "Password has been reset successfully." });
+            }
 
+            return BadRequest(new { message = "Invalid token or email." });
+        }
     }
 }

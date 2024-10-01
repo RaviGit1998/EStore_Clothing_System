@@ -28,17 +28,6 @@ namespace EStore.Infrastructure.Repositories
             }
             return result;  
         }
-        public async Task<User> UpdateUserPassword(User user)
-        {
-            var existingUser = await _context.Users.FirstOrDefaultAsync(c => c.UserId==user.UserId);
-            if (existingUser == null)
-            {
-                return null;
-            }
-            existingUser.PasswordHash = user.PasswordHash;
-            await _context.SaveChangesAsync();
-            return user;
-        }
         public async Task<User> RegisterUser(User user)
         {
             var existingUser = await _context.Users.FirstOrDefaultAsync(c => c.Email == user.Email);
@@ -47,6 +36,17 @@ namespace EStore.Infrastructure.Repositories
                 return null;
             }
             _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            return user;
+        }
+        public async Task<User> UpdateUserPassword(User user)
+        {
+            var existingUser = await _context.Users.FirstOrDefaultAsync(c => c.UserId == user.UserId);
+            if (existingUser == null)
+            {
+                return null;
+            }
+            existingUser.PasswordHash = user.PasswordHash;
             await _context.SaveChangesAsync();
             return user;
         }

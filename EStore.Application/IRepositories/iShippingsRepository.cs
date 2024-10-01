@@ -11,5 +11,6 @@ namespace EStore.Application.IRepositories
     public interface IShippingsRepository
     {
         Task<Shipping> Createshipping(Shipping shipping);
+        Task<IEnumerable<Shipping>> GetShippingDetailsById(int orderId);
     }
 }

@@ -65,7 +65,7 @@ namespace EStore.Web.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+ 
         public async Task<ActionResult> CreateAddress([FromBody] ShippingAddressRequest addressRequest)
         {
             if (!ModelState.IsValid)
@@ -85,8 +85,6 @@ namespace EStore.Web.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize]
-
         public async Task<ActionResult> UpdateAddress(int id, [FromBody] ShippingAddressRequest addressRequest)
         {
             if (!ModelState.IsValid)
@@ -115,7 +113,6 @@ namespace EStore.Web.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
         public async Task<ActionResult> DeleteAddress(int id)
         {
             try

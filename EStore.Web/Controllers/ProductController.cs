@@ -49,7 +49,7 @@ namespace EStore.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> AddProduct([FromForm] CreateProductDto createProductDto)
         {
             if (!ModelState.IsValid)
@@ -62,7 +62,7 @@ namespace EStore.Web.Controllers
         }
 
         [HttpDelete("{productId}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> DeleteProduct(int productId)
         {
             try
@@ -77,7 +77,7 @@ namespace EStore.Web.Controllers
         }
 
         [HttpPut("{productId}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> UpdateProduct(int productId, [FromForm] UpdateProductDto updateProductDto)
         {
             if (updateProductDto == null)
@@ -105,41 +105,31 @@ namespace EStore.Web.Controllers
             var products = await _productService.GetProductsByCategoryAsync(categoryId);
             return Ok(products);
         }
-
-        /*  [HttpGet("category/{categoryId}/filter")]
+        
+         [HttpGet("category/{categoryId}/filter")]
           public async Task<ActionResult<IEnumerable<ProductDto>>> GetFilteredAndSortedProducts(
-             int categoryId,
-             [FromQuery] decimal? minPrice,
-             [FromQuery] decimal? maxPrice,
-             [FromQuery] string size,
-             [FromQuery] string color,
-             [FromQuery] string sortOrder)
+            int categoryId,
+            [FromQuery] decimal? minPrice,
+            [FromQuery] decimal? maxPrice,
+            [FromQuery] string size,
+            [FromQuery] string color,
+            [FromQuery] string sortOrder)
           {
-              var products = await _productService.GetFilteredAndSortedProductsAsync(categoryId, minPrice, maxPrice, size, color, sortOrder);
-              return Ok(products);
-          }*/
-        [HttpGet("category/{categoryId}/filter")]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> GetFilteredAndSortedProducts(
-    int categoryId,
-    [FromQuery] decimal? minPrice,
-    [FromQuery] decimal? maxPrice,
-    [FromQuery] string size,
-    [FromQuery] string color,
-    [FromQuery] string sortOrder)
-        {
-            try
-            {
-                var products = await _productService.GetFilteredAndSortedProductsAsync(
-                    categoryId, minPrice, maxPrice, size, color, sortOrder
-                );
-                return Ok(products);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = "An error occurred while fetching products.", error = ex.Message });
-            }
-        }
+                    try
+                    {
+                        var products = await _productService.GetFilteredAndSortedProductsAsync(
+                            categoryId, minPrice, maxPrice, size, color, sortOrder
+                        );
+
+                        return Ok(products);
+                    }
+                    catch (Exception ex)
+                    {
+                        return BadRequest(new { message = "An error occurred while fetching products.", error = ex.Message });
+                    }
+          }
        
+
         [HttpGet]
         [Route("ProductVariants")]
         public async Task<IActionResult> GetProductVariantId()
@@ -180,6 +170,22 @@ namespace EStore.Web.Controllers
             }
         }
 
+        [HttpGet("category/{categoryId}/filterbyPrice")]
+           public async Task<ActionResult<IEnumerable<ProductDto>>> GetFilteredAndSortedProducts(
+           int categoryId,
+           [FromQuery] decimal? minPrice,
+           [FromQuery] decimal? maxPrice)
+        {
+            try
+            {
+                var products = await _productService.GetProductsByPriceRangeAsync(categoryId, minPrice, maxPrice);
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "An error occurred while fetching products.", error = ex.Message });
+            }
+        }
 
     }
 

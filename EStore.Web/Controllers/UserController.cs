@@ -1,6 +1,7 @@
 ﻿using EStore.Application.Interfaces;
 using EStore.Domain.Entities;
 using EStore.Domain.EntityDtos;
+using EStore.Domain.EntityDtos.OrderDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -62,6 +63,20 @@ namespace EStore.Web.Api.Controllers
             {             
                 return StatusCode(500, new { message = ex.Message });
             }
+        }
+
+        [HttpPost("send-email")]
+        public IActionResult SendEmail([FromBody] EmailReq emailRequest)
+        {
+            if (string.IsNullOrEmpty(emailRequest.ToEmail) ||
+                string.IsNullOrEmpty(emailRequest.Subject) ||
+                string.IsNullOrEmpty(emailRequest.Body))
+            {
+                return BadRequest("Email details are required.");
+            }
+
+            _userService.ShareOrderDetailsViaEmail(emailRequest);
+            return Ok("Email sent successfully.");
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using EStore.Domain.Entities;
 using EStore.Domain.EntityDtos;
+using EStore.Domain.EntityDtos.OrderDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,6 @@ namespace EStore.Application.Interfaces
         Task<User> RegisterUser(UserReq user);
         Task<User> GetUserByEmail(string email);
         Task<User> UpdateUserPassword(User user);
+        Task ShareOrderDetailsViaEmail(EmailReq emailReq);
     }
 } 

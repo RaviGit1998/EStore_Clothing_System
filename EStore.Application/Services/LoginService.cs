@@ -2,6 +2,7 @@
 using EStore.Application.Interfaces;
 using EStore.Application.IRepositories;
 using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos;
 using EStore.Domain.EntityDtos.OrderDtos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -45,7 +46,7 @@ namespace EStore.Application.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public async Task<string> ProvideToken(LoginReq login)
+        public async Task<LoginRes> ProvideToken(LoginReq login)
         {
             var user = await AuthenticateUser(login);
 
@@ -54,16 +55,12 @@ namespace EStore.Application.Services
                 return null;
             }
             var token = GenerateToken(user);
-            return token;
+            return new LoginRes { Token = token, Role = user.Role };
         }
         public string GeneratePasswordResetToken(User user)
-
         {
-
             var token = GenerateToken(user);
-
             return token;
-
         }
 
     }

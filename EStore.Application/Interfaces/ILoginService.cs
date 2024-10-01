@@ -1,4 +1,5 @@
 ﻿using EStore.Domain.Entities;
+using EStore.Domain.EntityDtos;
 using EStore.Domain.EntityDtos.OrderDtos;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace EStore.Application.Interfaces
     public interface ILoginService
     {
         Task<User> AuthenticateUser(LoginReq loginDetails);
-        Task<string> ProvideToken(LoginReq login);
+        Task<LoginRes> ProvideToken(LoginReq login);
         string GeneratePasswordResetToken(User user);
     }
 }

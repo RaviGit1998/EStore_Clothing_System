@@ -33,8 +33,9 @@ namespace EStore.Application.Services
         public async Task<User> RegisterUser(UserReq user)
         {
             var userDto= _mapper.Map<User>(user);
-
-          return await _userRepository.RegisterUser(userDto);
+            userDto.Role = "User";
+            userDto.CreatedDate = DateTime.Now;
+            return await _userRepository.RegisterUser(userDto);
 
         }
         public async Task<User> UpdateUserPassword(User user)

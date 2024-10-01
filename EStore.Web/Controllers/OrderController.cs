@@ -2,6 +2,7 @@
 using EStore.Application.Interfaces;
 using EStore.Domain.Entities;
 using EStore.Domain.EntityDtos.NewFolder;
+using EStore.Domain.EntityDtos.OrderDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +15,11 @@ namespace EStore.Web.Api.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
-        private readonly IEmailService _emailService;
-        public OrderController(IOrderService orderService,IEmailService emailservice)
+
+        public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
-            _emailService = emailservice;
+            
         }
 
         [HttpPost]
@@ -162,77 +163,41 @@ namespace EStore.Web.Api.Controllers
         [HttpPost("sendOrderCancelDetails")]
         public async Task<IActionResult> SendOrderCancelDetails(OrderEmailRequest request)
         {
-            if (request == null || string.IsNullOrEmpty(request.Email))
+            try
             {
-                return BadRequest("Invalid request data.");
+                if (request == null || string.IsNullOrEmpty(request.Email))
+                {
+                    return BadRequest("Invalid request data.");
+                }
+                await _orderService.SendOrderCancelDetails(request);
+
+                return Ok("Order Cancelled Successfully.");
             }
-
-            // Generate email content
-            var subject = $"Order Cancelled - Order #{request.OrderId}";
-            var body = BuildOrderCancelDetails(request);
-
-            // Send the email
-            _emailService.SendMailNotification(request.Email, subject, body);
-
-            return Ok("Order Cancelled Successfully.");
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
         }
         [HttpPost("sendOrderDetails")]
         public async Task<IActionResult> SendOrderDetails(OrderEmailRequest request)
         {
-            if (request == null || string.IsNullOrEmpty(request.Email))
+            try
             {
-                return BadRequest("Invalid request data.");
+                if (request == null || string.IsNullOrEmpty(request.Email))
+                {
+                    return BadRequest("Invalid request data.");
+                }
+
+                await _orderService.SendOrderDetails(request);
+
+                return Ok("Order details sent successfully.");
             }
-
-            // Generate email content
-            var subject = $"Order Confirmation - Order #{request.OrderId}";
-            var body = BuildOrderDetailsEmail(request);
-
-            // Send the email
-            _emailService.SendMailNotification(request.Email, subject, body);
-
-            return Ok("Order details sent successfully.");
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
         }
-        private string BuildOrderDetailsEmail(OrderEmailRequest order)
-        {
-            var sb = new StringBuilder();
-            sb.Append("<h2>Thank you for your order!</h2>");
-            sb.Append($"<p>Order Number: {order.OrderId}</p>");
-            sb.Append($"<p>Order Date: {order.OrderDate}</p>");
-            sb.Append($"<p>Order amount: {order.TotalAmount}</p>");
-            sb.Append($"<p>Thank You</p>");
-            sb.Append($"<p>Vastra</p>");
-            sb.Append("<ul>");
-            sb.Append("</ul>");
-            // sb.Append($"<p>Total Amount: ${order.}</p>");
-            sb.Append("<p>We will notify you once your order is shipped.</p>");
-
-            return sb.ToString();
-        }
-
-        private string BuildOrderCancelDetails(OrderEmailRequest order)
-        {
-            var sb = new StringBuilder();
-            sb.Append("<h2>ohh oo?? Your Order has been cancelled</h2>");
-            sb.Append($"<p>Order Id: {order.OrderId}</p>");     
-            sb.Append($"<p>Order amount: {order.TotalAmount}</p>");
-            sb.Append($"<p>Please reach out to our Customer Service if you have any queries</p>");
-            sb.Append($"<p>Thank You</p>");
-            sb.Append($"<p>Vastra</p>");
-            sb.Append("<ul>");
-            sb.Append("</ul>");
-            // sb.Append($"<p>Total Amount: ${order.}</p>");
-          
-
-            return sb.ToString();
-        }
-        public class OrderEmailRequest
-        {
-            public string Email { get; set; }
-            public int OrderId { get; set; }
-            public decimal TotalAmount { get; set; }
-            public string OrderDate { get; set; }
-        }
+      
 
     }
 }

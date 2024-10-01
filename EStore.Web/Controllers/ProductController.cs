@@ -105,21 +105,18 @@ namespace EStore.Web.Controllers
             var products = await _productService.GetProductsByCategoryAsync(categoryId);
             return Ok(products);
         }
-        /*
-                [HttpGet("category/{categoryId}/filter")]
-                public async Task<ActionResult<IEnumerable<ProductDto>>> GetFilteredAndSortedProducts(
-                   int categoryId,
-                   [FromQuery] decimal? minPrice,
-                   [FromQuery] decimal? maxPrice,
-                   [FromQuery] string size,
-                   [FromQuery] string color,
-                   [FromQuery] string sortOrder)
-                {
+        
+         [HttpGet("category/{categoryId}/filter")]
+          public async Task<ActionResult<IEnumerable<ProductDto>>> GetFilteredAndSortedProducts(
+            int categoryId,
+            [FromQuery] decimal? minPrice,
+            [FromQuery] decimal? maxPrice,
+            [FromQuery] string size,
+            [FromQuery] string color,
+            [FromQuery] string sortOrder)
+          {
                     try
                     {
-                        // Log incoming request
-                        Console.WriteLine($"Filtering by: minPrice={minPrice}, maxPrice={maxPrice}, size={size}, color={color}, sortOrder={sortOrder}");
-
                         var products = await _productService.GetFilteredAndSortedProductsAsync(
                             categoryId, minPrice, maxPrice, size, color, sortOrder
                         );
@@ -130,37 +127,8 @@ namespace EStore.Web.Controllers
                     {
                         return BadRequest(new { message = "An error occurred while fetching products.", error = ex.Message });
                     }
-                }
-        */
-        [HttpGet("category/{categoryId}/filter")]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> GetFilteredAndSortedProducts(
-          int categoryId,
-          [FromQuery] decimal? minPrice,
-          [FromQuery] decimal? maxPrice,
-          [FromQuery] string size,
-          [FromQuery] string color,
-          [FromQuery] string sortOrder)
-        {
-            try
-            {
-                // Log incoming parameters for better debugging
-                Console.WriteLine($"Filtering by: categoryId={categoryId}, minPrice={minPrice}, maxPrice={maxPrice}, size={size}, color={color}, sortOrder={sortOrder}");
-
-                var products = await _productService.GetFilteredAndSortedProductsAsync(
-                    categoryId, minPrice, maxPrice, size, color, sortOrder
-                );
-
-                return Ok(products);
-            }
-            catch (Exception ex)
-            {
-                // Log the exception for better troubleshooting
-                Console.WriteLine($"Error fetching products: {ex.Message}");
-                return BadRequest(new { message = "An error occurred while fetching products.", error = ex.Message });
-            }
-        }
-
-
+          }
+       
 
         [HttpGet]
         [Route("ProductVariants")]

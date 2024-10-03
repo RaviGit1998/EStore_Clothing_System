@@ -17,7 +17,6 @@ namespace EStore.Application.Services
             smtpClient.EnableSsl = true;
             smtpClient.UseDefaultCredentials = false;
             smtpClient.Credentials = new NetworkCredential("snasreen877@gmail.com", GetPassword());
-
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("snasreen877@gmail.com");
             mailMessage.To.Add(toEmail);

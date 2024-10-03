@@ -78,14 +78,48 @@ namespace EStore.Infrastructure.Repositories
 
         public async Task<Order> ChangeStatusOfOrder(int orderId)
         {
-           var order=await GetOrderByIdAsync(orderId);
-            if(order == null)
+            /*  var order=await GetOrderByIdAsync(orderId);
+               if(order == null)
+               {
+                   return null;
+               }
+               order.status = "Confirmed";
+               _eStoreDbContext.Orders.Update(order);
+               await _eStoreDbContext.SaveChangesAsync();
+               return order;*/
+            var order = await GetOrderByIdAsync(orderId);
+            if (order == null)
             {
                 return null;
             }
             order.status = "Confirmed";
+            foreach (var orderItem in order.OrderItems)
+            {
+                var productVariant = await _eStoreDbContext.ProductVariants
+                    .FindAsync(orderItem.ProductVariantId);
+
+                // Check if the product variant exists
+                if (productVariant == null)
+                {
+                    throw new InvalidOperationException($"Product variant with ID {orderItem.ProductVariantId} does not exist.");
+                }
+
+                // Ensure there's enough quantity available before reducing
+                if (productVariant.Quantity < orderItem.Quantity)
+                {
+                    throw new InvalidOperationException($"Not enough quantity for product variant {productVariant.Name}. Available: {productVariant.Quantity}, Requested: {orderItem.Quantity}");
+                }
+
+                // Deduct the ordered quantity from the product variant
+                productVariant.Quantity -= orderItem.Quantity;
+            }
+
+            // Update the order in the context
             _eStoreDbContext.Orders.Update(order);
+
+            // Save changes to the database
             await _eStoreDbContext.SaveChangesAsync();
+
             return order;
         }
 

@@ -142,8 +142,6 @@ namespace EStore.Application.Services
             return _mapper.Map<OrderRes>(order);
         }
 
-     
-
         public async Task<IEnumerable<OrderRes>> GetOrdersByUserIdAsync(int userId)
         {
             if (userId <= 0) throw new ArgumentException("Invalid User Id");

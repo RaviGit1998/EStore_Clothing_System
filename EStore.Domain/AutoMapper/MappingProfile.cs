@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace EStore.Domain.AutoMapper
 {
@@ -34,14 +35,30 @@ namespace EStore.Domain.AutoMapper
             CreateMap<CreateProductDto, Product>()
                 .ForMember(dest => dest.CreatedDate, opt => opt.Ignore()) 
                 .ForMember(dest => dest.ModifiedDate, opt => opt.Ignore());
-           
+
+            CreateMap<AddProductDto, Product>()
+                  .ForMember(dest => dest.CreatedDate, opt => opt.Ignore())
+                  .ForMember(dest => dest.ModifiedDate, opt => opt.Ignore())
+                  .ForMember(dest => dest.ProductVariants, opt => opt.MapFrom(src => src.addProductVariantDtos));
+
+            CreateMap<AddProductVariantDto, ProductVariant>()
+                .ForMember(dest => dest.Product, opt => opt.Ignore())
+                .ForMember(dest => dest.ProductId, opt => opt.Ignore())
+                .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
+                .ForMember(dest => dest.PricePerUnit, opt => opt.MapFrom(src => src.PricePerUnit))
+                .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
+                .ForMember(dest => dest.Color, opt => opt.MapFrom(src => src.Color));
+            CreateMap<ProductVariant, AddProductVariantDto>()
+                .ForMember(dest => dest.addProductDtos, opt => opt.Ignore());
+               
+
             CreateMap<OrderReq, Order>()
                 .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItemreq))
                 .ForMember(dest=>dest.Id, opt=>opt.MapFrom(src=>src.Id))
-              .ForMember(dest => dest.User, opt => opt.Ignore())
-            .ForMember(dest => dest.Coupon, opt => opt.Ignore())
-            .ForMember(dest => dest.Payment, opt => opt.Ignore())
-            .ForMember(dest => dest.Shipping, opt => opt.Ignore());
+                .ForMember(dest => dest.User, opt => opt.Ignore())
+                .ForMember(dest => dest.Coupon, opt => opt.Ignore())
+                .ForMember(dest => dest.Payment, opt => opt.Ignore())
+                .ForMember(dest => dest.Shipping, opt => opt.Ignore());
 
             CreateMap<Order, OrderRes>()
                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))

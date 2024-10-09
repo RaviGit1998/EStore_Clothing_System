@@ -194,7 +194,7 @@ namespace EStore.Application.Services
         private string BuildOrderDetailsEmail(OrderEmailRequest order)
         {
             var sb = new StringBuilder();
-            sb.Append("<h2>Thank you for your order!</h2>");
+        
             sb.Append($"<p>Order Number: {order.OrderId}</p>");
             sb.Append($"<p>Order Date: {order.OrderDate}</p>");
             sb.Append($"<p>Order amount: {order.TotalAmount}</p>");

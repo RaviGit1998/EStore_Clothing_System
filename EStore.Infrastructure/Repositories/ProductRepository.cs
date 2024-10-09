@@ -45,6 +45,12 @@ namespace EStore.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task AddProductWithVariantAsync(Product product)
+        {
+            await _dbContext.Products.AddAsync(product);
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId)
         {
             return await _dbContext.Products

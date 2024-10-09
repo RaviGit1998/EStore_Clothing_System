@@ -31,5 +31,7 @@ namespace EStore.Application.Interfaces
          int categoryId,
          decimal? minPrice,
          decimal? maxPrice);
+
+        Task<int> AddProductWithVariantAsync(AddProductDto addProductDto);
     }
 }

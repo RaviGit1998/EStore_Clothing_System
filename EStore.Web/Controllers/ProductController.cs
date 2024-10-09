@@ -59,9 +59,26 @@ namespace EStore.Web.Controllers
 
             return CreatedAtAction(nameof(GetProductById), new { productId = createdProductId }, createProductDto);
         }
-      
+
+        [HttpPost("AddProductwithVariant")]
+        public async Task<IActionResult> AddProductWithVariant([FromForm] AddProductDto addProductDto)
+        {
+            try
+            {
+                if (addProductDto.addProductVariantDtos == null)
+                {
+                    throw new ArgumentNullException("ProductVariants cant be null");
+                }
+                var createdProductId = await _productService.AddProductWithVariantAsync(addProductDto);
+                return Ok(addProductDto);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
         [HttpDelete("{productId}")]
-        
         public async Task<IActionResult> DeleteProduct(int productId)
         {
             try

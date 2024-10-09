@@ -237,6 +237,20 @@ namespace EStore.Infrastructure.Repositories
             {
                 return order;
             }
+            foreach (var orderItem in order.OrderItems)
+            {
+                var productVariant = await _eStoreDbContext.ProductVariants
+                                      .FindAsync(orderItem.ProductVariantId);
+
+                // Check if the product variant exists
+                if (productVariant == null)
+                {
+                    throw new InvalidOperationException($"Product variant with ID {orderItem.ProductVariantId} does not exist.");
+                }
+
+                // Add back the ordered quantity to the product variant's available quantity
+                productVariant.Quantity += orderItem.Quantity;
+            }
 
             order.status = "Cancelled";
             _eStoreDbContext.Orders.Update(order);

@@ -4,6 +4,7 @@ using EStore.Application.Interfaces;
 using EStore.Application.IRepositories;
 using EStore.Domain.Entities;
 using EStore.Domain.EntityDtos;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -94,6 +95,53 @@ namespace EStore.Application.Services
             product.CreatedDate = DateTime.UtcNow;
             product.ModifiedDate = DateTime.UtcNow;
             await _productRepository.AddProductAsync(product);
+            return product.ProductId;
+        }
+        /*        public async Task<int> AddProductWithVariantAsync(AddProductDto addProductDto)
+                {
+                    var product = _mapper.Map<Product>(addProductDto);
+                    if (addProductDto.ImageFile != null && addProductDto.ImageFile.Length > 0)
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await addProductDto.ImageFile.CopyToAsync(memoryStream);
+                            product.ImageData = memoryStream.ToArray();
+                        }
+                    }
+                    // Initialize the ProductVariants collection
+                    product.ProductVariants = new List<ProductVariant>();
+
+                    // Map and add Product Variants if provided
+                    if (addProductDto.addProductVariantDtos != null && addProductDto.addProductVariantDtos.Any())
+                    {
+                        // Map DTOs to ProductVariant entities
+                        var productVariants = _mapper.Map<List<ProductVariant>>(addProductDto.addProductVariantDtos);
+
+                        // Set the ProductId for each ProductVariant
+                        foreach (var variant in productVariants)
+                        {
+                            variant.ProductId = product.ProductId; // Associate the variant with the created product
+                            product.ProductVariants.Add(variant); // Add the variant to the product's variants list
+                        }
+                    }
+
+                    // Add the product to the repository
+                    await _productRepository.AddProductWithVariantAsync(product);
+                    return product.ProductId;
+                }*/
+        public async Task<int> AddProductWithVariantAsync(AddProductDto addProductDto)
+        {
+            var product = _mapper.Map<Product>(addProductDto);
+            if (addProductDto.ImageFile != null && addProductDto.ImageFile.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await addProductDto.ImageFile.CopyToAsync(memoryStream);
+                    product.ImageData = memoryStream.ToArray();
+                }
+            }
+
+            await _productRepository.AddProductWithVariantAsync(product);
             return product.ProductId;
         }
 
@@ -224,5 +272,6 @@ namespace EStore.Application.Services
             }
         }
 
+     
     }
 }

@@ -1,5 +1,6 @@
 ﻿using EStore.Domain.Entities;
 using EStore.Domain.EntityDtos.NewFolder;
+using EStore.Domain.EntityDtos.OrderDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,10 +33,12 @@ namespace EStore.Application.Interfaces
 
         //IsPayment Success or not for Order
         Task<bool> ProcessPayment(int orderId);
-
-
         Task<bool> DeleteOrderByIdAsync(int orderId);
         Task<OrderRes> CancelOrderById(int orderId);
+
+        Task SendOrderCancelDetails(OrderEmailRequest request);
+        Task SendOrderDetails(OrderEmailRequest request);
+
 
 
     }

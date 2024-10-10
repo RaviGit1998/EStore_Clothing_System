@@ -2,9 +2,11 @@
 using EStore.Application.Interfaces;
 using EStore.Domain.Entities;
 using EStore.Domain.EntityDtos.NewFolder;
+using EStore.Domain.EntityDtos.OrderDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace EStore.Web.Api.Controllers
 {
@@ -13,11 +15,11 @@ namespace EStore.Web.Api.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
-       
+
         public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
-           
+            
         }
 
         [HttpPost]
@@ -158,5 +160,44 @@ namespace EStore.Web.Api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
             }
         }
+        [HttpPost("sendOrderCancelDetails")]
+        public async Task<IActionResult> SendOrderCancelDetails(OrderEmailRequest request)
+        {
+            try
+            {
+                if (request == null || string.IsNullOrEmpty(request.Email))
+                {
+                    return BadRequest("Invalid request data.");
+                }
+                await _orderService.SendOrderCancelDetails(request);
+
+                return Ok("Order Cancelled Successfully.");
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
         }
+        [HttpPost("sendOrderDetails")]
+        public async Task<IActionResult> SendOrderDetails(OrderEmailRequest request)
+        {
+            try
+            {
+                if (request == null || string.IsNullOrEmpty(request.Email))
+                {
+                    return BadRequest("Invalid request data.");
+                }
+
+                await _orderService.SendOrderDetails(request);
+
+                return Ok("Order details sent successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
+        }
+      
+
+    }
 }

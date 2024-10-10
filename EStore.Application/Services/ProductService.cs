@@ -195,24 +195,6 @@ namespace EStore.Application.Services
             await _productRepository.UpdateProductAsync(existingProduct);
         }
 
-
-        public async Task<IEnumerable<ProductDto>> GetProductsByCategoryAsync(int categoryId)
-        {
-            var products = await _productRepository.GetProductsByCategoryAsync(categoryId);
-            var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
-
-            foreach (var productDto in productDtos)
-            {
-                var product = products.FirstOrDefault(p => p.ProductId == productDto.ProductId);
-                if (product?.ImageData != null)
-                {
-                    productDto.ImageBase64 = Convert.ToBase64String(product.ImageData);
-                }
-            }
-
-            return productDtos;
-        }
- 
         public async Task<IEnumerable<ProductDto>> GetFilteredAndSortedProductsAsync(
            int categoryId,
            decimal? minPrice,
@@ -295,100 +277,6 @@ namespace EStore.Application.Services
             // Call the repository to add the variant
             await _productRepository.AddProductVariantAsync(productVariant);
         }
-
-        public async Task UpdateProductVariantAsync(ProductVariantDto productVariantDto)
-        {
-            // Fetch existing product variant by ProductVariantId
-            var existingProductVariant = await _productRepository.GetProductVariantsByProductIdAsync(productVariantDto.ProductId);
-
-            if (existingProductVariant == null)
-            {
-                throw new Exception("Product variant not found");
-            }
-
-            // Map DTO to existing product variant entity
-            _mapper.Map(productVariantDto, existingProductVariant);
-
-            // Update product variant
-            //await _productRepository.UpdateProductVariantAsync(existingProductVariant);
-        }
-        
-
-            // Add Product with Variants
-            public async Task AddProductWithVariantsAsync(CreateProductDto createProductDto)
-            {
-                // Map DTO to Product entity
-              var product = _mapper.Map<Product>(createProductDto);
-              if (createProductDto.ImageFile != null && createProductDto.ImageFile.Length > 0)
-              {
-                using (var memoryStream = new MemoryStream())
-                {
-                    await createProductDto.ImageFile.CopyToAsync(memoryStream);
-                    product.ImageData = memoryStream.ToArray();
-                }
-              }
-               await _productRepository.AddProductAsync(product);
-
-              if (createProductDto.ProductVariants != null && createProductDto.ProductVariants.Any())
-              {
-                    foreach (var variantDto in createProductDto.ProductVariants)
-                    {
-                        var productVariant = _mapper.Map<ProductVariant>(variantDto);
-                        productVariant.ProductId = product.ProductId; 
-                       
-                        await _productRepository.AddProductVariantAsync(productVariant);
-                    }
-              }
-            }
-
-            // Update Product with Variants
-            public async Task UpdateProductWithVariantsAsync(int productId, UpdateProductDto updateProductDto)
-            {
-                // Fetch the existing product with variants
-                var existingProduct = await _productRepository.GetProductsByIdAsync(productId);
-                if (existingProduct == null)
-                {
-                    throw new KeyNotFoundException($"Product with ID {productId} not found.");
-                }
-
-                // Map updated product fields
-                _mapper.Map(updateProductDto, existingProduct);
-
-                // Handle ProductVariants
-                foreach (var variantDto in updateProductDto.ProductVariants)
-                {
-                    var existingVariant = existingProduct.ProductVariants
-                        .FirstOrDefault(v => v.ProductVariantId == variantDto.ProductVariantId);
-
-                    if (existingVariant != null)
-                    {
-                        // Update existing variant
-                        _mapper.Map(variantDto, existingVariant);
-                    }
-                    else
-                    {
-                        // Add new variant
-                        var newVariant = _mapper.Map<ProductVariant>(variantDto);
-                        newVariant.ProductId = productId;
-                        existingProduct.ProductVariants.Add(newVariant);
-                    }
-                }
-
-                // Remove variants that are not present in the updated list
-                var variantsToRemove = existingProduct.ProductVariants
-                    .Where(v => !updateProductDto.ProductVariants.Any(dto => dto.ProductVariantId == v.ProductVariantId))
-                    .ToList();
-
-                foreach (var variant in variantsToRemove)
-                {
-                    existingProduct.ProductVariants.Remove(variant);
-                    await _productRepository.DeleteProductVariantAsync(variant.ProductVariantId);
-                }
-
-                // Save changes via repository
-                await _productRepository.UpdateProductAsync(existingProduct);
-            }
-        
 
     }
 }

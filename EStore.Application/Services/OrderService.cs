@@ -3,6 +3,7 @@ using EStore.Application.Interfaces;
 using EStore.Application.IRepositories;
 using EStore.Domain.Entities;
 using EStore.Domain.EntityDtos.NewFolder;
+using EStore.Domain.EntityDtos.OrderDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +15,15 @@ namespace EStore.Application.Services
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IEmailService _emailservice;
         private readonly IMapper _mapper;
+        private readonly IUserService _userservice;
 
-        public OrderService(IOrderRepository orderRepository,IMapper mapper)
+        public OrderService(IOrderRepository orderRepository,IMapper mapper, IEmailService emailservice, IUserService userservice)
         {
             _orderRepository = orderRepository;
+            _emailservice = emailservice;
+            _userservice = userservice;
             _mapper = mapper;   
         }
 
@@ -137,8 +142,6 @@ namespace EStore.Application.Services
             return _mapper.Map<OrderRes>(order);
         }
 
-     
-
         public async Task<IEnumerable<OrderRes>> GetOrdersByUserIdAsync(int userId)
         {
             if (userId <= 0) throw new ArgumentException("Invalid User Id");
@@ -160,7 +163,27 @@ namespace EStore.Application.Services
              return success;
         }
 
-     
+        public async Task SendOrderCancelDetails(OrderEmailRequest request)
+        {
+            // Generate email content
+            var subject = $"Order Cancelled - Order #{request.OrderId}";
+            var body = BuildOrderCancelDetails(request);
+
+            // Send the email
+            _emailservice.SendMailNotification(request.Email, subject, body);
+        }
+
+        public async Task SendOrderDetails(OrderEmailRequest request)
+        {
+
+            var subject = $"Order Confirmation - Order #{request.OrderId}";
+            var body = BuildOrderDetailsEmail(request);
+
+            // Send the email
+            _emailservice.SendMailNotification(request.Email, subject, body);
+
+          
+        }
 
         public async Task UpdateOrderasync(OrderReq ordeRreq)
         {
@@ -168,7 +191,40 @@ namespace EStore.Application.Services
             await _orderRepository.UpdateOrderasync(order);
         }
 
-      
+        private string BuildOrderDetailsEmail(OrderEmailRequest order)
+        {
+            var sb = new StringBuilder();
+            sb.Append("<h2>Thank you for your order!</h2>");
+            sb.Append($"<p>Order Number: {order.OrderId}</p>");
+            sb.Append($"<p>Order Date: {order.OrderDate}</p>");
+            sb.Append($"<p>Order amount: {order.TotalAmount}</p>");
+            sb.Append($"<p>Thank You</p>");
+            sb.Append($"<p>Vastra</p>");
+            sb.Append("<ul>");
+            sb.Append("</ul>");
+            // sb.Append($"<p>Total Amount: ${order.}</p>");
+            sb.Append("<p>We will notify you once your order is shipped.</p>");
+
+            return sb.ToString();
+        }
+
+        private string BuildOrderCancelDetails(OrderEmailRequest order)
+        {
+            var sb = new StringBuilder();
+            sb.Append("<h2>ohh oo?? Your Order has been cancelled</h2>");
+            sb.Append($"<p>Order Id: {order.OrderId}</p>");
+            sb.Append($"<p>Order amount: {order.TotalAmount}</p>");
+            sb.Append($"<p>Please reach out to our Customer Service if you have any queries</p>");
+            sb.Append($"<p>Thank You</p>");
+            sb.Append($"<p>Vastra</p>");
+            sb.Append("<ul>");
+            sb.Append("</ul>");
+            // sb.Append($"<p>Total Amount: ${order.}</p>");
+
+
+            return sb.ToString();
+        }
+
     }
 
 }

@@ -37,6 +37,7 @@ namespace EStore.Domain.Entities
         [Required]
         public DateTime CreatedDate { get; set; }
         //navigation Properties 
+        public string Role {  get; set; }
         public virtual ICollection<Order> Orders { get; set; }
         public virtual WishList WishList { get; set; }
 

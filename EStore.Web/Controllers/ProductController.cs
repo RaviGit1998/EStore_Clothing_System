@@ -47,9 +47,8 @@ namespace EStore.Web.Controllers
             var products = await _productService.SearchProductAsync(keyword);
             return Ok(products);
         }
-
+     
         [HttpPost]
-        //[Authorize]
         public async Task<IActionResult> AddProduct([FromForm] CreateProductDto createProductDto)
         {
             if (!ModelState.IsValid)
@@ -60,9 +59,9 @@ namespace EStore.Web.Controllers
 
             return CreatedAtAction(nameof(GetProductById), new { productId = createdProductId }, createProductDto);
         }
-
+      
         [HttpDelete("{productId}")]
-        //[Authorize]
+        
         public async Task<IActionResult> DeleteProduct(int productId)
         {
             try
@@ -76,8 +75,7 @@ namespace EStore.Web.Controllers
             }
         }
 
-        [HttpPut("{productId}")]
-        //[Authorize]
+        [HttpPut("{productId}")]      
         public async Task<IActionResult> UpdateProduct(int productId, [FromForm] UpdateProductDto updateProductDto)
         {
             if (updateProductDto == null)

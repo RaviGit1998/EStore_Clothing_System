@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,8 @@ namespace EStore.Domain.EntityDtos
         public IFormFile ImageFile { get; set; }
         public int CategoryId { get; set; }
         public int SubCategoryId { get; set; }
+        [Required]
+        public ICollection<AddProductVariantDto> addProductVariantDtos { get; set; }= new List<AddProductVariantDto>();
 
-        public ICollection<AddProductVariantDto> addProductVariantDtos { get; set; }
     }
 }

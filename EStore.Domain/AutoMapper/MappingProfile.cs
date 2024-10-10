@@ -35,10 +35,11 @@ namespace EStore.Domain.AutoMapper
             CreateMap<CreateProductDto, Product>()
                 .ForMember(dest => dest.CreatedDate, opt => opt.Ignore()) 
                 .ForMember(dest => dest.ModifiedDate, opt => opt.Ignore());
-
+/*
             CreateMap<AddProductDto, Product>()
                   .ForMember(dest => dest.CreatedDate, opt => opt.Ignore())
                   .ForMember(dest => dest.ModifiedDate, opt => opt.Ignore())
+      
                   .ForMember(dest => dest.ProductVariants, opt => opt.MapFrom(src => src.addProductVariantDtos));
 
             CreateMap<AddProductVariantDto, ProductVariant>()
@@ -47,9 +48,9 @@ namespace EStore.Domain.AutoMapper
                 .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
                 .ForMember(dest => dest.PricePerUnit, opt => opt.MapFrom(src => src.PricePerUnit))
                 .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
-                .ForMember(dest => dest.Color, opt => opt.MapFrom(src => src.Color));
-            CreateMap<ProductVariant, AddProductVariantDto>()
-                .ForMember(dest => dest.addProductDtos, opt => opt.Ignore());
+                .ForMember(dest => dest.Color, opt => opt.MapFrom(src => src.Color));*/
+
+            
                
 
             CreateMap<OrderReq, Order>()

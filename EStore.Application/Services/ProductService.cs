@@ -131,18 +131,111 @@ namespace EStore.Application.Services
                 }*/
         public async Task<int> AddProductWithVariantAsync(AddProductDto addProductDto)
         {
-            var product = _mapper.Map<Product>(addProductDto);
-            if (addProductDto.ImageFile != null && addProductDto.ImageFile.Length > 0)
+            var product = new Product
             {
-                using (var memoryStream = new MemoryStream())
+                Name = addProductDto.Name,
+                ShortDescription = addProductDto.ShortDescription,
+                LongDesrciption = addProductDto.LongDesrciption,
+                Brand = addProductDto.Brand,
+                CategoryId = addProductDto.CategoryId,
+                SubCategoryId = addProductDto.SubCategoryId,
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                
+            };
+
+            // Upload and save the product image
+            if (addProductDto.ImageFile != null)
+            {
+                using (var stream = new MemoryStream())
                 {
-                    await addProductDto.ImageFile.CopyToAsync(memoryStream);
-                    product.ImageData = memoryStream.ToArray();
+                    addProductDto.ImageFile.CopyTo(stream);
+                    product.ImageData = stream.ToArray();
                 }
             }
 
+            // Create new product variants
+            foreach (var addProductVariantDto in addProductDto.addProductVariantDtos)
+            {
+                var productVariant = new ProductVariant
+                {
+                   
+                    Name = product.Name,
+                    Size = addProductVariantDto.Size,
+                    Color = addProductVariantDto.Color,
+                    PricePerUnit = addProductVariantDto.PricePerUnit,
+                    Quantity = addProductVariantDto.Quantity
+                };
+
+                product.ProductVariants.Add(productVariant);
+            }
+
+            // Save the product and its variants
             await _productRepository.AddProductWithVariantAsync(product);
             return product.ProductId;
+        }
+        public async Task UpdateProductWithVariantAsync(int productId,AddProductDto addProductDto)
+        {                 
+           
+            if (addProductDto == null)
+            {
+                throw new ArgumentNullException(nameof(addProductDto));
+            }
+
+            var existingProduct = await _productRepository.GetProductsByIdAsync(productId);
+
+            existingProduct.Name = addProductDto.Name;
+            existingProduct.ShortDescription = addProductDto.ShortDescription;
+            existingProduct.LongDesrciption = addProductDto.LongDesrciption;
+            existingProduct.Brand = addProductDto.Brand;
+            existingProduct.CategoryId = addProductDto.CategoryId;
+            existingProduct.SubCategoryId = addProductDto.SubCategoryId;
+            existingProduct.ModifiedDate = DateTime.UtcNow;
+
+            // Upload and save the product image if provided
+            if (addProductDto.ImageFile != null)
+            {
+                using (var stream = new MemoryStream())
+                {
+                    await addProductDto.ImageFile.CopyToAsync(stream);
+                    existingProduct.ImageData = stream.ToArray();
+                }
+            }
+
+
+
+            var existingVariants = existingProduct.ProductVariants.ToList();
+
+            foreach (var addProductVariantDto in addProductDto.addProductVariantDtos)
+            {
+                // Try to find an existing variant based on size and color
+                var existingVariant = existingVariants
+                    .FirstOrDefault(v => v.Size == addProductVariantDto.Size && v.Color == addProductVariantDto.Color);
+
+                if (existingVariant != null)
+                {
+                    // Update existing variant
+                    existingVariant.PricePerUnit = addProductVariantDto.PricePerUnit;
+                    existingVariant.Quantity = addProductVariantDto.Quantity;
+                }
+                else
+                {
+                    // Create a new variant
+                    var productVariant = new ProductVariant
+                    {
+                        Name = existingProduct.Name,
+                        Size = addProductVariantDto.Size,
+                        Color = addProductVariantDto.Color,
+                        PricePerUnit = addProductVariantDto.PricePerUnit,
+                        Quantity = addProductVariantDto.Quantity
+                    };
+
+                    existingProduct.ProductVariants.Add(productVariant);
+                }
+            }
+
+
+            await _productRepository.UpdateProductWithVariantAsync(existingProduct);
         }
 
         public async Task DeleteProductAsync(int productId)
@@ -272,6 +365,6 @@ namespace EStore.Application.Services
             }
         }
 
-     
+    
     }
 }

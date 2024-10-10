@@ -12,6 +12,7 @@ namespace EStore.Domain.EntityDtos
         public string Color { get; set; }
         public decimal PricePerUnit { get; set; }
         public int Quantity { get; set; }
-        public AddProductDto addProductDtos { get; set; }
+        
+       
     }
 }

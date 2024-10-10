@@ -1,10 +1,5 @@
 ﻿using EStore.Domain.Entities;
 using EStore.Domain.EntityDtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EStore.Application.IRepositories
 {
@@ -32,6 +27,9 @@ namespace EStore.Application.IRepositories
           decimal? maxPrice);
 
         Task AddProductWithVariantAsync(Product product);
+        Task AddProductVariantAsync(ProductVariant productVariant);
+        Task UpdateProductWithVariantAsync(Product product);
+
     }
    
 }

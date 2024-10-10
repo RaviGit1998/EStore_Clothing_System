@@ -5,6 +5,7 @@ using EStore.Domain.EntityDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Org.BouncyCastle.Pqc.Crypto.Lms;
 
 namespace EStore.Web.Controllers
@@ -60,21 +61,61 @@ namespace EStore.Web.Controllers
             return CreatedAtAction(nameof(GetProductById), new { productId = createdProductId }, createProductDto);
         }
 
-        [HttpPost("AddProductwithVariant")]
-        public async Task<IActionResult> AddProductWithVariant([FromForm] AddProductDto addProductDto)
+        [HttpPost("ProductWihVariant")]
+        public async Task<IActionResult> AddProductWithVariant([FromForm] AddProductDto addProductDto, [FromForm] string addProductVariantsJson)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
-                if (addProductDto.addProductVariantDtos == null)
-                {
-                    throw new ArgumentNullException("ProductVariants cant be null");
-                }
-                var createdProductId = await _productService.AddProductWithVariantAsync(addProductDto);
+                // Deserialize the product variants from JSON
+                var addProductVariantDtos = JsonConvert.DeserializeObject<List<AddProductVariantDto>>(addProductVariantsJson);
+                addProductDto.addProductVariantDtos = addProductVariantDtos;
+
+                // Call the service to add the product and its variants
+                var productId = await _productService.AddProductWithVariantAsync(addProductDto);
+
+                // Return a success response with the created product's ID
+                return Ok(new { ProductId = productId, Message = "Product with variants added successfully" });
+            }
+            catch (Exception ex)
+            {
+                // Handle any errors
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPut("EditProductVariant{productId}")]
+        public async Task<IActionResult> UpdateProductWithVariantAsync(int productId, [FromForm] AddProductDto addProductDto, [FromForm] string addProductVariantsJson)
+        {
+            var existingProduct = await _productService.GetProductByIdAsync(productId);
+            if (existingProduct == null)
+            {
+                return NotFound($"Product with ID {productId} not found.");
+            }
+            if (addProductDto == null)
+            {
+                return BadRequest("Update data is required.");
+            }
+            try
+            {
+                var addProductVariantDtos = JsonConvert.DeserializeObject<List<AddProductVariantDto>>(addProductVariantsJson);
+                addProductDto.addProductVariantDtos = addProductVariantDtos;
+
+                await _productService.UpdateProductWithVariantAsync(productId, addProductDto);
+
                 return Ok(addProductDto);
             }
-            catch(Exception ex)
+            catch (KeyNotFoundException ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
 

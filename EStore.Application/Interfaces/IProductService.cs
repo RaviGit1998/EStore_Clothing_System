@@ -33,5 +33,7 @@ namespace EStore.Application.Interfaces
          decimal? maxPrice);
 
         Task<int> AddProductWithVariantAsync(AddProductDto addProductDto);
+
+        Task UpdateProductWithVariantAsync(int productId,AddProductDto addProductDto);
     }
 }

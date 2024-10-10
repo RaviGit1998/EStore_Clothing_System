@@ -148,6 +148,7 @@ namespace EStore.Web.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
             }
         }
+
         [HttpGet("variant/{productVariantId}")]
         public async Task<ActionResult<ProductRespDto>> GetProductByVariantId(int productVariantId)
         {
@@ -171,9 +172,9 @@ namespace EStore.Web.Controllers
         }
 
         [HttpGet("category/{categoryId}/filterbyPrice")]
-           public async Task<ActionResult<IEnumerable<ProductDto>>> GetFilteredAndSortedProducts(
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetFilteredAndSortedProducts(
            int categoryId,
-           [FromQuery] decimal? minPrice,
+           [FromQuery] decimal? minPrice, 
            [FromQuery] decimal? maxPrice)
         {
             try
@@ -187,6 +188,70 @@ namespace EStore.Web.Controllers
             }
         }
 
+        [HttpPost("product/{productId}/variant")]
+        public async Task<IActionResult> AddProductVariant(int productId, [FromBody] ProductVariantDto productVariantDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Assign the ProductId to the DTO
+            productVariantDto.ProductId = productId;
+
+            await _productService.AddProductVariantAsync(productVariantDto);
+
+            return Ok("Product variant added successfully");
+        }
+
+        [HttpPut("product/{productId}/variant/{productVariantId}")]
+        public async Task<IActionResult> UpdateProductVariant(int productId, int productVariantId, [FromBody] ProductVariantDto productVariantDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Assign the ProductId and ProductVariantId to the DTO
+            productVariantDto.ProductId = productId;
+            productVariantDto.ProductVariantId = productVariantId;
+
+            await _productService.UpdateProductVariantAsync(productVariantDto);
+
+            return Ok("Product variant updated successfully");
+        }
+
+        [HttpPost("AddProductsWithVariants")]
+        public async Task<IActionResult> AddProductWithVariants([FromForm] CreateProductDto createProductDto)
+        {
+            try
+            {
+                await _productService.AddProductWithVariantsAsync(createProductDto);
+                return StatusCode(201);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPut("{productIdByVariant}")]
+        public async Task<IActionResult> UpdateProductWithVariants(int productIdByVariant, [FromForm] UpdateProductDto updateProductDto)
+        {
+            try
+            {
+                await _productService.UpdateProductWithVariantsAsync(productIdByVariant, updateProductDto);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 
 }

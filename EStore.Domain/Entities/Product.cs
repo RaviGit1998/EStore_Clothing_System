@@ -21,7 +21,7 @@ namespace EStore.Domain.Entities
         //navigation in product
         public Category Category { get; set; }
         public SubCategory SubCategory { get; set; }
-      //this is product detail navigation
+        //this is product detail navigation
         public virtual ICollection<ProductVariant> ProductVariants { get; set; }
       
        

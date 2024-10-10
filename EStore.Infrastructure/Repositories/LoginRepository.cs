@@ -25,10 +25,8 @@ namespace EStore.Infrastructure.Repositories
         public async Task<User> GetUserByCredentails(string email,string password)
         {
             var user = await _context.Users
-           .SingleOrDefaultAsync(u => u.Email == email && u.PasswordHash == password);
+            .SingleOrDefaultAsync(u => u.Email == email && u.PasswordHash == password);
             return user;
         }
-    
-
     }
 }

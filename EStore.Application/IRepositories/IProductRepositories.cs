@@ -30,5 +30,9 @@ namespace EStore.Application.IRepositories
           int categoryId,
           decimal? minPrice,
           decimal? maxPrice);
+        Task AddProductVariantAsync(ProductVariant productVariant);
+        Task UpdateProductVariantAsync(ProductVariant productVariant);
+        Task<IEnumerable<ProductVariant>> GetProductVariantsByProductIdAsync(int productId);
+        Task DeleteProductVariantAsync(int productVariantId);
     }
 }

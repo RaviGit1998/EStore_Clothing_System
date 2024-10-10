@@ -120,10 +120,6 @@ namespace EStore.Infrastructure.Data
                 .HasForeignKey<WishList>(w=>w.UserId);
           
         }
-
-
-
-
     }
 
 }

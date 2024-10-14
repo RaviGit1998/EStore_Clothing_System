@@ -10,11 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -43,6 +40,8 @@ builder.Services.AddScoped<IShippingService, ShippingService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPasswordRecoveryService, PasswordRecoveryService>();
 builder.Services.AddSingleton<InMemoryTokenStore>();
+builder.Services.AddScoped<IWishlistRepository, WishlistRepository>();
+builder.Services.AddScoped<IWishlistService,WishlistService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -56,6 +55,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -66,35 +66,7 @@ builder.Services.AddCors(options =>
                    .AllowAnyMethod();
         });
 });
-
-/*builder.Services.AddSwaggerGen(Options =>
-{
-    Options.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme,
-        securityScheme: new OpenApiSecurityScheme
-        {
-            Name = "Authorization",
-            Description = "Enter the Bearer token: `Bearer Generated-Jwt-Token`",
-            In = ParameterLocation.Header,
-            Type = SecuritySchemeType.ApiKey,
-            Scheme = "Bearer"
-        });
-    Options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-        new OpenApiSecurityScheme
-        {
-            Reference=new OpenApiReference
-            {
-                Type=ReferenceType.SecurityScheme,
-                Id=JwtBearerDefaults.AuthenticationScheme
-
-            }
-        },new string[]{ }
-       }
-    });
-});*/
 var app = builder.Build();
-
 //app.UseAuthentication();
 app.UseCors("AllowSpecificOrigin");
 app.UseAuthentication(); // Must be before UseAuthorization
@@ -105,15 +77,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-
-
 app.UseStaticFiles();
 app.UseAuthorization();
 app.UseHttpsRedirection();
-
-
-
 app.MapControllers();
-
 app.Run();

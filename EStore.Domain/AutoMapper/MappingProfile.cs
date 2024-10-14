@@ -16,8 +16,9 @@ namespace EStore.Domain.AutoMapper
     {
         public MappingProfile()
         {
+            CreateMap<ProductVariantDto, ProductVariant>().ReverseMap();
             CreateMap<ProductVariant, ProductVariantDto>();
-
+            CreateMap<ProductVariantDto, ProductVariant>();
             CreateMap<UpdateProductDto, Product>()
             .ForMember(dest => dest.ModifiedDate, opt => opt.Ignore()) 
             .ForMember(dest => dest.CreatedDate, opt => opt.Ignore()); 
@@ -133,6 +134,14 @@ namespace EStore.Domain.AutoMapper
 
             CreateMap<Shipping, ShippingDto>()
                   .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.OrderId));
+
+            // Mapping for Product
+            CreateMap<CreateProductDto, Product>().ForMember(dest => dest.ProductVariants, opt => opt.MapFrom(src => src.ProductVariants)); 
+            CreateMap<UpdateProductDto, Product>();
+
+            // Mapping for ProductVariant
+            CreateMap<CreateProductVariantDto, ProductVariant>();
+            CreateMap<UpdateProductVariantDto, ProductVariant>();
         }
     }
 }

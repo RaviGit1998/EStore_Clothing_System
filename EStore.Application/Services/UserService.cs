@@ -23,7 +23,7 @@ namespace EStore.Application.Services
             _mapper = mapper;
             _emailService = emailService;
         }
-
+                
         public async Task<User> GetUserByEmail(string email)
         {
 
@@ -33,7 +33,7 @@ namespace EStore.Application.Services
         public async Task<User> RegisterUser(UserReq user)
         {
             var userDto= _mapper.Map<User>(user);
-            userDto.Role = "User";
+            userDto.Role = "User";  
             userDto.CreatedDate = DateTime.Now;
             return await _userRepository.RegisterUser(userDto);
 

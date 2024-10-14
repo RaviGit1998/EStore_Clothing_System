@@ -134,7 +134,6 @@ namespace EStore.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-
         public async Task DeleteProductAsync(int productId)
         {
             var product = await _dbContext.Products.FindAsync(productId);
@@ -145,10 +144,52 @@ namespace EStore.Infrastructure.Repositories
             }
         }
 
-        public async Task UpdateProductAsync(Product product)
+        /*public async Task UpdateProductAsync(Product product)
         {
             _dbContext.Products.Update(product);
             await _dbContext.SaveChangesAsync();
+        }*/
+        public async Task UpdateProductAsync(Product product)
+        {
+            var existingProduct = await _dbContext.Products
+                .Include(p => p.ProductVariants) // Include the ProductVariants
+                .FirstOrDefaultAsync(p => p.ProductId == product.ProductId);
+
+            if (existingProduct != null)
+            {
+                // Update Product fields
+                _dbContext.Entry(existingProduct).CurrentValues.SetValues(product);
+
+                // Update or add ProductVariants
+                foreach (var variant in product.ProductVariants)
+                {
+                    var existingVariant = existingProduct.ProductVariants
+                        .FirstOrDefault(v => v.ProductVariantId == variant.ProductVariantId);
+
+                    if (existingVariant != null)
+                    {
+                        // Update the existing variant
+                        _dbContext.Entry(existingVariant).CurrentValues.SetValues(variant);
+                    }
+                    else
+                    {
+                        // Add new variant
+                        existingProduct.ProductVariants.Add(variant);
+                    }
+                }
+
+                // Handle removed variants
+                foreach (var existingVariant in existingProduct.ProductVariants.ToList())
+                {
+                    if (!product.ProductVariants.Any(v => v.ProductVariantId == existingVariant.ProductVariantId))
+                    {
+                        // Remove the variant that no longer exists in the updated product
+                        _dbContext.ProductVariants.Remove(existingVariant);
+                    }
+                }
+
+                await _dbContext.SaveChangesAsync();
+            }
         }
 
 
@@ -190,8 +231,7 @@ namespace EStore.Infrastructure.Repositories
                 var colors = color.Split(',');
                 query = query.Where(p => p.ProductVariants.Any(v => colors.Contains(v.Color)));
             }
-
-            // Sorting logic
+         
             query = sortOrder switch
             {
                 "price_asc" => query.OrderBy(p => p.ProductVariants.Min(v => v.PricePerUnit)),
@@ -202,12 +242,9 @@ namespace EStore.Infrastructure.Repositories
             return await query.ToListAsync();
         }
 
-
-
         public async Task<IEnumerable<ProductVariant>> GetProductVariants()
         {
             var productVariants = await _dbContext.ProductVariants.ToListAsync();
-
             return productVariants;
         }
 
@@ -231,7 +268,6 @@ namespace EStore.Infrastructure.Repositories
                 ImageData = Convert.ToBase64String(productVariant.Product.ImageData)
               };
           
-
             return productResDto;
         }
 
@@ -258,7 +294,34 @@ namespace EStore.Infrastructure.Repositories
             return await query.ToListAsync();
         }
 
+        public async Task AddProductVariantAsync(ProductVariant productVariant)
+        {
+            await _dbContext.ProductVariants.AddAsync(productVariant);
+            await _dbContext.SaveChangesAsync();
+        }
 
+        public async Task UpdateProductVariantAsync(ProductVariant productVariant)
+        {
+            _dbContext.ProductVariants.Update(productVariant);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<ProductVariant>> GetProductVariantsByProductIdAsync(int productId)
+        {
+            return await _dbContext.ProductVariants
+                .Where(pv => pv.ProductId == productId)
+                .ToListAsync();
+        }
+
+        public async Task DeleteProductVariantAsync(int productVariantId)
+        {
+            var variant = await _dbContext.ProductVariants.FindAsync(productVariantId);
+            if (variant != null)
+            {
+                _dbContext.ProductVariants.Remove(variant);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
 
     }
 }

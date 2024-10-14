@@ -20,6 +20,8 @@ namespace EStore.Domain.EntityDtos
         public string ImageBase64 { get; set; }
         public int CategoryId { get; set; }
         public int SubCategoryId { get; set; }
+        public double Price {  get; set; }
+        public int Quantity { get; set; }
         public ICollection<ProductVariantDto> ProductVariants { get; set; }
     }
 

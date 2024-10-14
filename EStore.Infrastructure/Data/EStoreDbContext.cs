@@ -29,6 +29,7 @@ namespace EStore.Infrastructure.Data
         public DbSet<User> Users { get; set; }
         public DbSet<WishList> WishList { get; set; }
         public DbSet<Cart> Carts { get; set; }
+       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -104,27 +105,16 @@ namespace EStore.Infrastructure.Data
                 .HasOne(sa => sa.User)
                 .WithMany(u => u.ShippingAddresses)
                 .HasForeignKey(sa => sa.UserId);
-
             //WishList and Product
+            modelBuilder.Entity<WishList>()
+            .HasMany(w => w.Product)
+            .WithOne(); 
 
-          /*  modelBuilder.Entity<WishList>()
-                .HasMany(w => w.ProductVariants)
-                .WithOne(pv => pv.Wishlists)
-                .HasForeignKey(w => w.ProductId);
-         */
-
-         
             //WishList and User 
             modelBuilder.Entity<WishList>()
                 .HasOne(w => w.User)
                 .WithOne(u => u.WishList)
-                .HasForeignKey<WishList>(w=>w.UserId);
-          
+                .HasForeignKey<WishList>(w=>w.UserId);     
         }
-
-
-
-
-    }
-
+    } 
 }

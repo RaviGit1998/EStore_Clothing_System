@@ -91,7 +91,7 @@ namespace EStore.Application.Services
                     await createProductDto.ImageFile.CopyToAsync(memoryStream);
                     product.ImageData = memoryStream.ToArray();
                 }
-            }         
+            }
             product.CreatedDate = DateTime.UtcNow;
             product.ModifiedDate = DateTime.UtcNow;
             await _productRepository.AddProductAsync(product);
@@ -252,7 +252,7 @@ namespace EStore.Application.Services
             await _productRepository.DeleteProductAsync(productId);
         }
 
-        public async Task UpdateProductAsync(int productId, UpdateProductDto updateProductDto)
+        /*public async Task UpdateProductAsync(int productId, UpdateProductDto updateProductDto)
         {
             if (updateProductDto == null)
             {
@@ -277,32 +277,76 @@ namespace EStore.Application.Services
             existingProduct.ModifiedDate = DateTime.UtcNow;
 
             await _productRepository.UpdateProductAsync(existingProduct);
-        }
-        
-        public async Task<IEnumerable<ProductDto>> GetProductsByCategoryAsync(int categoryId)
+        }*/
+        public async Task UpdateProductAsync(int productId, UpdateProductDto updateProductDto)
         {
-            var products = await _productRepository.GetProductsByCategoryAsync(categoryId);
-            var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
-
-            foreach (var productDto in productDtos)
+            if (updateProductDto == null)
             {
-                var product = products.FirstOrDefault(p => p.ProductId == productDto.ProductId);
-                if (product?.ImageData != null)
+                throw new ArgumentNullException(nameof(updateProductDto));
+            }
+
+            var existingProduct = await _productRepository.GetProductsByIdAsync(productId);
+            if (existingProduct == null)
+            {
+                throw new KeyNotFoundException($"Product with ID {productId} not found.");
+            }
+
+            // Map updated product details
+            _mapper.Map(updateProductDto, existingProduct);
+
+            // Handle image upload if available
+            if (updateProductDto.ImageFile != null && updateProductDto.ImageFile.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
                 {
-                    productDto.ImageBase64 = Convert.ToBase64String(product.ImageData);
+                    await updateProductDto.ImageFile.CopyToAsync(memoryStream);
+                    existingProduct.ImageData = memoryStream.ToArray();
                 }
             }
 
-            return productDtos;
+            // Update existing product variants or add new ones
+            foreach (var variantDto in updateProductDto.ProductVariants)
+            {
+                var existingVariant = existingProduct.ProductVariants
+                    .FirstOrDefault(v => v.ProductVariantId == variantDto.ProductVariantId);
+
+                if (existingVariant != null)
+                {
+                    // Update existing variant
+                    _mapper.Map(variantDto, existingVariant);
+                }
+                else
+                {
+                    // Add new variant
+                    var newVariant = _mapper.Map<ProductVariant>(variantDto);
+                    existingProduct.ProductVariants.Add(newVariant);
+                }
+            }
+
+            // Remove deleted variants
+            var variantIdsToUpdate = updateProductDto.ProductVariants.Select(v => v.ProductVariantId).ToList();
+            foreach (var variant in existingProduct.ProductVariants.ToList())
+            {
+                if (!variantIdsToUpdate.Contains(variant.ProductVariantId))
+                {
+                    existingProduct.ProductVariants.Remove(variant);
+                }
+            }
+
+            // Update product's modified date
+            existingProduct.ModifiedDate = DateTime.UtcNow;
+
+            // Save updated product and variants to the database
+            await _productRepository.UpdateProductAsync(existingProduct);
         }
 
         public async Task<IEnumerable<ProductDto>> GetFilteredAndSortedProductsAsync(
-     int categoryId,
-     decimal? minPrice,
-     decimal? maxPrice,
-     string size,
-     string color,
-     string sortOrder)
+           int categoryId,
+           decimal? minPrice,
+           decimal? maxPrice,
+           string size,
+           string color,
+           string sortOrder)
         {
             size = string.IsNullOrWhiteSpace(size) ? null : size;
             color = string.IsNullOrWhiteSpace(color) ? null : color;
@@ -310,8 +354,8 @@ namespace EStore.Application.Services
             try
             {
                 var products = await _productRepository.GetFilteredAndSortedProducts(
-                    categoryId, minPrice, maxPrice, size, color, sortOrder
-                );
+                    categoryId, minPrice, maxPrice, size, color, sortOrder);
+
                 var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
                 foreach (var productDto in productDtos)
                 {
@@ -367,6 +411,16 @@ namespace EStore.Application.Services
             {
                 throw new Exception("An error occurred while fetching products", ex);
             }
+        }
+
+
+        public async Task AddProductVariantAsync(ProductVariantDto productVariantDto)
+        {
+            // Map the DTO to entity
+            var productVariant = _mapper.Map<ProductVariant>(productVariantDto);
+
+            // Call the repository to add the variant
+            await _productRepository.AddProductVariantAsync(productVariant);
         }
 
     

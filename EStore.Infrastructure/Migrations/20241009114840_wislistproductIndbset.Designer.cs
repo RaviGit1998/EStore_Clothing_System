@@ -4,6 +4,7 @@ using EStore.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EStore.Infrastructure.Migrations
 {
     [DbContext(typeof(EStoreDbContext))]
-    partial class EStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20241009114840_wislistproductIndbset")]
+    partial class wislistproductIndbset
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,16 +236,11 @@ namespace EStore.Infrastructure.Migrations
                     b.Property<int>("SubCategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("WishListId")
-                        .HasColumnType("int");
-
                     b.HasKey("ProductId");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("SubCategoryId");
-
-                    b.HasIndex("WishListId");
 
                     b.ToTable("Products");
                 });
@@ -509,6 +507,21 @@ namespace EStore.Infrastructure.Migrations
                     b.ToTable("WishList");
                 });
 
+            modelBuilder.Entity("EStore.Domain.Entities.WishlistProduct", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WishListId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId", "WishListId");
+
+                    b.HasIndex("WishListId");
+
+                    b.ToTable("WishlistProducts");
+                });
+
             modelBuilder.Entity("EStore.Domain.Entities.Order", b =>
                 {
                     b.HasOne("EStore.Domain.Entities.Coupon", "Coupon")
@@ -569,10 +582,6 @@ namespace EStore.Infrastructure.Migrations
                         .HasForeignKey("SubCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("EStore.Domain.Entities.WishList", null)
-                        .WithMany("Product")
-                        .HasForeignKey("WishListId");
 
                     b.Navigation("Category");
 
@@ -664,6 +673,25 @@ namespace EStore.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("EStore.Domain.Entities.WishlistProduct", b =>
+                {
+                    b.HasOne("EStore.Domain.Entities.Product", "Products")
+                        .WithMany("WishlistProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EStore.Domain.Entities.WishList", "WishLists")
+                        .WithMany("WishlistProducts")
+                        .HasForeignKey("WishListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Products");
+
+                    b.Navigation("WishLists");
+                });
+
             modelBuilder.Entity("EStore.Domain.Entities.Category", b =>
                 {
                     b.Navigation("Products");
@@ -697,6 +725,8 @@ namespace EStore.Infrastructure.Migrations
             modelBuilder.Entity("EStore.Domain.Entities.Product", b =>
                 {
                     b.Navigation("ProductVariants");
+
+                    b.Navigation("WishlistProducts");
                 });
 
             modelBuilder.Entity("EStore.Domain.Entities.ProductVariant", b =>
@@ -725,7 +755,7 @@ namespace EStore.Infrastructure.Migrations
 
             modelBuilder.Entity("EStore.Domain.Entities.WishList", b =>
                 {
-                    b.Navigation("Product");
+                    b.Navigation("WishlistProducts");
                 });
 #pragma warning restore 612, 618
         }

@@ -22,6 +22,6 @@ namespace EStore.Domain.Entities
         public virtual Product Product { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }
         public virtual ICollection<ProductReview> ProductReviews { get; set; }
-     //   public virtual WishList Wishlists { get; set; }
+   
     }
 }

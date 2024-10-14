@@ -107,32 +107,7 @@ namespace EStore.Application.Services
             await _productRepository.DeleteProductAsync(productId);
         }
 
-        /*public async Task UpdateProductAsync(int productId, UpdateProductDto updateProductDto)
-        {
-            if (updateProductDto == null)
-            {
-                throw new ArgumentNullException(nameof(updateProductDto));
-            }
 
-            var existingProduct = await _productRepository.GetProductsByIdAsync(productId);
-            if (existingProduct == null)
-            {
-                throw new KeyNotFoundException($"Product with ID {productId} not found.");
-            }
-
-            _mapper.Map(updateProductDto, existingProduct);
-            if (updateProductDto.ImageFile != null && updateProductDto.ImageFile.Length > 0)
-            {
-                using (var memoryStream = new MemoryStream())
-                {
-                    await updateProductDto.ImageFile.CopyToAsync(memoryStream);
-                    existingProduct.ImageData = memoryStream.ToArray();
-                }
-            }
-            existingProduct.ModifiedDate = DateTime.UtcNow;
-
-            await _productRepository.UpdateProductAsync(existingProduct);
-        }*/
         public async Task UpdateProductAsync(int productId, UpdateProductDto updateProductDto)
         {
             if (updateProductDto == null)
@@ -276,7 +251,9 @@ namespace EStore.Application.Services
 
             // Call the repository to add the variant
             await _productRepository.AddProductVariantAsync(productVariant);
+           
         }
 
+       
     }
 }

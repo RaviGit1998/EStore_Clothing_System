@@ -17,6 +17,7 @@ namespace EStore.Domain.EntityDtos
         public IFormFile ImageFile { get; set; }  
         public int CategoryId { get; set; }
         public int SubCategoryId { get; set; }
-       
+        public List<CreateProductVariantDto> ProductVariants { get; set; }
+
     }
 }

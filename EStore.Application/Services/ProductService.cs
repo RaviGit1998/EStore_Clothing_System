@@ -201,8 +201,12 @@ namespace EStore.Application.Services
                     existingProduct.ImageData = stream.ToArray();
                 }
             }
-
-
+            else
+            {
+                // If no new image is provided, retain the existing image
+                // This line is optional since existingProduct.ImageData will remain unchanged if not set.
+                existingProduct.ImageData = existingProduct.ImageData;
+            }
 
             var existingVariants = existingProduct.ProductVariants.ToList();
 

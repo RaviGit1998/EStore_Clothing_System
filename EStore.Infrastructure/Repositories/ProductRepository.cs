@@ -83,9 +83,10 @@ namespace EStore.Infrastructure.Repositories
             {
                 throw new Exception("Product not found");
             }
-
+                _dbContext.Entry(existingProduct).CurrentValues.SetValues(product);
+            
             // Update the main product details
-            _dbContext.Entry(existingProduct).CurrentValues.SetValues(product);
+            
 
             // Handle variants
             foreach (var variant in product.ProductVariants)

@@ -11,7 +11,6 @@ namespace EStore.Domain.Entities
         public int ProductVariantId { get; set; }
         public int ProductId { get; set; }
         public string Name { get; set; }
-
         public string Size { get; set; }
         public string Color { get; set; }
         public decimal PricePerUnit {  get; set; }

@@ -44,7 +44,86 @@ namespace EStore.Infrastructure.Repositories
             await _dbContext.Products.AddAsync(product);
             await _dbContext.SaveChangesAsync();
         }
+      
+        public async Task AddProductWithVariantAsync(Product product)
+        {
+            // Safeguard to initialize the collection if it is null
+            if (product.ProductVariants == null)
+            {
+                product.ProductVariants = new List<ProductVariant>();
+            }
 
+
+            await _dbContext.Products.AddAsync(product);
+            foreach (var productVariant in product.ProductVariants)
+            {
+                await _dbContext.ProductVariants.AddAsync(productVariant);
+            }
+
+            await _dbContext.SaveChangesAsync();
+        }
+        public async Task UpdateProductWithVariantAsync(Product product)
+        {
+            /*  if (product.ProductVariants == null)
+              {
+                  product.ProductVariants = new List<ProductVariant>();
+              }
+
+              _dbContext.Products.Update(product);
+              foreach (var productVariant in product.ProductVariants)
+              {
+                  await _dbContext.ProductVariants.AddAsync(productVariant);
+              }
+              await _dbContext.SaveChangesAsync();*/
+            var existingProduct = await _dbContext.Products
+         .Include(p => p.ProductVariants)
+         .FirstOrDefaultAsync(p => p.ProductId == product.ProductId);
+
+            if (existingProduct == null)
+            {
+                throw new Exception("Product not found");
+            }
+                _dbContext.Entry(existingProduct).CurrentValues.SetValues(product);
+            
+            // Update the main product details
+            
+
+            // Handle variants
+            foreach (var variant in product.ProductVariants)
+            {
+                var existingVariant = existingProduct.ProductVariants
+                    .FirstOrDefault(v => v.ProductVariantId == variant.ProductVariantId);
+
+                if (existingVariant != null)
+                {
+                    // Update existing variant
+                    _dbContext.Entry(existingVariant).CurrentValues.SetValues(variant);
+                }
+                else
+                {
+                    // Add new variant
+                    await _dbContext.ProductVariants.AddAsync(variant);
+                }
+            }
+
+            // Remove any variants that are not in the updated product
+            foreach (var existingVariant in existingProduct.ProductVariants)
+            {
+                if (!product.ProductVariants.Any(v => v.ProductVariantId == existingVariant.ProductVariantId))
+                {
+                    _dbContext.ProductVariants.Remove(existingVariant);
+                }
+            }
+
+            // Save all changes
+            await _dbContext.SaveChangesAsync();
+        }
+        public async Task AddProductVariantAsync(ProductVariant productVariant)
+        {
+            await _dbContext.ProductVariants.AddAsync(productVariant);
+           await _dbContext.SaveChangesAsync();
+        }
+      
         public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId)
         {
             return await _dbContext.Products

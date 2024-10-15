@@ -294,11 +294,7 @@ namespace EStore.Infrastructure.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task AddProductVariantAsync(ProductVariant productVariant)
-        {
-            await _dbContext.ProductVariants.AddAsync(productVariant);
-            await _dbContext.SaveChangesAsync();
-        }
+       
 
         public async Task UpdateProductVariantAsync(ProductVariant productVariant)
         {

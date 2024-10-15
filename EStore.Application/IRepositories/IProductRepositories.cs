@@ -29,8 +29,6 @@ namespace EStore.Application.IRepositories
         Task AddProductWithVariantAsync(Product product);
         Task AddProductVariantAsync(ProductVariant productVariant);
         Task UpdateProductWithVariantAsync(Product product);
-
-        Task AddProductVariantAsync(ProductVariant productVariant);
         Task UpdateProductVariantAsync(ProductVariant productVariant);
         Task<IEnumerable<ProductVariant>> GetProductVariantsByProductIdAsync(int productId);
         Task DeleteProductVariantAsync(int productVariantId);

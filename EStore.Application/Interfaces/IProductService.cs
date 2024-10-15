@@ -36,8 +36,6 @@ namespace EStore.Application.Interfaces
 
         Task UpdateProductWithVariantAsync(int productId,AddProductDto addProductDto);
         Task AddProductVariantAsync(ProductVariantDto productVariantDto);
-        Task UpdateProductVariantAsync(ProductVariantDto productVariantDto);
-        Task AddProductWithVariantsAsync(CreateProductDto createProductDto);
-        Task UpdateProductWithVariantsAsync(int productId, UpdateProductDto updateProductDto);
+       
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Pqc.Crypto.Lms;
+using System.Security.Policy;
 
 namespace EStore.Web.Controllers
 {
@@ -48,7 +49,6 @@ namespace EStore.Web.Controllers
             var products = await _productService.SearchProductAsync(keyword);
             return Ok(products);
         }
-     
         [HttpPost]
         public async Task<IActionResult> AddProduct([FromForm] CreateProductDto createProductDto)
         {
@@ -133,7 +133,7 @@ namespace EStore.Web.Controllers
             }
         }
 
-        [HttpPut("{productId}")]      
+        [HttpPut("{productId}")]
         public async Task<IActionResult> UpdateProduct(int productId, [FromForm] UpdateProductDto updateProductDto)
         {
             if (updateProductDto == null)
@@ -161,30 +161,29 @@ namespace EStore.Web.Controllers
             var products = await _productService.GetProductsByCategoryAsync(categoryId);
             return Ok(products);
         }
-        
-         [HttpGet("category/{categoryId}/filter")]
-          public async Task<ActionResult<IEnumerable<ProductDto>>> GetFilteredAndSortedProducts(
-            int categoryId,
-            [FromQuery] decimal? minPrice,
-            [FromQuery] decimal? maxPrice,
-            [FromQuery] string size,
-            [FromQuery] string color,
-            [FromQuery] string sortOrder)
-          {
-                    try
-                    {
-                        var products = await _productService.GetFilteredAndSortedProductsAsync(
-                            categoryId, minPrice, maxPrice, size, color, sortOrder
-                        );
+        [HttpGet("category/{categoryId}/filter")]
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetFilteredAndSortedProducts(
+           int categoryId,
+           [FromQuery] decimal? minPrice,
+           [FromQuery] decimal? maxPrice,
+           [FromQuery] string size,
+           [FromQuery] string color,
+           [FromQuery] string sortOrder)
+        {
+            try
+            {
+                var products = await _productService.GetFilteredAndSortedProductsAsync(
+                    categoryId, minPrice, maxPrice, size, color, sortOrder
+                );
 
-                        return Ok(products);
-                    }
-                    catch (Exception ex)
-                    {
-                        return BadRequest(new { message = "An error occurred while fetching products.", error = ex.Message });
-                    }
-          }
-       
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "An error occurred while fetching products.", error = ex.Message });
+            }
+        }
+
 
         [HttpGet]
         [Route("ProductVariants")]
@@ -204,7 +203,6 @@ namespace EStore.Web.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
             }
         }
-
         [HttpGet("variant/{productVariantId}")]
         public async Task<ActionResult<ProductRespDto>> GetProductByVariantId(int productVariantId)
         {
@@ -230,7 +228,7 @@ namespace EStore.Web.Controllers
         [HttpGet("category/{categoryId}/filterbyPrice")]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetFilteredAndSortedProducts(
            int categoryId,
-           [FromQuery] decimal? minPrice, 
+           [FromQuery] decimal? minPrice,
            [FromQuery] decimal? maxPrice)
         {
             try
@@ -244,70 +242,6 @@ namespace EStore.Web.Controllers
             }
         }
 
-        [HttpPost("product/{productId}/variant")]
-        public async Task<IActionResult> AddProductVariant(int productId, [FromBody] ProductVariantDto productVariantDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            // Assign the ProductId to the DTO
-            productVariantDto.ProductId = productId;
-
-            await _productService.AddProductVariantAsync(productVariantDto);
-
-            return Ok("Product variant added successfully");
-        }
-
-        [HttpPut("product/{productId}/variant/{productVariantId}")]
-        public async Task<IActionResult> UpdateProductVariant(int productId, int productVariantId, [FromBody] ProductVariantDto productVariantDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            // Assign the ProductId and ProductVariantId to the DTO
-            productVariantDto.ProductId = productId;
-            productVariantDto.ProductVariantId = productVariantId;
-
-            await _productService.UpdateProductVariantAsync(productVariantDto);
-
-            return Ok("Product variant updated successfully");
-        }
-
-        [HttpPost("AddProductsWithVariants")]
-        public async Task<IActionResult> AddProductWithVariants([FromForm] CreateProductDto createProductDto)
-        {
-            try
-            {
-                await _productService.AddProductWithVariantsAsync(createProductDto);
-                return StatusCode(201);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        [HttpPut("{productIdByVariant}")]
-        public async Task<IActionResult> UpdateProductWithVariants(int productIdByVariant, [FromForm] UpdateProductDto updateProductDto)
-        {
-            try
-            {
-                await _productService.UpdateProductWithVariantsAsync(productIdByVariant, updateProductDto);
-                return NoContent();
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
     }
 
 }
